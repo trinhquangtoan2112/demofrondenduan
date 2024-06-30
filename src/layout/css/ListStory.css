@@ -1,0 +1,12 @@
+.section {
+  padding: 15px;
+}
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.list-story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}/*# sourceMappingURL=ListStory.css.map */

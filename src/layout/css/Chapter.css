@@ -1,0 +1,74 @@
+.chapter-manual {
+  width: 70px;
+  position: fixed;
+  top: 102px;
+  right: 40px;
+  background-color: #e1e8e8;
+  border-radius: 4px;
+  box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);
+}
+.chapter-manual__item {
+  z-index: 10;
+  position: relative;
+}
+.chapter-manual__item > a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  position: relative;
+}
+.chapter-manual__item > a i {
+  z-index: 10;
+}
+.chapter-manual__item.active {
+  background-color: white;
+}
+.chapter-manual__item.active a {
+  z-index: 10;
+}
+.chapter-manual__item.active a::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0px;
+  height: 100%;
+  width: 100px;
+  background-color: white;
+}
+.chapter-manual__item.active > .chapter-manual__popup {
+  display: block;
+}
+.chapter-manual__item .chapter-manual__popup {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 80px;
+  padding: 10px;
+  background-color: white;
+  z-index: 2;
+  min-width: 500px;
+  box-shadow: 0 10px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+.chapter-setting table {
+  width: 100%;
+  padding: 20px;
+}
+.chapter-setting table tr {
+  margin-bottom: 15px;
+}
+.chapter-setting__label {
+  width: 100%;
+  display: inline-flex;
+  gap: 10px;
+  align-items: baseline;
+}
+.chapter-setting__input {
+  width: 100%;
+  justify-content: space-between;
+  padding: 6px 10px;
+}
+.chapter-setting__input button {
+  border: none;
+}/*# sourceMappingURL=Chapter.css.map */

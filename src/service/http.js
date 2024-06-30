@@ -33,11 +33,9 @@ class SetUpAxios {
         return this.axiosCreate.get(url, {
             params: updatedParams,
             data: data,
-
         })
     }
     postToken = async (url, data, params) => {
-
         const updatedParams = await { ...params, 'token': 'Bearer ' + localStorage.getItem(TOKEN) };
         return this.axiosCreate.post(url, {
             params: updatedParams,
