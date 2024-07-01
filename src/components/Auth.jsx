@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+
+import { DangKy, DangNhap } from '../service/actions/UserAction';
+import toast, { Toaster } from 'react-hot-toast';
 export default function Auth(props) {
     const [login, setLogin] = useState(props.choose)
-
+    const notify = () => toast('Here is your toast.');
     const [isforgetPasswordForm, setIsforgetPasswordForm] = useState(false)
     const [isActiveForm, setIsActiveForm] = useState(false)
     const dispatch = useDispatch();
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         // setLogin(props.choose);
@@ -24,6 +26,7 @@ export default function Auth(props) {
 
     const onClickForgetpw = useCallback(() => {
         setIsforgetPasswordForm(true)
+
     })
 
     const onClickActive = useCallback(() => {
@@ -31,28 +34,33 @@ export default function Auth(props) {
     })
     return (
         <div className='auth-wrap'>
-            {/* {
+            {
                 isforgetPasswordForm ? <ForgetPassword />
                     : isActiveForm ? <ReActive /> :
                         <div>
                             <div className="auth-header">
                                 <ul>
-                                    <li><a onClick={handleChooseLogin}>Đăng nhập</a></li>
-                                    <li><a onClick={handleChooseRegister}>Đăng ký</a></li>
+                                    <li><a style={login ? { color: 'orange' } : {}} onClick={handleChooseLogin}>Đăng nhập</a></li>
+                                    <li><a style={!login ? { color: "orange" } : {}} onClick={handleChooseRegister}>Đăng ký</a></li>
                                 </ul>
                             </div>
                             <div className="auth-body">
                                 {
-                                    login ? <Login dispatch={dispatch} navigate={navigate} onClickActive={onClickActive} handleChooseRegister={handleChooseRegister} onClickForgetpw={onClickForgetpw} />
+                                    login ? <Login
+                                        dispatch={dispatch} navigate={navigate} handleChooseRegister={handleChooseRegister}
+                                        onClickForgetpw={onClickForgetpw}
+                                    />
                                         :
-                                        <Register dispatch={dispatch} navigate={navigate} />
+                                        <Register
+                                            dispatch={dispatch} navigate={navigate}
+                                        />
                                 }
                             </div>
                         </div>
-            } */}
-            <Register></Register>
+            }
 
-        </div>
+
+        </div >
     )
 }
 const Login = props => {
@@ -61,69 +69,71 @@ const Login = props => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     // const msgLogin = useSelector(state => state.message.login?.msg)
-
+    const [check, setCheck] = useState(false);
     useEffect(() => {
         //   if (msgLogin)
         //     props.dispatch(clearMessageLogin())
     }, [])
 
-    // const onLogin = async (e) => {//xử lý đăng nhập
-    //   e.preventDefault();
-    //   const user = { username, password };//payload
-    //   await handleLogin(user, props.dispatch, props.navigate);//gọi hàm handle
-    // }
+    const onLogin = async (e) => {//xử lý đăng nhập
+        e.preventDefault();
+        const user = { username, password };
+        const data = {
+            email: user.username,
+            matKhau: user.password
+        }
+        DangNhap(data, props.dispatch, check)
+    }
     return (
         <div className="form-wrap">
             <form>
                 <div className="form-group d-flex">
                     <div className='d-flex label-group'>
-                        <label >Tên đăng nhập</label>
+                        <label>Email</label>
                         {/* <a onClick={props.onClickActive}>Kích hoạt tài khoản</a> */}
-                        <a >Kích hoạt tài khoản</a>
+
                     </div>
                     <div className="field-wrap">
                         <input
-                            placeholder="Username" required name="username" type="text"
-                            // onChange={(e) => {
-                            //   setUsername(e.target.value)
-                            // }}
+                            placeholder="Email" required name="username" type="text"
+                            onChange={(e) => {
+                                setUsername(e.target.value)
+                            }}
                             value={username}
                         />
                     </div>
-
                 </div>
                 <div className="form-group d-flex">
                     <div className="label-group d-flex">
                         <label>Mật khẩu</label>
-                        {/* <a onClick={props.onClickForgetpw}>Quên mật khẩu</a> */}
-                        <a >Quên mật khẩu</a>
+                        <a onClick={props.onClickForgetpw}>Quên mật khẩu</a>
                     </div>
                     <div className="field-wrap">
                         <input placeholder="Password" required name="password" type='password'
                             value={password}
-                        // onChange={e => {
-                        //   setPassword(e.target.value)
-                        // }}
+                            onChange={e => {
+                                setPassword(e.target.value)
+                            }}
                         />
                     </div>
                 </div>
                 <div className="d-flex">
                     <label className='remember-label' htmlFor="remember">
                         <span>Ghi nhớ mật khẩu</span>
-                        <input type="checkbox" id="remember"></input>
+                        <input type="checkbox" id="remember" onChange={(e) => {
+                            setCheck(!check)
+                        }}></input>
                         <span className="checkmark"></span>
                     </label>
                 </div>
                 <button className='rounded-2'
-                //    onClick={onLogin}
+                    onClick={onLogin}
                 >
-                    {/* {loading ? <Loading /> : ""} */}
                     Đăng nhập</button>
-                {/* <span >{msgLogin || ""}</span> */}
             </form>
             <span className="register-choose"><label>Bạn chưa có tài khoản. </label>
-                {/* <a onClick={props.handleChooseRegister}>Đăng ký ngay?</a></span> */}
-                <a >Đăng ký ngay?</a></span>
+                <a onClick={props.handleChooseRegister}>Đăng ký ngay?</a></span>
+
         </div>
     )
 }
@@ -237,128 +247,80 @@ const Register = props => {
 
     const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ ///regex validate email
 
-    // const onRegister = async (e) => {//Xử lý gọi API Sign up
-    //   e.preventDefault();
-    //   if (!valid.every(item => item)) {
-    //     toast.warning("Vui lòng điền các thông tin phù hợp")
-    //     return
-    //   }
-    //   const user = {//payload
-    //     username: usernameRegister,
-    //     password: passwordRegister,
-    //     email: emailRegister
-    //   };
-    //   await handleRegister(user, props.dispatch, props.navigate); //gọi hàm sign up
-    // }
+    const onRegister = async (e) => {//Xử lý gọi API Sign up
+        e.preventDefault();
 
-    // const onChangeEmail = (e) => {//validate email
-    //   let email = e.target.value
-    //   setEmailRegister(e.target.value)
-    //   if (regex.test(email)) {
-    //     apiMain.checkEmail({ email })
-    //       .then(res => {
-    //         let newValid = [...valid]
-    //         if (res.valid) {
-    //           newValid[0] = true
-    //           setValid(newValid)
+        const user = {
+            matKhau: passwordRegister,
+            email: emailRegister
+        };
+        toast.success("Đăng ký thành công. Vui lòng vào email để mở liên kết xác thực tài khoản", { autoClose: 3000, pauseOnHover: false });//hiển thị toast thông báo
 
-    //         }
-    //         else {
-    //           newValid[0] = false
-    //           setValid(newValid)
-    //         }
-    //         setMsgEmail(res.message)
-    //       }).
-    //       catch(err => {
-    //         let newValid = [...valid]
-    //         newValid[0] = false
-    //         setValid(newValid)
-    //         console.log(err.response)
-    //         setMsgEmail(err.response.data?.detail?.message || '')
-    //       })
-    //   }
-    //   else {
-    //     let newValid = [...valid]
-    //     newValid[0] = false
-    //     setValid(newValid)
-    //     setMsgEmail('Email không hợp lệ')
-    //   }
-    // }
+        DangKy(user);
+    }
 
-    // const onChangeUsername = (e) => {//validate username
-    //   let username = e.target.value
-    //   setUsernameRegister(e.target.value)
-    //   if (username.length > 5) {
-    //     apiMain.checkUsername({ username })
-    //       .then(res => {
-    //         let newValid = [...valid]
-    //         if (res.valid) {
-    //           newValid[1] = true
-    //           setValid(newValid)
-    //         }
-    //         else {
-    //           newValid[1] = false
-    //           setValid(newValid)
-    //         }
-    //         setMsgUsername(res.message)
-    //       }).catch(err => {
-    //         let newValid = [...valid]
-    //         newValid[1] = false
-    //         setValid(newValid)
-    //         setMsgUsername(err.response.data?.detail?.message || '')
-    //       })
-    //   }
-    //   else {
-    //     let newValid = [...valid]
-    //     newValid[1] = false
-    //     setValid(newValid)
-    //     setMsgUsername('Tên đăng nhập có ít nhất 6 kí tự')
-    //   }
-    // }
+    const onChangeEmail = (e) => {//validate email
+        let email = e.target.value
+        setEmailRegister(e.target.value)
+        if (regex.test(email)) {
 
-    // const onChangePassword = (e) => {//validate password
-    //   let password = e.target.value
-    //   setPasswordRegister(e.target.value)
-    //   let newValid = [...valid]
-    //   if (password.length > 8) {
-    //     setMsgPassword("Mật khẩu hợp lệ")
-    //     newValid[2] = true
-    //     if (password === passwordCfRegister) {
-    //       newValid[3] = true
-    //       setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
-    //     } else {
-    //       newValid[3] = false
-    //       setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
-    //     }
-    //   } else {
-    //     setMsgPassword("Mật khẩu không hợp lệ")
-    //     newValid[2] = false
-    //     if (password === passwordCfRegister) {
-    //       newValid[3] = true
-    //       setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
-    //     } else {
-    //       newValid[3] = false
-    //       setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
-    //     }
-    //   }
-    //   setValid(newValid)
-    // }
+        }
+        else {
+            let newValid = [...valid]
+            newValid[0] = false
+            setValid(newValid)
+            setMsgEmail('Email không hợp lệ')
+        }
+    }
 
-    // const onChangePasswordCf = (e) => {//validate password confirm
-    //   let password = e.target.value
-    //   setPasswordCfRegister(e.target.value)
-    //   let newValid = [...valid]
-    //   if (password === passwordCfRegister) {
-    //     newValid[3] = true
-    //     setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
-    //   } else {
-    //     newValid[3] = false
-    //     setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
-    //   }
 
-    //   setValid(newValid)
-    // }
 
+    const onChangePassword = (e) => {//validate password
+        let password = e.target.value
+        setPasswordRegister(e.target.value)
+        let newValid = [...valid]
+        if (password.length > 8) {
+            setMsgPassword("Mật khẩu hợp lệ")
+            newValid[2] = true
+            if (password === passwordCfRegister) {
+                newValid[3] = true
+                setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
+            } else {
+                newValid[3] = false
+                setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
+            }
+        } else {
+            setMsgPassword("Mật khẩu không hợp lệ")
+            newValid[2] = false
+            if (password === passwordCfRegister) {
+                newValid[3] = true
+                setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
+            } else {
+                newValid[3] = false
+                setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
+            }
+        }
+        setValid(newValid)
+    }
+
+    const onChangePasswordCf = (e) => {//validate password confirm
+        let password = e.target.value
+        setPasswordCfRegister(e.target.value)
+        let newValid = [...valid]
+        if (password === passwordCfRegister) {
+            newValid[3] = true
+            setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
+        } else {
+            newValid[3] = false
+            setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
+        }
+
+        setValid(newValid)
+    }
+    const notify = () => {
+        toast('Here is your toast.')
+        console.log(1111)
+    };
     return (
         <div className="form-wrap">
             <form>
@@ -366,7 +328,7 @@ const Register = props => {
                     <label>Email</label>
                     <div className="field-wrap">
                         <input placeholder="example@gmail.com" required name="emailRegister" type="text" value={emailRegister}
-                        // onChange={onChangeEmail}
+                            onChange={onChangeEmail}
                         />
                     </div>
                     <span className={`${valid[0] ? 'success' : 'error'}`}>{msgEmail}</span>
@@ -377,7 +339,7 @@ const Register = props => {
                     <label>Mật khẩu</label>
                     <div className="field-wrap">
                         <input required={true} name={"passwordRegister"} type='password' value={passwordRegister}
-                        // onChange={onChangePassword}
+                            onChange={onChangePassword}
                         />
                     </div>
                     <span className={`${valid[2] ? 'success' : 'error'}`}>{msgPassword}</span>
@@ -387,14 +349,14 @@ const Register = props => {
                     <label>Nhập lại mật khẩu</label>
                     <div className="field-wrap">
                         <input required={true} name={"passwordCfRegister"} type='password' value={passwordCfRegister}
-                        // onChange={onChangePasswordCf}
+                            onChange={onChangePasswordCf}
                         />
                     </div>
                     <span className={`${valid[3] ? 'success' : 'error'}`}>{msgCfPassword}</span>
                 </div>
                 {/* <span>{msgRegister}</span> */}
                 <button
-                //    onClick={onRegister}
+                    onClick={onRegister}
                 >
                     {/* {loading ? <Loading /> : ""} */}
                     Đăng ký</button>

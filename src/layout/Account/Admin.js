@@ -1,16 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import Layout from '../../components/Layout';
-import ChangePassword from './ChangePassword';
-import CreateNovel from './CreateNovel';
-import Profile from './Profile';
-import { AddChapter, EditNovel, ListChap, StoryCreate } from './TuTruyen';
-import User from './User';
-import Active from '../Actiive/Active';
-import AllStory from '../AllStory/AllStory';
-import Chapter from '../Chapter/Chapter';
-import Search from '../Search/Search';
+import React, { eEffect, useState } from 'react'
+
 import StoryDetail from '../StoryDetail/StoryDetail';
 const menu = [
     {

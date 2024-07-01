@@ -7,9 +7,12 @@ import Modal, { ModalContent } from './Modal';
 import Auth from './Auth';
 import Comment from './Comment';
 import Grid from './Grid';
+import { useSelector } from 'react-redux';
 
 
 export default function HeaderFile() {
+    const { user, auth } = useSelector(state => state.UserReducer);
+    console.log(user)
     return (
         <>
             <nav className="header">
@@ -68,16 +71,18 @@ export default function HeaderFile() {
                             <a to={""}>
                                 <li><i style={{ marginRight: 4 + 'px' }} className="fa-regular fa-circle-up"></i> Đăng truyện</li>
                             </a>
-                            {/* {
+                            {
                                 user ? <div className='navbar-nav__profile'>
-                                    <div onClick={handleDropdownProfile} className="navbar-nav__profile__name">
-                                        {user.image ?
+                                    <div
+                                        //  onClick={handleDropdownProfile}
+                                        className="navbar-nav__profile__name">
+                                        {/* {user.image ?
                                             <div className='navbar-nav__avatar'><img src={user.image} alt="" /></div>
                                             : <i style={{ marginRight: 4 + 'px' }} className="fa-solid fa-user"></i>
                                         }
-                                        <a>{user.name || user.tenhienthi || user.username}</a>
+                                        <a>{user.name || user.tenhienthi || user.username}</a> */}
                                     </div>
-                                    <div ref={profileDropdownRef} tabIndex={"1"} onBlur={hideProfileDropdown} className="navbar-nav__profile__menu">
+                                    {/* <div ref={profileDropdownRef} tabIndex={"1"} onBlur={hideProfileDropdown} className="navbar-nav__profile__menu">
                                         <ul>
                                             {
                                                 menu[user?.roles[0] || 'USER'].map((item, i) => {
@@ -85,26 +90,30 @@ export default function HeaderFile() {
                                                 }
                                                 )
                                             }
-                                            <li ><a onClick={onClickLogout}>Đăng xuất</a></li>
+                                            <li ></li>
                                         </ul>
-                                    </div>
+                                    </div> */}
+                                    <a
+                                    //  onClick={onClickLogout}
+                                    >
+                                        Đăng xuất</a>
                                 </div>
                                     :
-                                   
-                            } */}
-                            <>
-                                <a  ><li>Đăng nhập</li></a>
-                                <a ><li>Đăng ký</li></a>
-                            </>
+                                    <>
+                                        <a ><li>Đăng nhập</li></a>
+                                        <a ><li>Đăng ký</li></a>
+                                    </>
+                            }
+
                         </ul>
                     </div>
                 </div>
-
-                {/* <Modal>
-                    <ModalContent>
-                        <Auth choose={true}></Auth>
+                {auth.active && user == false ? <Modal active={auth.active}>
+                    <ModalContent  >
+                        <Auth choose={auth.login} user={user}></Auth>
                     </ModalContent>
-                </Modal> */}
+                </Modal> : <></>}
+
             </nav>
 
 

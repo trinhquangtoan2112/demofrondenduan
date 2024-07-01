@@ -1,15 +1,8 @@
 import React, { useState } from 'react'
 import Section, { SectionBody, SectionHeading } from './../../components/Section';
 import Story from '../Account/Story';
-
-
-
 function AllStory() {
     const [datas, setDatas] = useState([])
-
-
-
-
     return (
         <>
             <a><span

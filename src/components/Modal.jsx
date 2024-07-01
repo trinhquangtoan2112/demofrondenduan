@@ -2,13 +2,9 @@ import { useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 const Modal = props => {
-
-
+    const { active } = props;
     return (
-        // <div className={`modal ${props.active ? 'active' : ''}`}>
-        //    {props.children}
-        // </div>
-        <div className={`modal  active`}>
+        <div className={`modal ${active ? 'active' : ''}`}>
             {props.children}
         </div>
     )

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL = "https://localhost:7094/";
-
+const TOKEN = "TOKEN";
 class SetUpAxios {
     constructor() {
         this.axiosCreate = axios.create({
@@ -13,47 +13,39 @@ class SetUpAxios {
         return this.axiosCreate.get(url, {
         })
     }
-    post = async (url, data, params) => {
-        return this.axiosCreate.post(url, {
-            data: data
-        })
+    post = async (url, data) => {
+        return this.axiosCreate.post(url, data)
     }
     delete = async (url, data, params) => {
-        return this.axiosCreate.delete(url, {
-            data: data
-        })
+        return this.axiosCreate.delete(url, data)
     }
     put = async (url, data, params) => {
-        return this.axiosCreate.put(url, {
-            data: data
-        })
+        return this.axiosCreate.put(url, data)
     }
     getToken = async (url, data, params) => {
         const updatedParams = await { ...params, 'token': 'Bearer ' + localStorage.getItem(TOKEN) };
-        return this.axiosCreate.get(url, {
+        return this.axiosCreate.get(url, data, {
             params: updatedParams,
-            data: data,
         })
     }
     postToken = async (url, data, params) => {
         const updatedParams = await { ...params, 'token': 'Bearer ' + localStorage.getItem(TOKEN) };
-        return this.axiosCreate.post(url, {
+        return this.axiosCreate.post(url, data, {
             params: updatedParams,
-            data: data
         })
     }
     deleteToken = async (url, data, params) => {
         const updatedParams = await { ...params, 'token': 'Bearer ' + localStorage.getItem(TOKEN) };
-        return this.axiosCreate.delete(url, {
+        return this.axiosCreate.delete(url, data, {
             params: updatedParams,
-            data: data
         })
     }
     putToken = async (url, data, params) => {
         const updatedParams = await { ...params, 'token': 'Bearer ' + localStorage.getItem(TOKEN) };
-        return this.axiosCreate.put(url, {
+        return this.axiosCreate.put(url, data, {
             params: updatedParams,
-            data: data
         })
     }
 }
+
+export const apiKey = new SetUpAxios();
