@@ -9,9 +9,16 @@ class SetUpAxios {
             timeout: 60000
         });
     }
-    get = async (url, data, params) => {
-        return this.axiosCreate.get(url, {
-        })
+    get = async (url, params) => {
+
+        console.log(params)
+        return this.axiosCreate.get(url
+            , {
+                params
+            }
+
+
+        )
     }
     post = async (url, data) => {
         return this.axiosCreate.post(url, data)
@@ -20,11 +27,13 @@ class SetUpAxios {
         return this.axiosCreate.delete(url, data)
     }
     put = async (url, data, params) => {
-        return this.axiosCreate.put(url, data)
+        console.log(params)
+        return this.axiosCreate.put(url, data, { params })
     }
-    getToken = async (url, data, params) => {
+    getToken = async (url, params) => {
         const updatedParams = await { ...params, 'token': 'Bearer ' + localStorage.getItem(TOKEN) };
-        return this.axiosCreate.get(url, data, {
+
+        return this.axiosCreate.get(url, {
             params: updatedParams,
         })
     }
@@ -46,6 +55,7 @@ class SetUpAxios {
             params: updatedParams,
         })
     }
+
 }
 
 export const apiKey = new SetUpAxios();

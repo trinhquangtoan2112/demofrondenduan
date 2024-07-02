@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { DangKy, DangNhap } from '../service/actions/UserAction';
+import { DangKy, DangNhap, sendEmailPassword } from '../service/actions/UserAction';
 import toast, { Toaster } from 'react-hot-toast';
+import Loading from './Loading';
 export default function Auth(props) {
     const [login, setLogin] = useState(props.choose)
     const notify = () => toast('Here is your toast.');
@@ -186,26 +187,22 @@ const ReActive = props => {
 }
 
 const ForgetPassword = props => { ///Quên mật khẩu
-    const [email, setEmail] = useState("")
+    const [gmail, setGmail] = useState("")
     const [loading, setLoading] = useState(false)
 
     const onChangeEmail = (e) => {
-        setEmail(e.target.value)
+        setGmail(e.target.value)
     }
 
-    // const onForgetPassword = async (e) => { //xử lý gọi API gửi mail quên mật khẩu
-    //   e.preventDefault()
-    //   setLoading(true)
-    //   apiMain.forgetPassword({ email: email })
-    //     .then(res => {
-    //       toast.success("Đã gửi mật khẩu mới vào email");
-    //     })
-    //     .catch(err => {
-    //       toast.error(err?.response?.data?.details?.message);
-    //     })
-    //     .finally(() => { setLoading(false) })
+    const onForgetPassword = async (e) => { //xử lý gọi API gửi mail quên mật khẩu
+        e.preventDefault()
+        setLoading(true)
+        const data = {
+            gmail: gmail
+        }
+        sendEmailPassword(data)
 
-    // }
+    }
     return (
         <div className="form-wrap">
             <form>
@@ -216,16 +213,16 @@ const ForgetPassword = props => { ///Quên mật khẩu
                     <div className="field-wrap">
                         <input
                             placeholder="Email" required name="emailActive" type="text"
-                            // onChange={onChangeEmail
-                            // }
-                            value={email} />
+                            onChange={onChangeEmail
+                            }
+                            value={gmail} />
                     </div>
                 </div>
                 <button className='rounded-2'
-                //    onClick={onForgetPassword}
+                    onClick={onForgetPassword}
                 >
-                    {/* {loading ? <Loading /> : ''} */}
-                    Gửi mật khẩu</button>
+                    {loading ? <Loading /> : ''}
+                    Thay đổi mật khẩu</button>
             </form>
         </div>
     )

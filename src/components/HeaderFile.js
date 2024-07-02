@@ -7,12 +7,28 @@ import Modal, { ModalContent } from './Modal';
 import Auth from './Auth';
 import Comment from './Comment';
 import Grid from './Grid';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { hienDangNhap, logOutFromAccount } from '../store/reducer/UserReducer';
 
 
 export default function HeaderFile() {
-    const { user, auth } = useSelector(state => state.UserReducer);
-    console.log(user)
+    const { user, auth, userInfo } = useSelector(state => state.UserReducer);
+    const [auth1, setAuth] = useState(false);
+    useEffect(() => {
+        setAuth(auth)
+    }, [auth])
+    const dispatch = useDispatch();
+    const onClickLogout = () => {
+        localStorage.removeItem("USER_LOGIN");
+        localStorage.removeItem("TOKEN");
+        dispatch(logOutFromAccount())
+    }
+    const hienDangNha = () => {
+        dispatch(hienDangNhap())
+    };
+    const hienDangKy = () => {
+        dispatch(hienDangKy())
+    };
     return (
         <>
             <nav className="header">
@@ -67,21 +83,30 @@ export default function HeaderFile() {
                                 <button ><i className="fa-solid fa-magnifying-glass"></i></button>
                             </div>
                         </div>
+
                         <ul className='navbar-nav__list navbar-nav__list--right'>
                             <a to={""}>
                                 <li><i style={{ marginRight: 4 + 'px' }} className="fa-regular fa-circle-up"></i> Đăng truyện</li>
                             </a>
+
+                            {userInfo.maQuyen == 1 ?
+                                <Link to={"QuanLy"} >
+                                    <li>Quản lý </li>
+                                </Link>
+                                : <></>
+                            }
                             {
-                                user ? <div className='navbar-nav__profile'>
+                                user ? <div className='navbar-nav__profile d-flex items-center' >
                                     <div
-                                        //  onClick={handleDropdownProfile}
-                                        className="navbar-nav__profile__name">
-                                        {/* {user.image ?
-                                            <div className='navbar-nav__avatar'><img src={user.image} alt="" /></div>
-                                            : <i style={{ marginRight: 4 + 'px' }} className="fa-solid fa-user"></i>
+
+                                        className="navbar-nav__profile__name cursor-pointer">
+                                        {userInfo.anhDaiDien != "string" && userInfo.anhDaiDien != null ?
+                                            <Link to={"UserDetail"} className='navbar-nav__avatar'><img src={userInfo.anhDaiDien} alt={userInfo.email + "picture"} /></Link>
+                                            : <Link to={"UserDetail"} ><i style={{ marginRight: 4 + 'px' }} className="fa-solid fa-user"></i></Link>
                                         }
-                                        <a>{user.name || user.tenhienthi || user.username}</a> */}
+                                        <a>{user.name || user.tenhienthi || user.username}</a>
                                     </div>
+
                                     {/* <div ref={profileDropdownRef} tabIndex={"1"} onBlur={hideProfileDropdown} className="navbar-nav__profile__menu">
                                         <ul>
                                             {
@@ -94,23 +119,25 @@ export default function HeaderFile() {
                                         </ul>
                                     </div> */}
                                     <a
-                                    //  onClick={onClickLogout}
+                                        onClick={onClickLogout}
                                     >
                                         Đăng xuất</a>
                                 </div>
                                     :
                                     <>
-                                        <a ><li>Đăng nhập</li></a>
-                                        <a ><li>Đăng ký</li></a>
+                                        <a ><li onClick={() => {
+                                            hienDangNha()
+                                        }}>Đăng nhập</li></a>
+                                        <a onClick={hienDangKy}><li>Đăng ký</li></a>
                                     </>
                             }
 
                         </ul>
                     </div>
                 </div>
-                {auth.active && user == false ? <Modal active={auth.active}>
+                {auth1.active && user == false ? <Modal active={auth1.active}>
                     <ModalContent  >
-                        <Auth choose={auth.login} user={user}></Auth>
+                        <Auth choose={auth1.login} user={user}></Auth>
                     </ModalContent>
                 </Modal> : <></>}
 
