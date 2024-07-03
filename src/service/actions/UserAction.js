@@ -37,9 +37,10 @@ export const CapNhapThongTin = async (dispatch) => {
         if (result.status == 200) {
             dispatch(setUserInformation(result.data))
             localStorage.setItem("USER_LOGIN", JSON.stringify(result.data.data));
-
+            message.success("Cập nhập thành công")
         }
     } catch (error) {
+        console.log(error)
         message.error("Lỗi xảy ra")
     }
 }
@@ -47,8 +48,8 @@ export const ChinhSuaThongTinDangNhap = async (user, dispatch) => {
     try {
         const result = await apiKey.putToken("/Login/CapNhapThongtinNguoiDung", user)
         if (result.status == 200) {
-            await CapNhapThongTin()
-            message.success("Successfully")
+            await CapNhapThongTin(dispatch)
+
         }
     } catch (error) {
         message.error("Lỗi xảy ra")
@@ -105,6 +106,24 @@ export const ChangePasswordAction = async (data) => {
         return false;
 
     } catch (error) {
+        message.error("Lỗi xảy ra")
+    }
+}
+
+export const searchUserAction = async (search1) => {
+    const search = search1;
+    console.log(search)
+    try {
+        const result = await apiKey.get("/Login/SearchUser", search)
+        console.log(result)
+        if (result.status == 200) {
+            return result.data;
+        }
+        message.error("Lỗi xảy ra")
+        return false;
+
+    } catch (error) {
+        console.log(error)
         message.error("Lỗi xảy ra")
     }
 }

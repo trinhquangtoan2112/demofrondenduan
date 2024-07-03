@@ -17,6 +17,7 @@ Modal.propTypes = {
 }
 export default Modal
 export const ModalContent = props => {
+    const { onClose } = props;
 
     const dispatch = useDispatch();
     const onClickButtonq = () => {
@@ -26,7 +27,7 @@ export const ModalContent = props => {
         <div className="modal__content active">
             {props.children}
             <div className="modal__content__close" >
-                <i className="fa-solid fa-xmark" onClick={onClickButtonq}></i>
+                <i className="fa-solid fa-xmark" onClick={onClose ? onClose : onClickButtonq}></i>
             </div>
         </div>
     )

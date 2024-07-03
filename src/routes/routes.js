@@ -1,5 +1,6 @@
 import ChangePassword from "../layout/Account/ChangePassword";
 import Profile from "../layout/Account/Profile";
+import User from "../layout/Account/User";
 import Active from "../layout/Actiive/Active";
 import Home from "../layout/Home/Home";
 import HomePage from "../layout/HomePage";
@@ -41,8 +42,8 @@ const ROUTES = [
     },
     {
         index: 5,
-        path: 'QuanLy',
-        element: <Admin></Admin>,
+        path: '',
+        element: <User></User>,
         auth: false,
         roles: [],
 

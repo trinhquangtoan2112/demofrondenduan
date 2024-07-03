@@ -21,30 +21,32 @@ export default function AddUser() {
 
     return (
         <div className="form-wrap">
+            <h3 className='text-center'>Thêm tài khoản</h3>
             <form>
                 <div className="form-group d-flex">
                     <label>Email</label>
                     <div className="field-wrap">
                         <input placeholder="example@gmail.com" required name="emailRegister" type="text" value={emailRegister}
-                        //    onChange={e => { setEmailRegister(e.target.value) }}
+                            onChange={e => { setEmailRegister(e.target.value) }}
                         />
                     </div>
 
                 </div>
                 <div className="form-group d-flex">
-                    <label>Tên đăng nhập</label>
+                    <label>Email</label>
                     <div className="field-wrap">
-                        <input required name="usernameRegister" type="text" value={usernameRegister}
-                        //    onChange={e => { setUsernameRegister(e.target.value) }} 
+                        <input placeholder="example@gmail.com" required name="emailRegister" type="text" value={emailRegister}
+                            onChange={e => { setEmailRegister(e.target.value) }}
                         />
                     </div>
 
                 </div>
+
                 <div className="form-group d-flex">
                     <label>Mật khẩu</label>
                     <div className="field-wrap">
                         <input required={true} name={"passwordRegister"} type='password' value={passwordRegister}
-                        //    onChange={e => { setPasswordRegister(e.target.value) }}
+                            onChange={e => { setPasswordRegister(e.target.value) }}
                         />
                     </div>
 
@@ -53,9 +55,54 @@ export default function AddUser() {
                     <label>Nhập lại mật khẩu</label>
                     <div className="field-wrap">
                         <input required={true} name={"passwordCfRegister"} type='password' value={passwordCfRegister}
-                        //    onChange={e => { setPasswordCfRegister(e.target.value) }}
+                            onChange={e => { setPasswordCfRegister(e.target.value) }}
                         />
                     </div>
+                </div>
+                <div className="form-group d-flex">
+                    <label>Email</label>
+                    <div className="field-wrap">
+                        <input placeholder="example@gmail.com" required name="emailRegister" type="text" value={emailRegister}
+                            onChange={e => { setEmailRegister(e.target.value) }}
+                        />
+                    </div>
+
+                </div>
+                <div className="form-group d-flex">
+                    <label>Email</label>
+                    <div className="field-wrap">
+                        <input placeholder="example@gmail.com" required name="emailRegister" type="text" value={emailRegister}
+                            onChange={e => { setEmailRegister(e.target.value) }}
+                        />
+                    </div>
+
+                </div>
+                <div className="form-group d-flex">
+                    <label>Email</label>
+                    <div className="field-wrap">
+                        <input placeholder="example@gmail.com" required name="emailRegister" type="text" value={emailRegister}
+                            onChange={e => { setEmailRegister(e.target.value) }}
+                        />
+                    </div>
+
+                </div>
+                <div className="form-group d-flex">
+                    <label>Email</label>
+                    <div className="field-wrap">
+                        <input placeholder="example@gmail.com" required name="emailRegister" type="text" value={emailRegister}
+                            onChange={e => { setEmailRegister(e.target.value) }}
+                        />
+                    </div>
+
+                </div>
+                <div className="form-group d-flex">
+                    <label>Email</label>
+                    <div className="field-wrap">
+                        <input placeholder="example@gmail.com" required name="emailRegister" type="text" value={emailRegister}
+                            onChange={e => { setEmailRegister(e.target.value) }}
+                        />
+                    </div>
+
                 </div>
                 {/* <span>{msgRegister}</span> */}
                 <button

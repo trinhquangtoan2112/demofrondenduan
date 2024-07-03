@@ -10,14 +10,10 @@ class SetUpAxios {
         });
     }
     get = async (url, params) => {
-
-        console.log(params)
         return this.axiosCreate.get(url
             , {
                 params
             }
-
-
         )
     }
     post = async (url, data) => {

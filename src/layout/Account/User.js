@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Modal, { ModalContent } from '../../components/Modal'
+import { useDispatch } from 'react-redux'
 
+import { Button, Space, Table, Tag } from 'antd';
+import { render } from '@testing-library/react';
+import { apiKey } from '../../service/http';
+import dayjs from 'dayjs';
+import AddUser from './AddUser';
+import { searchUserAction } from '../../service/actions/UserAction';
 export default function User() {
     // const user = useSelector(state => state.auth.login?.user)
     const [listUser, setListUser] = useState([])
@@ -8,8 +15,86 @@ export default function User() {
     const [roles, setRoles] = useState([])
     const [id, setId] = useState("")
     const [modalRole, setModalRole] = useState(false)
-    // const dispatch = useDispatch()
+    const [search, setSearch] = useState();
+    const [searchUser, setSearchUser] = useState();
+    const [type1, setType1] = useState(true);
+    const dispatch = useDispatch()
+    const columns = [
+        {
+            title: 'STT',
+            dataIndex: 'id',
+            key: 'id',
+            render: (_, record, index) => (<a>{index + 1}</a>)
 
+        },
+        {
+            title: 'UserName',
+            dataIndex: 'tenNguoiDung',
+            key: 'tenNguoiDung',
+            render: (th) => <>{th != null ? <p>{th}</p> : <p>Không có</p>} </>
+
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+        },
+        {
+            title: 'Ngày Sinh',
+            dataIndex: 'ngaySinh',
+            key: 'ngaySinh',
+            render: (th) => <>{th != null ? <p>{dayjs(th).format("DD-MM-YYYY")}</p> : <p>Không có</p>} </>
+
+        },
+        {
+            title: 'Giới tính',
+            dataIndex: 'gioiTinh',
+            key: 'gioiTinh',
+            render: (th) => <>{th != null ? <p>{th}</p> : <p>Không xác định</p>} </>
+
+        },
+
+        {
+            title: 'Trạng thái',
+            dataIndex: 'trangThai',
+            key: 'trangThai',
+            render: (th) => <Tag color={th ? "green" : "volcano"} > {th ? "True" : "False"}</Tag>
+
+
+        },
+        {
+            title: 'Đã xóa',
+            dataIndex: 'daXoa',
+            key: 'daXoa',
+            render: (th) => <Tag color={th ? "green" : "volcano"} > {th ? "True" : "False"}</Tag>
+        },
+        {
+            title: 'Quyền',
+            dataIndex: 'tenQuyen',
+            key: 'tenQuyen',
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (_, record) => (
+                <div>
+                    {_.tenQuyen === "Admin" ? <p>Bạn không có quyền</p> : !_.daXoa ? <>    <Button style={{
+                        marginRight: 1,
+                    }} onClick={handleChangeRole}>Thay quyền</Button>
+                        <Button>Khóa tk</Button></> : <p>Tài khoản đã bị xóa</p>}
+
+
+                </div>
+            ),
+        },
+    ];
+    useEffect(() => {
+        const getListNguoiDung = async () => {
+            const result = await apiKey.get("/Login/GetDsNguoiDung");
+            setListUser(result.data.data)
+        }
+        getListNguoiDung()
+    }, [])
     // const onClickRole = (e) => {
     //     const role = document.getElementById(`roles-${e.target.name}`).innerText
     //     setModalRole(true)
@@ -86,57 +171,57 @@ export default function User() {
     //     }
     //     loadUsers();
     // }, [])
-
+    const handleClickAddUser = () => {
+        setModalRole(true);
+        setChoose(true)
+    }
+    const handleChangeRole = () => {
+        setModalRole(true);
+        setChoose(false)
+    }
+    const closeModalRole = () => {
+        setModalRole(false);
+        setChoose(false)
+    }
+    const handleSearchUsers = async () => {
+        const data = {
+            search: search
+        }
+        const result = await searchUserAction(data);
+        if (result.success == 200) {
+            console.log(result)
+            setSearchUser(result.data);
+            setType1(false)
+        }
+    }
     return (
         <>
-            <h1>All Users</h1>
-
-            {/* <table className='user-table' style={{ "width": "90%" }}>
-                <thead>
-                    <tr>
-                        <th>Tên đăng nhập</th>
-                        <th>Email</th>
-                        <th>Trạng thái</th>
-                        <th>Quyền hạn</th>
-                        <th>Thao tác</th>
-                    </tr></thead>
-                <tbody>
-                    {
-                        listUser.map((item, index) => {
-                            return (
-                                <tr key={item._id}>
-                                    <td>{item.username}</td>
-                                    <td>{item.email}</td>
-                                    <td key={item.active}>{item.active ? "Đã kích hoạt" : "Chưa kích hoạt"}</td>
-                                    <td id={`roles-${item._id}`}>{item.roles?.map(e => e.name).join(', ') || ""}</td>
-                                    <td tabIndex={index} onBlur={hideMenu}>
-                                        <div className='d-flex user__item' >
-                                            <a className='ma' id={item._id} onClick={onClickShow} >
-                                                <i id={item._id} name={item._id} className="ma fs-20 fa-solid fa-ellipsis"></i>
-                                            </a>
-                                        </div>
-                                        <div className={`user__menu ${choose === item._id ? 'active' : ''}`}>
-                                            <ul>
-                                                <li><a key={item.active} name={item._id} onClick={item.active ? onClickInActive : onClickActive}>
-                                                    {item.active ? 'Khoá tài khoản' : 'Kích hoạt'}</a></li>
-                                                <li><a name={item._id} onClick={onClickRole}>Cấp quyền</a></li>
-                                                <li><a name={item._id} onClick={onClickDelete}>Xoá</a></li>
-                                            </ul>
-                                        </div>
-
-                                    </td>
-                                </tr>
-                            )
-                        })
+            <div className='flex flex-row justify-between items-center mb-1'>
+                <h1>Danh sách tài khoản</h1>
+                <input className='w-3/4' placeholder='Tìm kiếm' onChange={(e) => {
+                    setSearch(e.target.value)
+                }} onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        handleSearchUsers()
                     }
-                </tbody>
-            </table> */}
+                }}></input>
+                <Button
+                    onClick={handleClickAddUser}
+                    type="primary"
+
+                >
+                    Thêm tài khoản
+                </Button></div>
+
+            <Table columns={columns} dataSource={type1 ? listUser : searchUser} />
+
             {/* {modalRole &&  */}
             <Modal active={modalRole}>
                 <ModalContent
-                //  onClose={closeModalRole}
+                    onClose={closeModalRole}
                 >
-                    <ChooseRoles roles={roles} userId={id} />
+                    {choose ? <AddUser></AddUser> : <ChooseRoles roles={roles} userId={id} />}
+
                 </ModalContent>
             </Modal>
             {/* } */}
@@ -150,7 +235,15 @@ export default function User() {
 
 
 const roleBase = [
-    '1', '2'
+    {
+        id: 1,
+        tenQuyen: "Admin"
+    },
+    {
+        id: 2,
+        tenQuyen: "User"
+    }
+
 ]
 const ChooseRoles = (props) => {
     // const user = useSelector(state=>state.auth.login?.user)
@@ -197,20 +290,12 @@ const ChooseRoles = (props) => {
         <div>
             <form className='choose-roles' action="">
                 <h3 style={{ "textAlign": "center" }}>Chọn quyền</h3>
-                {roleBase.map(item => {
-                    return (
-                        <label key={item} htmlFor={item}
-                            // onClick={onClickChooseRole} 
-                            name={item} className='remember-label'>
-                            {item}
-                            <input name={item} readOnly type={'checkbox'}
-                                // checked={roles.includes(item)}
-                                id={item}></input>
-                            <span className='checkmark'></span>
-                        </label>
+                <select>
+                    {roleBase.map(item => {
+                        return <option value={item.id}>{item.tenQuyen}</option>
 
-                    )
-                })}
+                    })}
+                </select>
                 <button
                 // onClick={onClickUpdateRole}
                 >Cấp quyền</button>

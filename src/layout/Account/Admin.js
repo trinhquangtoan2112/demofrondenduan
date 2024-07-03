@@ -1,10 +1,12 @@
 import React, { eEffect, useState } from 'react'
 
 import StoryDetail from '../StoryDetail/StoryDetail';
+import { Link, Outlet } from 'react-router-dom';
+import HeaderFile from '../../components/HeaderFile';
 const menu = [
     {
-        path: "profile",
-        display: "Hồ sơ",
+        path: "",
+        display: "Quản lý thành viên",
         icon: ""
     },
     {
@@ -51,32 +53,36 @@ export default function Admin() {
 
 
     return (
-        <div className='admin-main' >
-            <div className="main-content">
-                <div className="d-flex">
-                    <div className="col-3">
-                        <ul className="list-group">
-                            {/* {
-                  menu.map((item, index) => {
-                    return <li key={index} className={`list-group__item ${index === active ? 'active' : ''}`} ><Link to={item.path}>{item.display}</Link></li>
-                  })
-                } */}
-                            <StoryDetail></StoryDetail>
-                        </ul>
+        <>
+            <HeaderFile></HeaderFile>
+            <div className="main">
+                <div>
 
+                    <div className='admin-main' >
+                        <div className="main-content">
+                            <div className="d-flex">
+                                <div className="col-2">
+                                    <ul className="list-group">
+                                        {
+                                            menu.map((item, index) => {
+                                                return <li key={index} className={`list-group__item `} ><Link to={item.path}>{item.display}</Link></li>
+                                            })
+                                        }
+
+                                    </ul>
+
+                                </div>
+                                <div className="col-10 " style={{ 'minHeight': '500px' }}>
+                                    <Outlet></Outlet>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="col-9 " style={{ 'minHeight': '500px' }}>
-                        {/* <Routes>
-                <Route path='profile' element={<Profile userInfo={userInfo}/>}></Route>
-                <Route path='change-password' element={<ChangePassword />}></Route>
-                <Route path='users' element={<Users dispatch={dispatch}/>}></Route>
-                <Route path='tu-truyen/*' element={<TuTruyen userInfo={userInfo}/>}></Route>
-                <Route path='dang-truyen' element={<CreateNovel  userInfo={userInfo}  />}></Route>
-              </Routes> */}
-                    </div>
+
+
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 

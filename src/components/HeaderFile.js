@@ -37,22 +37,22 @@ export default function HeaderFile() {
                         <button className='navbar-nav__collapse'><i className="fa-solid fa-bars"></i></button>
                         <div className="navbar__items__expand" >
                             <ul className='navbar-nav__list__expand'>
-                                <a to='/'>
+                                <Link to='/'>
                                     <li className='text-bold'>
                                         Thể loại
                                     </li>
-                                </a>
-                                <a to='/truyen'>
+                                </Link>
+                                <Link to='/truyen'>
                                     <li className='text-bold'>Bảng xếp hạng</li>
-                                </a>
-                                <a to={'/'}>
+                                </Link>
+                                <Link to={'/'}>
                                     <li>Đăng truyện</li>
-                                </a>
+                                </Link>
                                 {
-                                    true ? <a to='/profile'>
+                                    true ? <Link to='/userDetail'>
                                         <i style={{ marginRight: 4 + 'px' }} className="fa-solid fa-user"></i>
 
-                                    </a> :
+                                    </Link> :
                                         <>
                                             <a ><li>Đăng nhập</li></a>
                                             <a ><li>Đăng ký</li></a>
@@ -63,19 +63,19 @@ export default function HeaderFile() {
                     </div>
 
                     <div className="logo">
-                        <a className="" to='/'><img src={logo} alt="" /></a>
+                        <Link className="" to='/'><img src={logo} alt="" /></Link>
                     </div>
                     <div className="navbar-nav">
 
                         <ul className='navbar-nav__list'>
-                            <a to='/'>
+                            <Link to='/'>
                                 <li className='text-bold'>
                                     Thể loại
                                 </li>
-                            </a>
-                            <a to='/truyen'>
+                            </Link>
+                            <Link to='/truyen'>
                                 <li className='text-bold'>Bảng xếp hạng</li>
-                            </a>
+                            </Link>
                         </ul>
                         <div className='navbar-nav__list__search'>
                             <div className='form-group'>
@@ -85,12 +85,12 @@ export default function HeaderFile() {
                         </div>
 
                         <ul className='navbar-nav__list navbar-nav__list--right'>
-                            <a to={""}>
+                            <Link to={""}>
                                 <li><i style={{ marginRight: 4 + 'px' }} className="fa-regular fa-circle-up"></i> Đăng truyện</li>
-                            </a>
+                            </Link>
 
                             {userInfo.maQuyen == 1 ?
-                                <Link to={"QuanLy"} >
+                                <Link to={"admin"} >
                                     <li>Quản lý </li>
                                 </Link>
                                 : <></>
@@ -101,8 +101,8 @@ export default function HeaderFile() {
 
                                         className="navbar-nav__profile__name cursor-pointer">
                                         {userInfo.anhDaiDien != "string" && userInfo.anhDaiDien != null ?
-                                            <Link to={"UserDetail"} className='navbar-nav__avatar'><img src={userInfo.anhDaiDien} alt={userInfo.email + "picture"} /></Link>
-                                            : <Link to={"UserDetail"} ><i style={{ marginRight: 4 + 'px' }} className="fa-solid fa-user"></i></Link>
+                                            <Link to={"/UserDetail"} className='navbar-nav__avatar'><img src={userInfo.anhDaiDien} alt={userInfo.email + "picture"} /></Link>
+                                            : <Link to={"/UserDetail"} ><i style={{ marginRight: 4 + 'px' }} className="fa-solid fa-user"></i></Link>
                                         }
                                         <a>{user.name || user.tenhienthi || user.username}</a>
                                     </div>
