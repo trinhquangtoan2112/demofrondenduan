@@ -52,6 +52,7 @@ export const ChinhSuaThongTinDangNhap = async (user, dispatch) => {
 
         }
     } catch (error) {
+        console.log(error)
         message.error("Lỗi xảy ra")
     }
 }
