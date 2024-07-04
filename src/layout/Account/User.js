@@ -8,6 +8,7 @@ import { apiKey } from '../../service/http';
 import dayjs from 'dayjs';
 import AddUser from './AddUser';
 import { searchUserAction } from '../../service/actions/UserAction';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 export default function User() {
     // const user = useSelector(state => state.auth.login?.user)
     const [listUser, setListUser] = useState([])
@@ -80,8 +81,16 @@ export default function User() {
                 <div>
                     {_.tenQuyen === "Admin" ? <p>Bạn không có quyền</p> : !_.daXoa ? <>    <Button style={{
                         marginRight: 1,
-                    }} onClick={handleChangeRole}>Thay quyền</Button>
-                        <Button>Khóa tk</Button></> : <p>Tài khoản đã bị xóa</p>}
+                    }} onClick={() => {
+
+                        if (_.tenQuyen === "Admin") {
+                            handleChangeRole(1)
+                        } else {
+                            handleChangeRole(2)
+                        }
+
+                    }}><EditOutlined /></Button>
+                        <Button><DeleteOutlined /></Button></> : <p>Tài khoản đã bị xóa</p>}
 
 
                 </div>
@@ -175,9 +184,10 @@ export default function User() {
         setModalRole(true);
         setChoose(true)
     }
-    const handleChangeRole = () => {
+    const handleChangeRole = (roles) => {
         setModalRole(true);
-        setChoose(false)
+        setChoose(false);
+        setRoles(roles)
     }
     const closeModalRole = () => {
         setModalRole(false);
@@ -247,7 +257,13 @@ const roleBase = [
 ]
 const ChooseRoles = (props) => {
     // const user = useSelector(state=>state.auth.login?.user)
-    const [roles, setRoles] = useState(props.roles)
+    const { roles, userId } = props;
+    console.log(roles)
+    const [role, setRole] = useState();
+    useEffect(() => {
+        setRole(roles)
+    }, [])
+
     // const dispatch = useDispatch();
 
     // const  onClickUpdateRole =async(e)=>{
@@ -287,19 +303,97 @@ const ChooseRoles = (props) => {
     //   }
     // }
     return (
-        <div>
-            <form className='choose-roles' action="">
-                <h3 style={{ "textAlign": "center" }}>Chọn quyền</h3>
-                <select>
-                    {roleBase.map(item => {
-                        return <option value={item.id}>{item.tenQuyen}</option>
+        <>
 
-                    })}
-                </select>
-                <button
-                // onClick={onClickUpdateRole}
-                >Cấp quyền</button>
-            </form>
-        </div>
+            <div className="w-80">
+                <form action="#">
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium leading-5  text-gray-700">Name</label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                            <input id="name" name="name" placeholder="John Doe" type="text" required defaultValue className="appearance-none block w-full px-3 py-2  border-blue-500 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-600 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                            <div className="hidden absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium leading-5  text-gray-700">Name</label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                            <input id="name" name="name" placeholder="John Doe" type="text" required defaultValue className="appearance-none block w-full px-3 py-2  border-blue-500 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-600 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                            <div className="hidden absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium leading-5  text-gray-700">Name</label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                            <input id="name" name="name" placeholder="John Doe" type="text" required defaultValue className="appearance-none block w-full px-3 py-2  border-blue-500 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-600 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                            <div className="hidden absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium leading-5  text-gray-700">Name</label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                            <input id="name" name="name" placeholder="John Doe" type="text" required defaultValue className="appearance-none block w-full px-3 py-2  border-blue-500 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-600 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                            <div className="hidden absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium leading-5  text-gray-700">Name</label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                            <input id="name" name="name" placeholder="John Doe" type="text" required defaultValue className="appearance-none block w-full px-3 py-2  border-blue-500 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-600 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                            <div className="hidden absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium leading-5  text-gray-700">Name</label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                            <input id="name" name="name" placeholder="John Doe" type="text" required defaultValue className="appearance-none block w-full px-3 py-2  border-blue-500 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-600 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                            <div className="hidden absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium leading-5  text-gray-700">Name</label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                            <input id="name" name="name" placeholder="John Doe" type="text" required defaultValue className="appearance-none block w-full px-3 py-2  border-blue-500 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-600 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                            <div className="hidden absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </>
+
     )
 }
