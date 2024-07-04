@@ -35,7 +35,7 @@ const UserReducer = createSlice({
             state.auth.active = true;
             state.auth.login = true;
         },
-        hienDangKy: (state, action) => {
+        hienDangKy1: (state, action) => {
             state.auth.active = true;
             state.auth.login = false;
         }
@@ -43,6 +43,6 @@ const UserReducer = createSlice({
     }
 });
 
-export const { setUserInformation, logOutFromAccount, closeButton, hienDangNhap, hienDangKy } = UserReducer.actions
+export const { setUserInformation, logOutFromAccount, closeButton, hienDangNhap, hienDangKy1 } = UserReducer.actions
 
 export default UserReducer.reducer

@@ -8,7 +8,7 @@ import Auth from './Auth';
 import Comment from './Comment';
 import Grid from './Grid';
 import { useDispatch, useSelector } from 'react-redux';
-import { hienDangNhap, logOutFromAccount } from '../store/reducer/UserReducer';
+import { hienDangKy1, hienDangNhap, logOutFromAccount } from '../store/reducer/UserReducer';
 
 
 export default function HeaderFile() {
@@ -27,7 +27,7 @@ export default function HeaderFile() {
         dispatch(hienDangNhap())
     };
     const hienDangKy = () => {
-        dispatch(hienDangKy())
+        dispatch(hienDangKy1())
     };
     return (
         <>
@@ -90,7 +90,7 @@ export default function HeaderFile() {
                             </Link>
 
                             {userInfo.maQuyen == 1 ?
-                                <Link to={"admin"} >
+                                <Link to={"/admin"} >
                                     <li>Quản lý </li>
                                 </Link>
                                 : <></>
