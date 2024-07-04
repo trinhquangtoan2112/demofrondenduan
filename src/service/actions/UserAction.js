@@ -113,7 +113,7 @@ export const ChangePasswordAction = async (data) => {
 
 export const searchUserAction = async (search1) => {
     const search = search1;
-    console.log(search)
+
     try {
         const result = await apiKey.get("/Login/SearchUser", search)
         console.log(result)
@@ -126,5 +126,76 @@ export const searchUserAction = async (search1) => {
     } catch (error) {
         console.log(error)
         message.error("Lỗi xảy ra")
+    }
+}
+
+export const AddUserByAdmin = async (data) => {
+    try {
+        const result = await apiKey.post("/Login/AddUserByAdmin", data)
+        console.log(result)
+        if (result.status == 200) {
+            message.success("Thêm tài khoản thành công")
+            return true;
+        }
+        message.error("Lỗi xảy ra")
+        return false;
+
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+    }
+
+}
+export const UpdateUserByAdmin = async (id, data) => {
+    const idUser = {
+        id: id
+    }
+
+    try {
+        const result = await apiKey.put("/Login/SuaTaikhoanByAdmin", data, idUser)
+        console.log(result)
+        if (result.status == 200) {
+            message.success("Sửa tài khoản thành công")
+            return true;
+        }
+        message.error("Lỗi xảy ra")
+        return false;
+
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+    }
+
+}
+export const getUserInAdmin = async (id) => {
+    console.log("idAction", id)
+    const dataUser = {
+        id: id
+    }
+    try {
+        const result = await apiKey.get("/Login/GetThongTinCuThe", dataUser)
+        console.log(result)
+        if (result.data.status === 200) {
+            return result.data.data
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const deleteUserAdmin = async (id) => {
+
+    const dataUser = {
+        id: id
+    }
+    try {
+        const result = await apiKey.put("/Login/XoaTaikhoan", null, dataUser)
+        console.log(result)
+        if (result.status === 200) {
+            return true
+        }
+        return false;
+    } catch (error) {
+        return false;
     }
 }

@@ -24,7 +24,7 @@ export const ModalContent = props => {
         dispatch(closeButton())
     }
     return (
-        <div className="modal__content active">
+        <div className="modal__content active" >
             {props.children}
             <div className="modal__content__close" >
                 <i className="fa-solid fa-xmark" onClick={onClose ? onClose : onClickButtonq}></i>

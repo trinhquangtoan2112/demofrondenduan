@@ -6,3 +6,92 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+img {
+  width: 50px;
+  height: 50px;
+}
+.ant-table-tbody .ant-table-row td {
+  padding: 5px !important;
+}
+
+.ant-btn {
+  margin-right: 10px;
+}
+.ant-picker {
+  width: 100%;
+}
+.ant-input-number {
+  width: 100%;
+}
+.anticon svg {
+  color: #feaf00;
+}
+.ant-table-cell {
+  text-align: center !important;
+}
+.ant-table-cell img {
+  border-radius: 8px;
+  width: 65px;
+  height: 55px;
+}
+.ant-table table {
+  border-spacing: 0 5px;
+  background-color: #f8f8f8;
+}
+.ant-table-row {
+  background-color: rgba(255, 255, 255, 1);
+}
+.ant-space-item svg {
+  width: 19px;
+  height: 19px;
+}
+.ant-table-cell a {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 17.07px;
+}
+.ant-form-horizontal img {
+  margin: 0 auto;
+  margin-bottom: 10px;
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+}
+.ant-form,
+.ant-form-horizontal {
+  width: 99%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  max-width: 99% !important;
+}
+
+.ant-form-item {
+  width: 50%;
+}
+.ant-form-item-control {
+  margin-right: 0px;
+}
+.ant-form-item-row {
+  align-items: center;
+}
+.ant-form-item-control-input-content {
+  display: flex;
+  flex-direction: row;
+
+  align-items: center;
+}
+.ant-form-item-control-input-content .ant-btn {
+  width: 40%;
+  margin-right: 10px;
+}
+.ant-form-item-required {
+  margin-right: 5px;
+  text-wrap: auto;
+}
+.ant-form-item-label label {
+  margin-right: 5px;
+  text-wrap: auto;
+}
