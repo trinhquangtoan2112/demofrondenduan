@@ -6,10 +6,10 @@ import { ChinhSuaThongTinDangNhap, sendEmail } from '../../service/actions/UserA
 export default function Profile(props) {
     const { userInfo } = useSelector(state => state.UserReducer);
 
-    const [image, setImage] = useState("");
+    const [image, setImage] = useState(userInfo?.anhDaiDien);
     const [preview, setPreview] = useState(
         // userInfo?.image || 
-        avt)
+        userInfo?.anhDaiDien)
     const [name, setName] = useState(
         userInfo.tenNguoiDung || ""
     );
@@ -66,16 +66,17 @@ export default function Profile(props) {
     const handleEdit = async (e) => {
         e.preventDefault()
         console.log(1214142)
-        const data = {
-            "maNguoiDung": userInfo.maNguoiDung,
-            "tenNguoiDung": name,
-            "ngaySinh": birthDate,
-            "gioiTinh": sex,
-            "anhDaiDien": preview
-        }
-        ChinhSuaThongTinDangNhap(data, dispatch);
-    }
 
+        const form = new FormData();
+        form.append('maNguoiDung', userInfo.maNguoiDung);
+        form.append('tenNguoiDung', name);
+        form.append('ngaySinh', birthDate);
+        form.append('gioiTinh', sex);
+        form.append('anhDaiDien', image);
+
+        ChinhSuaThongTinDangNhap(form, dispatch);
+    }
+    console.log(image)
     ///OnChange event
     const onChangeName = (e) => {
 
@@ -99,12 +100,13 @@ export default function Profile(props) {
         sendEmail()
     }
 
-    // const onChangeImage = (e) => {//xử lý chọn ảnh
-    //     if (e.target.files.lenght !== 0) {
-    //         setImage(e.target.files[0]);
-    //         setPreview(URL.createObjectURL(e.target.files[0]))
-    //     }
-    // }
+    const onChangeImage = (e) => {//xử lý chọn ảnh
+
+        if (e.target.files.lenght !== 0) {
+            setImage(e.target.files[0]);
+            setPreview(URL.createObjectURL(e.target.files[0]))
+        }
+    }
 
     //style
     const labelStyle = { 'minWidth': '100px', 'display': 'inline-block' }
@@ -117,11 +119,11 @@ export default function Profile(props) {
                 {userInfo ? <>
                     <div className="col-5 profile__avt">
                         {
-                            userInfo.anhDaiDien ? <img src={userInfo.anhDaiDien} alt="anhDaiDien" />
+                            preview ? <img src={preview} alt="anhDaiDien" />
                                 : <i style={{ marginRight: 4 + 'px' }} className="fa-solid fa-user"></i>
                         }
                         <input type={"file"} accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" name={"avatar"}
-                        // onChange={onChangeImage} 
+                            onChange={onChangeImage}
                         />
                         <button
                         // onClick={upload}
