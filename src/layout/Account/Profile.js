@@ -6,7 +6,7 @@ import { ChinhSuaThongTinDangNhap, sendEmail } from '../../service/actions/UserA
 export default function Profile(props) {
     const { userInfo } = useSelector(state => state.UserReducer);
 
-    const [image, setImage] = useState(userInfo?.anhDaiDien);
+    const [image, setImage] = useState(null);
     const [preview, setPreview] = useState(
         // userInfo?.image || 
         userInfo?.anhDaiDien)
@@ -65,7 +65,7 @@ export default function Profile(props) {
 
     const handleEdit = async (e) => {
         e.preventDefault()
-        console.log(1214142)
+
 
         const form = new FormData();
         form.append('maNguoiDung', userInfo.maNguoiDung);
