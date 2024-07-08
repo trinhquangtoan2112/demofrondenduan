@@ -36,7 +36,7 @@ export default function ListStory() {
                 <div className='col-8'>
                     <Section>
                         <SectionHeading>
-                            <h4 className='section-title'>Biên tập viên đề cử</h4>
+                            <h4 className='section-title'>Truyện đề cử</h4>
                             <a to='tat-ca'>Xem tất cả</a>
                         </SectionHeading>
                         <SectionBody>
