@@ -45,6 +45,7 @@ export const CapNhapThongTin = async (dispatch) => {
     }
 }
 export const ChinhSuaThongTinDangNhap = async (user, dispatch) => {
+    console.log(user)
     try {
         const result = await apiKey.putToken("/Login/CapNhapThongtinNguoiDung", user)
         if (result.status == 200) {

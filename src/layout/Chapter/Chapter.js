@@ -1,26 +1,35 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { GetChiTietChuongTruyenAction } from '../../service/actions/TruyenAction';
+import parse from 'html-react-parser';
 
 
 function Chapter(props) {
-    // const { chapnum, url } = useParams()
+    const { maChuong } = useParams()
     const [chapter, setChapter] = useState({})
     const [fontsize, setFontsize] = useState(18);
     const [lineHeight, setLineHeight] = useState(1.5);
     const [manual, setManual] = useState("")
     // const user = useSelector(state => state.auth.login?.user)
-    // const dispatch = useDispatch()
+    const dispatch = useDispatch()
     const contentRef = useRef(null)
 
     useEffect(() => {//xử lý đánh dấu truyện đang đọc
-        // const handleSetReading = async () => {//tạo hàm
-        //     if (user) {
-        //         const params = {
-        //             url, chapNumber: chapnum
-        //         }
-        //         apiMain.setReading(params, user, dispatch, loginSuccess)
-        //     }
-        // }
-        // handleSetReading();//gọi hàm
+        const handleSetReading = async () => {//tạo hàm
+
+            const data = {
+                maChuong: maChuong
+            }
+            const result = await GetChiTietChuongTruyenAction(data)
+            setChapter({
+                machuongtruyen: result.machuongtruyen,
+                tenChuong: result.tenChuong,
+                content: result.noiDung
+            })
+
+        }
+        handleSetReading();//gọi hàm
     }, [])
 
     // useEffect(() => {//Xử lý load dữ liệu chương truyện
@@ -36,9 +45,9 @@ function Chapter(props) {
     //     getChapter()//gọi hàm
     // }, [chapnum])
 
-    useEffect(() => {//xử lý hiển thị nội dung truyện
-        contentRef.current.innerHTML = chapter?.content || ""
-    }, [chapter])
+    // useEffect(() => {//xử lý hiển thị nội dung truyện
+    //     contentRef.current.innerHTML = chapter?.content || ""
+    // }, [chapter])
 
     // useEffect(() => {//xử lý sự kiện click khi đọc truyện
     //     const handleClick = () => {//khi click sẽ set manual về "" để ẩn manual
@@ -47,12 +56,18 @@ function Chapter(props) {
     //     document.addEventListener("click", handleClick)
     //     return () => { document.removeEventListener("click", handleClick) }
     // }, [])
-
+    const renderNoiDung = () => {
+        return <div>
+            {
+                parse(chapter.content)
+            }
+        </div>
+    }
     return (<>
         <div className="main" style={{ backgroundColor: "#ced9d9", paddingTop: "30px" }}>
             <div className="container">
                 <div className="main-content" style={{ "position": "relative", margin: "0 80px", backgroundColor: "#e1e8e8" }}>
-                    <ul className='chapter-manual fs-24'>
+                    {/* <ul className='chapter-manual fs-24'>
                         <li className={`chapter-manual__item ${manual === 'list-chap' ? 'active' : ''}`} onClick={(e) => {
                             e.stopPropagation();
                             if (manual === 'list-chap')
@@ -64,7 +79,7 @@ function Chapter(props) {
                             <div className="chapter-manual__popup" >
                                 <div className="list-chapter" style={{ width: "700px", "maxHeight": "500px", "overflow": "scroll" }}>
                                     {/* <ListChapter url={url} col={2} fontsize={15} /> */}
-                                </div>
+                    {/* </div>
                             </div>
 
                         </li>
@@ -124,11 +139,11 @@ function Chapter(props) {
                         </li>
                         <li className='chapter-manual__item'><a><i className="fa-solid fa-comments"></i></a> </li>
 
-                    </ul>
+                    </ul> */}
                     <div className="d-lex" >
-                        <h1 className='chapter-name'>{chapter?.tenchap}</h1>
+                        <h1 className='chapter-name'>{chapter?.tenChuong}</h1>
                         <div className={`fs-${fontsize}`} style={{ "lineHeight": `${lineHeight}` }}>
-                            <div ref={contentRef} id="chapter-content"></div>
+                            <div id="chapter-content">{chapter?.content ? renderNoiDung() : <p>Lỗi xảy ra hãy reset lại web</p>}</div>
                         </div>
 
                     </div>

@@ -2,9 +2,11 @@ import ChangePassword from "../layout/Account/ChangePassword";
 import Profile from "../layout/Account/Profile";
 import User from "../layout/Account/User";
 import Active from "../layout/Actiive/Active";
+import Chapter from "../layout/Chapter/Chapter";
 import Home from "../layout/Home/Home";
 import HomePage from "../layout/HomePage";
 import Admin from './../layout/Account/Admin';
+import Feedback from './../layout/Feedback/Feedback';
 
 
 const ROUTES = [
@@ -48,6 +50,20 @@ const ROUTES = [
         roles: [],
 
     },
+    {
+        index: 6,
+        path: "truyen/:name/:maChuong",
+        element: <Chapter></Chapter>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 7,
+        path: "Feedback",
+        element: <Feedback></Feedback>,
+        auth: true,
+        roles: [],
+    }
 ];
 
 export default ROUTES;
