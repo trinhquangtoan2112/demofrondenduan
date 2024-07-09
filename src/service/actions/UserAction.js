@@ -4,7 +4,7 @@ import { apiKey } from "../http"
 import { message } from 'antd';
 import ChangePassword from './../../layout/Account/ChangePassword';
 
-export const DangNhap = async (user, dispatch, check) => {
+export const DangNhap = async (user, dispatch) => {
     try {
         const result = await apiKey.post("Login/Login", user)
         if (result.status == 200) {

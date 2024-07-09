@@ -83,7 +83,7 @@ const Login = props => {
             email: user.username,
             matKhau: user.password
         }
-        DangNhap(data, props.dispatch, check)
+        DangNhap(data, props.dispatch)
     }
     return (
         <div className="form-wrap">
@@ -118,7 +118,7 @@ const Login = props => {
                         />
                     </div>
                 </div>
-                <div className="d-flex">
+                {/* <div className="d-flex">
                     <label className='remember-label' htmlFor="remember">
                         <span>Ghi nhớ mật khẩu</span>
                         <input type="checkbox" id="remember" onChange={(e) => {
@@ -126,7 +126,7 @@ const Login = props => {
                         }}></input>
                         <span className="checkmark"></span>
                     </label>
-                </div>
+                </div> */}
                 <button className='rounded-2'
                     onClick={onLogin}
                 >
