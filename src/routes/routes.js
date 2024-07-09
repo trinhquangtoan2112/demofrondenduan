@@ -6,6 +6,7 @@ import Chapter from "../layout/Chapter/Chapter";
 import Home from "../layout/Home/Home";
 import HomePage from "../layout/HomePage";
 import Admin from './../layout/Account/Admin';
+import Feedback from './../layout/Feedback/Feedback';
 
 
 const ROUTES = [
@@ -55,6 +56,14 @@ const ROUTES = [
         element: <Chapter></Chapter>,
         auth: true,
         roles: [],
+    },
+    {
+        index: 7,
+        path: "Feedback",
+        element: <Feedback></Feedback>,
+        auth: true,
+        roles: [],
+
     }
 ];
 
