@@ -10,10 +10,10 @@ export const DangNhap = async (user, dispatch, check) => {
         if (result.status == 200) {
             dispatch(setUserInformation(result.data))
             message.success("Successfully")
-            if (check) {
-                localStorage.setItem("USER_LOGIN", JSON.stringify(result.data.data));
-                localStorage.setItem("TOKEN", result.data.token);
-            }
+
+            localStorage.setItem("USER_LOGIN", JSON.stringify(result.data.data));
+            localStorage.setItem("TOKEN", result.data.token);
+
         }
     } catch (error) {
         message.error("Lỗi xảy ra")
