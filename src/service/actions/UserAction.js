@@ -4,16 +4,16 @@ import { apiKey } from "../http"
 import { message } from 'antd';
 import ChangePassword from './../../layout/Account/ChangePassword';
 
-export const DangNhap = async (user, dispatch, check) => {
+export const DangNhap = async (user, dispatch) => {
     try {
         const result = await apiKey.post("Login/Login", user)
         if (result.status == 200) {
             dispatch(setUserInformation(result.data))
             message.success("Successfully")
-            if (check) {
-                localStorage.setItem("USER_LOGIN", JSON.stringify(result.data.data));
-                localStorage.setItem("TOKEN", result.data.token);
-            }
+
+            localStorage.setItem("USER_LOGIN", JSON.stringify(result.data.data));
+            localStorage.setItem("TOKEN", result.data.token);
+
         }
     } catch (error) {
         message.error("Lỗi xảy ra")
