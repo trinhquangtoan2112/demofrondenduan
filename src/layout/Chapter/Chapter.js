@@ -143,7 +143,9 @@ function Chapter(props) {
                     <div className="d-lex" >
                         <h1 className='chapter-name'>{chapter?.tenChuong}</h1>
                         <div className={`fs-${fontsize}`} style={{ "lineHeight": `${lineHeight}` }}>
-                            <div id="chapter-content">{chapter?.content ? renderNoiDung() : <p>Lỗi xảy ra hãy reset lại web</p>}</div>
+
+                            <div id="chapter-content">{chapter?.content ? renderNoiDung() : <p>Lỗi xảy ra hãy thử lại sau</p>}</div>
+
                         </div>
 
                     </div>
