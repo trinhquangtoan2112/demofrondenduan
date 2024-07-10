@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 
 
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Layout from '../../components/Layout';
 import LoadingData from '../../components/LoadingData';
 import Grid from '../../components/Grid';
 import Pagination from './../../components/Pagination';
-
+import { GetChiTietChuongTruyen } from '../../service/actions/TruyenAction';
+import dayjs from 'dayjs';
+import parse from 'html-react-parser';
 
 const nav = [//navigate
   {
@@ -32,26 +34,26 @@ const nav = [//navigate
 ]
 
 function StoryDetail() {
-  // const { url } = useParams()
+  const { id } = useParams()
   const [truyen, setTruyen] = useState(null);
   const [catGiu, setCatGiu] = useState(100)
   const [main, setMain] = useState(null)
   const [tab, setTab] = useState('')
   const active = nav.findIndex(e => e.path === tab)
-  const [loadingData, setLoadingData] = useState(true)
+  const [loadingData, setLoadingData] = useState(false)
 
-  // useEffect(() => {//load truyện
-  //   const getStory = async () => {
-  //     let params = { url }
-  //     apiMain.getStory(params).then(res => {
-  //       setTruyen(res)
-  //       setTab('about')//set tab mặc định là About
-  //       setLoadingData(false)
-  //     })
-  //   }
-  //   getStory()
-  // }, [url])
+  useEffect(() => {//load truyện
+    const getStory = async () => {
+      const result = await GetChiTietChuongTruyen(id);
+      setTruyen(result)
+    }
+    getStory()
+  }, [])
 
+  const handleSetPage = async () => {
+    console.log(214124124)
+  }
+  console.log(truyen)
   // useEffect(() => {//xử lý đổi tab
   //   switch (tab) {
   //     case 'about':
@@ -76,7 +78,7 @@ function StoryDetail() {
   //   setTab(e.target.name)
   // }
   //style
-  const liClass = "border-primary rounded-2 color-primary"
+  const liClass = "border-primary rounded-2 color-primary m-1"
   return (
     <Layout >
       <div className="main-content">
@@ -85,36 +87,33 @@ function StoryDetail() {
           <>
             <div className="heroSide d-flex">
               <div className="img-wrap">
-                <img src={truyen?.hinhanh} alt="" />
+                <img src={truyen?.anhBia} className='h-full' alt="" />
               </div>
-              <div className="heroSide__main">
-                <h2 className='mb-1'>{truyen?.tentruyen}</h2>
-                <ul className=''>
-                  <li className={liClass}>{truyen?.tacgia}</li>
-                  <li className={liClass}>{truyen?.trangthai}</li>
-                  <li className={liClass}>{truyen?.theloai}</li>
-                </ul>
-                <ul className="heroSide__info">
-                  <li>
-                    <span className='fs-16 bold'>{truyen?.sochap || '0'}</span>
-                    <br />
-                    <span>Chương</span>
-                  </li>
-                  <li>
-                    <span className='fs-16 bold'>{truyen?.luotdoc || '0'}</span>
-                    <br />
-                    <span>Lượt đọc</span>
-                  </li>
+              <div className='col-3'>
 
-                  <li>
+                <div className="heroSide__main">
+                  <h2 className='mb-1'>{truyen?.tenTruyen}</h2>
+                  <ul className='flex flex-col w-full'>
+                    <li className={liClass}>Tác giả: {truyen?.tenButDanh}</li>
+                    <li className={liClass}>Thể loại: {truyen?.tenTheLoai}</li>
+                    <li className={liClass}>Ngày cập nhập: {dayjs(truyen?.ngayCapNhat).format("DD/MM/YYYY")}</li>
+                  </ul>
+                  <ul className="heroSide__info">
+                    <li>
+                      <span className='fs-16 bold'>{truyen?.tongLuotDoc || '0'}</span>
+                      <br />
+                      <span>Lượt đọc</span>
+                    </li>
+
+                    {/* <li>
                     <span className='fs-16 bold'>{catGiu || '0'}</span>
                     <br />
                     <span>Cất giữ</span>
-                  </li>
+                  </li> */}
 
-                </ul>
+                  </ul>
 
-                <div className="heroSide__rate">
+                  {/* <div className="heroSide__rate">
                   <span className={`fa fa-star ${truyen?.danhgia >= 1 ? 'checked' : ''}`}></span>
                   <span className={`fa fa-star ${truyen?.danhgia >= 2 ? 'checked' : ''}`}></span>
                   <span className={`fa fa-star ${truyen?.danhgia >= 3 ? 'checked' : ''}`}></span>
@@ -122,16 +121,20 @@ function StoryDetail() {
                   <span className={`fa fa-star ${truyen?.danhgia >= 5 ? 'checked' : ''}`}></span>
                   <span>&nbsp;{truyen?.danhgia}/5   ({truyen?.soluongdanhgia} đánh giá)</span>
                 </div>
-                <div className=''>
-                  <button className='btn-primary mr-1'>Đọc truyện</button>
-                  <button className='btn-outline mr-1'>Đánh dấu</button>
-                  <button className='btn-outline'>Đề cử</button>
+                */}
                 </div>
-
+                <div className='flex flex-row justify-between'>
+                  <button className='btn-primary m-0 p-0' style={{ minWidth: "10px" }}><i class="fa fa-book-reader"></i></button>
+                  <button className='btn-outline m-0 p-0' style={{ minWidth: "10px" }}><i class="fa fa-check"></i></button>
+                  <button className='btn-outline m-0 p-0' style={{ minWidth: "10px" }}><i class="fa fa-heart"></i></button>
+                </div>
+              </div>
+              <div className='col-9' style={{ overflowY: "scroll" }}>
+                {truyen?.moTa != null ? parse(truyen?.moTa) : "Khong co gi"}
               </div>
             </div>
 
-            <div className="story-detail">
+            {/* <div className="story-detail">
               <div className="navigate">
                 {
                   nav.map((item, index) => {
@@ -144,15 +147,17 @@ function StoryDetail() {
                   })
                 }
               </div>
-            </div>
+            </div> */}
 
             <div className="story-detail__tab__main">
-              {main}
+              <ListChapter dsChuong={truyen?.data} tenTruyen={truyen?.tenTruyen}></ListChapter>
             </div>
+            {truyen?.totalCount ? <Pagination totalPage={truyen?.totalCount} currentPage={truyen?.currentPage} handleSetPage={handleSetPage}></Pagination>
+              : null}
           </>
         }
       </div>
-    </Layout>
+    </Layout >
   )
 }
 
@@ -172,29 +177,17 @@ const Rate = props => {
 }
 
 export const ListChapter = props => {
-  const [chapters, setChapters] = useState([])
-  const [loadingData, setLoadingData] = useState(true)
+  const { dsChuong, tenTruyen } = props
+  const [chapters, setChapters] = useState([dsChuong])
+  const [loadingData, setLoadingData] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-
-  // const url = props.url
-  // useEffect(() => {
-  //   const loadList = async () => {//xử lý gọi API danh sách truyện
-  //     const params = {//payload
-  //       page: currentPage,
-  //       size: 20
-  //     }
-
-  //     apiMain.getNameChapters(props.url, params).then(res => {
-  //       setChapters(res)
-  //       setLoadingData(false)
-  //     })
-  //   }
-  //   loadList()//gọi hàm
-  // }, [props.url, currentPage])
-
-  const handleSetPage = useCallback((value) => {//hàm xử lý set lại trang hiện tại trong phân trang
-    setCurrentPage(Number(value))
+  console.log(chapters, "124241241")
+  useEffect(() => {
+    setChapters(dsChuong)
   })
+
+
+
 
   return (
     <>
@@ -203,16 +196,16 @@ export const ListChapter = props => {
         loadingData ? <LoadingData /> :
           <Grid gap={15} col={props.col || 3} snCol={1}>
             {
-              chapters.map((item, index) => {
-                return <a
+              chapters?.map((item, index) => {
+                return <Link to={`/truyen/${tenTruyen}/${item?.maChuong}`}
                   // to={`/truyen/${url}/${item.chapnumber}`}
-                  key={index} className='text-overflow-1-lines'
-                  style={{ "fontSize": `${props.fontsize || 16}px` }}>{item.tenchap}</a>
+                  key={item?.maChuong} className='text-overflow-1-lines'
+                  style={{ "fontSize": `${props.fontsize || 16}px` }}>Chương {item?.stt}: {item?.tenChuong}</Link>
               })
             }
           </Grid>
       }
-      <Pagination totalPage={10} currentPage={currentPage} handleSetPage={handleSetPage} />
+
 
     </>
   )

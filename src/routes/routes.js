@@ -8,6 +8,9 @@ import HomePage from "../layout/HomePage";
 import Admin from './../layout/Account/Admin';
 import Feedback from './../layout/Feedback/Feedback';
 import FeedbackAdmin from '../layout/Feedback/FeedbackAdmin';
+import TuTruyen, { EditNovel, StoryCreate } from './../layout/Account/TuTruyen';
+import CreateNovel from './../layout/Account/CreateNovel';
+import StoryDetail from "../layout/StoryDetail/StoryDetail";
 
 
 const ROUTES = [
@@ -71,8 +74,35 @@ const ROUTES = [
         element: <FeedbackAdmin></FeedbackAdmin>,
         auth: false,
         roles: [],
+    },
+    {
+        index: 9,
+        path: "DangTruyen",
+        element: <CreateNovel></CreateNovel>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 10,
+        path: "CapNhapTruyen/:id",
+        element: <EditNovel></EditNovel>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 11,
+        path: "truyen/:id",
+        element: <StoryDetail></StoryDetail>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 12,
+        path: "QuanLyTruyen/:id",
+        element: <TuTruyen></TuTruyen>,
+        auth: true,
+        roles: [],
     }
-    
 ];
 
 export default ROUTES;

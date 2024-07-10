@@ -5,6 +5,13 @@ import avt from '../../assets/img/avt.png'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Grid from '../../components/Grid';
+import { Link, useParams } from 'react-router-dom';
+import { AnTruyen, AnTruyenAction, DangTruyen, GetThongTinTruyen, GetTruyenTheoButDanh, HienTruyenAction, SuaTruyen } from '../../service/actions/TruyenAction';
+import { AddUserByAdmin, deleteUserAdmin, getUserInAdmin, searchUserAction, UpdateUserByAdmin } from '../../service/actions/UserAction';
+import { Button, Table, Tag, DatePicker, Form, Input, InputNumber, Checkbox, Select, message, Popconfirm } from 'antd';
+import { DeleteOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined, FormOutlined, UserOutlined } from '@ant-design/icons';
+
+import dayjs from 'dayjs';
 const nav = [
     {
         path: 'reading',
@@ -19,32 +26,151 @@ const nav = [
         display: 'Đã đăng'
     },
 ]
+const types = [
+    {
+        id: 1,
+        tenTag: "Tiên Hiệp"
+    },
+    {
+        id: 2,
+        tenTag: "Kiếm hiệp"
+    },
+    {
+        id: 3,
+        tenTag: "Dã sử"
+    },
+    {
+        id: 4,
+        tenTag: "Kì ảo"
+    },
+    {
+        id: 5,
+        tenTag: "Huyễn Huyền"
+    },
+    {
+        id: 6,
+        tenTag: "Khoa Huyễn"
+    },
+    {
+        id: 7,
+        tenTag: "Ngôn tình"
+    },
+]
 export default function TuTruyen(props) {
-    const { userInfo } = props;
-
-    //   const user = useSelector(state => state.auth.login.user)
-    //   const dispatch = useDispatch()
-    //   const location = useLocation()
-    //   const active = nav.findIndex(e => e.path === location.pathname.split('/').pop())
+    const { id } = useParams();
+    const [list, setList] = useState()
+    console.log(list)
+    const getBang = async () => {
+        const result = await GetTruyenTheoButDanh(id);
+        setList(result.data)
+    }
+    useEffect(() => {
+        getBang()
+    }, [])
+    const cancel = (e) => {
+        message.error('Bạn đã hủy');
+    };
+    const AnTruyen = async (id1) => {
+        const result = await AnTruyenAction(id1);
+        if (result) {
+            message.success("Thành công ẩn truyện")
+            getBang()
+        }
+    };
+    const HienTruyen = async (id1) => {
+        const result = await HienTruyenAction(id1);
+        if (result) {
+            message.success("Thành công hiện truyện")
+            getBang()
+        }
+    };
+    const columns = [
+        {
+            title: 'STT',
+            dataIndex: 'id',
+            key: 'id',
+            render: (_, record, index) => (<a>{index + 1}</a>)
+        },
+        {
+            title: 'Tên truyện',
+            dataIndex: 'tenTruyen',
+            key: 'tenTruyen',
+            render: (th) => <>{th != null ? <p>{th}</p> : <p>Không có</p>} </>
+        },
+        {
+            title: 'Tên thể loại',
+            dataIndex: 'tenTheLoai',
+            key: 'tenTheLoai',
+        },
+        {
+            title: 'Ngày Cập nhập',
+            dataIndex: 'ngayCapNhat',
+            key: 'ngayCapNhat',
+            render: (th) => <>{th != null ? <p>{dayjs(th).format("DD-MM-YYYY")}</p> : <p>Không có</p>} </>
+        },
+        {
+            title: 'Lượt đọc',
+            dataIndex: 'luotdoc',
+            key: 'luotdoc',
+            render: (th) => <>{th != null ? <p>{th}</p> : <p>Không xác định</p>} </>
+        },
+        {
+            title: 'Công bố',
+            dataIndex: 'congBo',
+            key: 'congBo',
+            render: (th) => (th == 1 ? <p> Hiển thị</p> : <p>Không hiển thị</p>)
+        },
+        {
+            title: 'Trạng thái',
+            dataIndex: 'trangThai',
+            key: 'trangThai',
+            render: (th) => (th == 1 ? <p> Hiển thị</p> : <p>Không hiển thị</p>)
+        },
+        {
+            title: 'Có phí',
+            dataIndex: 'coPhi',
+            key: 'coPhi',
+            render: (th) => <>{th ? <i className="fa fa-check bg-green-500 p-2 rounded-2xl" />
+                : <p>Không</p>} </>
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (_, record) => (
+                < div >
+                    <Link to={`/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
+                    <Link to={`/DanhSachChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
+                    {_.congBo == 1 ? <Popconfirm
+                        title="Ẩn truyện"
+                        description="Bạn có chắc muốn ẩn truyện ko không?"
+                        onConfirm={() => {
+                            AnTruyen(_.maTruyen)
+                        }}
+                        onCancel={cancel}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button><EyeInvisibleOutlined /></Button>
+                    </Popconfirm> : <Popconfirm
+                        title="Hiện người dùng"
+                        description="Bạn có chắc muốn hiện người dùng không?"
+                        onConfirm={() => {
+                            HienTruyen(_.maTruyen)
+                        }}
+                        onCancel={cancel}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button><EyeOutlined /></Button>
+                    </Popconfirm>}
+                </div >
+            ),
+        }
+    ];
     return (
         <>
-            <div className='navigate'>
-                {/* {
-            nav.map((item, index) => {
-              return <Link key={item.path} to={item.path} className={`navigate__tab fs-16 bold ${active === index ? 'tab_active' : ''}`}
-  
-                name={item.path}
-              >{item.display}</Link>
-  
-            })
-          } */}
-            </div>
-
-            {/* <Routes>
-          <Route key={'reading'} path='reading' element={<Readings key={'reading'} dispatch={dispatch} user={user} />} />
-          <Route key={'saved'} path='saved' element={<Readings key={'reading'}  />} />
-          <Route key={'created'} path='created' element={<StoryCreate key={'created'} userInfo={userInfo} />} />
-        </Routes> */}
+            {list ? <h1>Truyện của: {list[0]?.tenButDanh}</h1> : null}
+            <Table columns={columns} dataSource={list} />
 
 
         </>
@@ -56,16 +182,7 @@ export const Readings = (props) => {
     const { dispatch, user } = props
     const [readings, setReadings] = useState([])
     useEffect(async () => {
-        // if (user) {
-        //     apiMain.getReadings(user, dispatch, loginSuccess)
-        //         .then(res => {
-        //             console.log(res)
-        //             setReadings(res)
-        //         })
-        //         .catch(err => {
-        //             console.log(err)
-        //         })
-        // }
+
     }, [])
 
     return (
@@ -83,8 +200,6 @@ export const Readings = (props) => {
 
             }</div>)
 }
-
-
 export const StoryCreate = (props) => {
     // const { userInfo } = props;
     const [storys, setStorys] = useState([])
@@ -349,164 +464,132 @@ export const AddChapter = ({ url, chapnumber, user, dispatch, onClickBackFromAdd
 
 
 
-export function EditNovel({ url, user, dispatch, onClickBackFromEditNovel }) {
+export function EditNovel() {
+    const { id } = useParams();
+
     const [image, setImage] = useState("");
     const [preview, setPreview] = useState(avt)
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [tacgia, setTacgia] = useState("");
     const [theloai, setTheloai] = useState("");
-    const [id, setId] = useState("");
-    // const loading = useSelector(state => state.message.loading)
-    const [loadingStory, setLoadingStory] = useState(true)
-    const types = ["Tiên hiệp", "Dã sử", "Kì ảo", "Kiếm hiệp", "Huyền huyễn", "Khoa huyễn"]
+
+    const [ckValue, setCkValue] = useState(true);
+
+    const [trangthai, settrangthai] = useState(true)
+
+    const handleCreate = async (e) => {
+        e.preventDefault()
+        const form = new FormData();
+        form.append('tenTruyen', name);
+        form.append('moTa', description);
+        form.append('MaTheLoai', theloai);
+        form.append('TrangThai', trangthai);
+        form.append('anhBia', image);
+        const result = await SuaTruyen(id, form);
+        if (result) {
+            setCkValue(" ")
+            setTimeout(() => {
+                setCkValue(true)
+            }, [1])
+            setName("")
+            setDescription("")
+            setPreview(avt)
+        }
+    }
+    const onChangeName = (e) => {
+        setName(e.target.value)
+    }
+    const onChangeImage = (e) => {
+        if (e.target.files.lenght !== 0) {
+            setImage(e.target.files[0]);
+            setPreview(URL.createObjectURL(e.target.files[0]))
+        }
+    }
+    useEffect(() => {
+        const getData = async () => {
+            const result = await GetThongTinTruyen(id);
+            setImage(null);
+            setPreview(result.anhBia)
+            setName(result.tenTruyen);
+            setTheloai(result.maTheLoai)
+            setDescription(result.moTa)
+            settrangthai(result.trangThai)
+        }
+        getData();
+
+    }, [])
 
 
-    // useEffect(async () => {
-    //     if (url) {
-    //         apiMain.getStory({ url })
-    //             .then(res => {
-    //                 setPreview(res.hinhanh)
-    //                 setName(res.tentruyen)
-    //                 setDescription(res.noidung)
-    //                 setTheloai(res.theloai)
-    //                 setTacgia(res.tacgia)
-    //                 setId(res._id)
-    //                 setLoadingStory(false)
-    //             })
-    //     }
-    // }, [])
-
-
-    // const handleEditNovel = async (data) => {
-    //     try {
-    //         apiMain.updateNovel(data, user, dispatch, loginSuccess)
-    //             .then(res => {
-    //                 console.log(res)
-    //                 toast.success("Sửa truyện thành công", { autoClose: 1000, hideProgressBar: true, pauseOnHover: false })
-    //                 dispatch(setLoading(false))
-    //             })
-    //             .catch(err => {
-    //                 console.log(err)
-    //                 dispatch(setLoading(false))
-    //                 toast.error(err.response?.details.message, { autoClose: 1000, hideProgressBar: true, pauseOnHover: false })
-    //             })
-    //     } catch (error) {
-    //         console.log(error)
-    //         toast.error("Lỗi cập nhật thông tin", { autoClose: 1000, hideProgressBar: true, pauseOnHover: false })
-    //     }
-    // }
-
-    // const handleEdit = async (e) => {
-    //     e.preventDefault()
-    //     dispatch(setLoading(true))
-    //     if (image) {
-
-    //         const url = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").split(' ').filter(i => i !== ' ').join('-').toLowerCase()
-    //         const storageRef = ref(storage, `/images/truyen/${url}`);
-    //         uploadBytes(storageRef, image).then((result) => {
-    //             getDownloadURL(result.ref).then(async (urlImage) => {//lấy liên kết tới ảnh
-    //                 const data = {
-    //                     tentruyen: name,
-    //                     hinhanh: urlImage,
-    //                     tacgia,
-    //                     theloai,
-    //                     url,
-    //                     id,
-    //                 }
-    //                 await handleEditNovel(data)
-    //             })
-    //         })
-    //     }
-    //     else if (preview) {
-    //         const data = {
-    //             tentruyen: name,
-    //             hinhanh: preview,
-    //             tacgia,
-    //             theloai,
-    //             url,
-    //             id,
-    //         }
-    //         await handleEditNovel(data)
-    //     }
-
-
-    // }
-
-    // ///OnChange event
-    // const onChangeName = (e) => {
-    //     setName(e.target.value)
-    // }
-
-    // const onChangeImage = (e) => {
-    //     if (e.target.files.lenght !== 0) {
-    //         setImage(e.target.files[0]);
-    //         setPreview(URL.createObjectURL(e.target.files[0]))
-    //     }
-    // }
-
+    console.log(theloai)
     const labelStyle = { 'minWidth': '100px', 'display': 'inline-block' }
     return (
-        <>
-            {/* {
-                loadingStory ? <LoadingData />
-                    : */}
-            <><a
-            // onClick={onClickBackFromEditNovel}
-            ><i className="fa-solid fa-angle-left"></i> Danh sách truyện</a>
-                <div className="profile__wrap d-flex">
-                    <div className="col-5 profile__avt">
+        <div className="">
 
-                        <img src={preview} alt="" />
-                        <input type={"file"} name={"avatar"}
-                        //  onChange={onChangeImage}
-                        />
-                    </div>
-                    <div className="col-7 ">
-                        <div className="profile__main">
-                            <form>
-                                <div className="group-info">
-                                    <label htmlFor="" style={labelStyle}>Tên truyện</label>
-                                    <input
-                                        //  onChange={onChangeName} 
-                                        value={name || ""} />
-                                </div>
-                                <div className="group-info">
-                                    <label htmlFor="" style={labelStyle}>Mô tả</label>
-                                    <input
-                                        //  onChange={e => { setDescription(e.target.value) }} 
-                                        value={description}></input>
-                                </div>
-                                <div className="group-info">
-                                    <label style={labelStyle}>Tác giả</label>
-                                    <input required
-                                        // onChange={e => { setTacgia(e.target.value) }} 
-                                        value={tacgia}></input>
-                                </div>
-                                <div className="group-info">
-                                    <label for="types">Thể loại</label>
-                                    <select style={labelStyle}
-                                        // onChange={e => { console.log(e.target.value); setTheloai(e.target.value) }} 
-                                        value={theloai} id="types" name="types">
-                                        {
-                                            types.map(item => { return (<option value={item}>{item}</option>) })
-                                        }
-                                    </select>
-                                </div>
-                                <div className="d-flex">
-                                    <button
-                                    // onClick={handleEdit}
-                                    >
-                                        {/* {loading ? <Loading /> : ''}  */}
-                                        Sửa truyện</button>
-                                </div>
-                            </form>
-
+            <div className="profile__wrap ">
+                <div className="profile__main ">
+                    <form className=' d-flex flex-row flex-wrap items-center'>
+                        <div className="group-info col-3">
+                            <label htmlFor="" style={labelStyle}>Tên truyện</label>
+                            <input
+                                onChange={onChangeName}
+                                value={name || ""} />
                         </div>
-                    </div>
-                </div></>
-            {/* } */}
-        </>
+
+                        {/* <div className="group-info col-3">
+                                <label style={labelStyle}>Tác giả</label>
+                                <input required
+                                    onChange={e => { setTacgia(e.target.value) }} value={tacgia}
+                                ></input>
+                            </div> */}
+                        <div className="group-info col-6">
+                            <div className=" profile__avt flex flex-row items-center" style={{ flexDirection: "row" }}>
+                                <img src={preview} alt="" />
+                                <input type={"file"} accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" name={"avatar"}
+                                    onChange={onChangeImage}
+                                />
+                            </div>
+                        </div>
+                        <div className="group-info col-3">
+                            <label for="types">Thể loại</label>
+                            <select style={labelStyle}
+                                onChange={e => { setTheloai(e.target.value) }}
+                                value={theloai} id="types" name="types">
+                                {
+                                    types.map(item => { return (<option value={item.id}>{item.tenTag}</option>) })
+                                }
+                            </select>
+                        </div>
+                        <div className="group-info col-12">
+                            <label htmlFor="" style={labelStyle}>Mô tả</label>
+                            <CKEditor
+                                editor={ClassicEditor}
+                                config={{ placeholder: "Please enter your comment" }}
+                                data={description}
+                                onReady={editor => {
+
+                                }}
+                                onChange={
+                                    (_, editor) => setDescription(editor.getData().trim())
+                                }
+                                onBlur={(event, editor) => {
+
+                                }}
+                                onFocus={(event, editor) => {
+
+                                }}
+                            />
+                        </div>
+                        <div className="d-flex">
+                            <button
+                                onClick={handleCreate}
+                            >
+                                Cập nhập truyện</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
     )
 }

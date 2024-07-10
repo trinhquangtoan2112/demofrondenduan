@@ -16,7 +16,7 @@ const Grid = props => {
         //  ${col} ${mdCol} ${smCol}
          `
         } style={style}>
-            {/* {props.children} */}
+            {props.children}
         </div>
     )
 }

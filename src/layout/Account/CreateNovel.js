@@ -1,19 +1,54 @@
 import React, { useEffect, useState } from 'react'
 import avt from '../../assets/img/avt.png'
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Loading from './../../components/Loading';
+import { useDispatch } from 'react-redux';
+import { DangTruyen } from '../../service/actions/TruyenAction';
+const types = [
+    {
+        id: 1,
+        tenTag: "Tiên Hiệp"
+    },
+    {
+        id: 2,
+        tenTag: "Kiếm hiệp"
+    },
+    {
+        id: 3,
+        tenTag: "Dã sử"
+    },
+    {
+        id: 4,
+        tenTag: "Kì ảo"
+    },
+    {
+        id: 5,
+        tenTag: "Huyễn Huyền"
+    },
+    {
+        id: 6,
+        tenTag: "Khoa Huyễn"
+    },
+    {
+        id: 7,
+        tenTag: "Ngôn tình"
+    },
+]
 export default function CreateNovel(props) {
     const { userInfo } = props;
 
-    const types = ["Tiên hiệp", "Dã sử", "Kì ảo", "Kiếm hiệp", "Huyền huyễn", "Khoa huyễn"]
+    const [ckValue, setCkValue] = useState(true);
     // const user = useSelector(state=>state.auth.login.user)
     const [image, setImage] = useState("");
     const [preview, setPreview] = useState(avt)
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [tacgia, setTacgia] = useState("");
+    const [tacgia, setTacgia] = useState(1);
     const [theloai, setTheloai] = useState(types[0]);
     // const loading = useSelector(state => state.message.loading)
     const [loadingUser, setLoadingUser] = useState(true)
-    // const dispatch = useDispatch()
+    const dispatch = useDispatch()
 
 
     useEffect(() => {
@@ -44,28 +79,28 @@ export default function CreateNovel(props) {
     //     }
     // }
 
-    // const handleCreate = async (e) => {//xử lý tạo truyện
-    //     e.preventDefault()
-    //     if (image == null)
-    //         return;
-    //     dispatch(setLoading(true))
-    //     const url = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").split(' ').filter(i=>i!=='').join('-').toLowerCase()
-    //     const storageRef = ref(storage, `/images/truyen/${url}`);
-    //     uploadBytes(storageRef, image).then((result) => {//upload ảnh
-    //         getDownloadURL(result.ref).then(async (urlImage) => {//lấy liên kết tới ảnh
-    //             const data = {//payload
-    //                 tentruyen: name,
-    //                 hinhanh: urlImage,
-    //                 tacgia,
-    //                 theloai,
-    //                 url,
-    //                 nguoidangtruyen:userInfo?._id
-    //             }
-    //             await handleCreateNovel(data)//gọi API
-    //         })
-    //     })
+    const handleCreate = async (e) => {//xử lý tạo truyện
+        e.preventDefault()
 
-    // }
+
+        const form = new FormData();
+        form.append('tenTruyen', name);
+        form.append('moTa', description);
+        form.append('MaTheLoai', theloai);
+        form.append('maButDanh', tacgia);
+        form.append('anhBia', image);
+        const result = await DangTruyen(form);
+        if (result) {
+            setCkValue(" ")
+            setTimeout(() => {
+                setCkValue(true)
+            }, [1])
+            setName("")
+            setDescription("")
+            setPreview(avt)
+
+        }
+    }
 
     ///OnChange event
     const onChangeName = (e) => {
@@ -85,47 +120,64 @@ export default function CreateNovel(props) {
             {/* {
                 loadingUser ? <LoadingData />
                     : */}
-            <div className="profile__wrap d-flex">
-                <div className="col-5 profile__avt">
-                    <img src={preview} alt="" />
-                    <input type={"file"} accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" name={"avatar"}
-                    //  onChange={onChangeImage} 
-                    />
-                </div>
-                <div className="col-7 ">
-                    <div className="profile__main">
-                        <form>
-                            <div className="group-info">
+            <div className="">
+
+                <div className="profile__wrap ">
+                    <div className="profile__main ">
+                        <form className=' d-flex flex-row flex-wrap items-center'>
+                            <div className="group-info col-3">
                                 <label htmlFor="" style={labelStyle}>Tên truyện</label>
                                 <input
-                                    //  onChange={onChangeName} 
+                                    onChange={onChangeName}
                                     value={name || ""} />
                             </div>
-                            <div className="group-info">
-                                <label htmlFor="" style={labelStyle}>Mô tả</label>
-                                <input
-                                    onChange={e => { setDescription(e.target.value) }}
-                                    value={description}></input>
-                            </div>
-                            <div className="group-info">
+
+                            {/* <div className="group-info col-3">
                                 <label style={labelStyle}>Tác giả</label>
                                 <input required
                                     onChange={e => { setTacgia(e.target.value) }} value={tacgia}
                                 ></input>
+                            </div> */}
+                            <div className="group-info col-6">
+                                <div className=" profile__avt flex flex-row items-center" style={{ flexDirection: "row" }}>
+                                    <img src={preview} alt="" />
+                                    <input type={"file"} accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" name={"avatar"}
+                                        onChange={onChangeImage}
+                                    />
+                                </div>
                             </div>
-                            <div className="group-info">
+                            <div className="group-info col-3">
                                 <label for="types">Thể loại</label>
                                 <select style={labelStyle} onChange={e => { console.log(e.target.value); setTheloai(e.target.value) }} value={theloai} id="types" name="types">
                                     {
-                                        types.map(item => { return (<option value={item}>{item}</option>) })
+                                        types.map(item => { return (<option value={item.id}>{item.tenTag}</option>) })
                                     }
                                 </select>
                             </div>
+                            <div className="group-info col-12">
+                                <label htmlFor="" style={labelStyle}>Mô tả</label>
+                                <CKEditor
+                                    editor={ClassicEditor}
+                                    config={{ placeholder: "Please enter your comment" }}
+                                    data={ckValue}
+                                    onReady={editor => {
+
+                                    }}
+                                    onChange={
+                                        (_, editor) => setDescription(editor.getData().trim())
+                                    }
+                                    onBlur={(event, editor) => {
+
+                                    }}
+                                    onFocus={(event, editor) => {
+
+                                    }}
+                                />
+                            </div>
                             <div className="d-flex">
                                 <button
-                                // onClick={handleCreate}
+                                    onClick={handleCreate}
                                 >
-                                    {/* {loading ? <Loading /> : ''} */}
                                     Đăng truyện</button>
                             </div>
                         </form>
