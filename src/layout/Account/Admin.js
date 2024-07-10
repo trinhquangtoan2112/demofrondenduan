@@ -34,6 +34,11 @@ const menu = [
         display: "Đăng truyện",
         icon: ""
     },
+    {
+        path: "FeedbackAdmin",
+        display: "Phản hồi",
+        icon: ""
+    },
 ]
 export default function Admin() {
     // const user = useSelector(state => state.auth.login?.user);
