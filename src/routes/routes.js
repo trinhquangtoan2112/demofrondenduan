@@ -7,6 +7,7 @@ import Home from "../layout/Home/Home";
 import HomePage from "../layout/HomePage";
 import Admin from './../layout/Account/Admin';
 import Feedback from './../layout/Feedback/Feedback';
+import FeedbackAdmin from '../layout/Feedback/FeedbackAdmin';
 
 
 const ROUTES = [
@@ -63,8 +64,15 @@ const ROUTES = [
         element: <Feedback></Feedback>,
         auth: true,
         roles: [],
-
+    },
+    {
+        index: 8,
+        path: "FeedbackAdmin",
+        element: <FeedbackAdmin></FeedbackAdmin>,
+        auth: false,
+        roles: [],
     }
+    
 ];
 
 export default ROUTES;

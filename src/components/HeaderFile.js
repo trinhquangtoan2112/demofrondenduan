@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { hienDangKy1, hienDangNhap, logOutFromAccount } from '../store/reducer/UserReducer';
 
 import logo from '../assets/img/logo.png';
@@ -14,6 +15,7 @@ import anhDaiDienmacdinh from '../assets/img/avt.png';
 export default function HeaderFile() {
     const { user, auth, userInfo } = useSelector(state => state.UserReducer);
     const [auth1, setAuth] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setAuth(auth)
@@ -25,6 +27,7 @@ export default function HeaderFile() {
         localStorage.removeItem("USER_LOGIN");
         localStorage.removeItem("TOKEN");
         dispatch(logOutFromAccount());
+        navigate('/');
     };
 
     const hienDangNha = () => {
