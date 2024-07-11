@@ -12,6 +12,8 @@ import { Button, Table, Tag, DatePicker, Form, Input, InputNumber, Checkbox, Sel
 import { DeleteOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined, FormOutlined, UserOutlined } from '@ant-design/icons';
 
 import dayjs from 'dayjs';
+import { GetButDanhTheoTokenAction, ThemButDanhAction } from '../../service/actions/ButDanhAction';
+import Modal, { ModalContent } from '../../components/Modal';
 const nav = [
     {
         path: 'reading',
@@ -387,7 +389,157 @@ export const ListChap = (props) => {
         </>
     )
 }
+export const ListButDanh = (props) => {
+    const { idNguoiDung } = useParams()
+    console.log(idNguoiDung)
+    const [chapters, setChapters] = useState([])
+    // const location = useLocation()
+    const [tenButDanh, setTenButDanh] = useState()
+    const [chapnumber, setChapnumber] = useState(null)
+    const [modalVisible, setModalVisible] = useState(false);
 
+    const nav = useNavigate()
+    const onClickUpdateChap = (e) => {
+        setChapnumber(e.target.name)
+
+    }
+    const getData = async () => {
+        const result = await GetButDanhTheoTokenAction()
+        console.log(result)
+        if (result.status == 200) {
+            setChapters(result.data)
+        } else {
+            setChapters(null)
+        }
+    }
+    useEffect(() => {
+        getData()
+    }, [idNguoiDung])
+    // const onClickDeleteChap = (e) => {
+    //   if (e.target.name) {
+    //     apiMain.deleteChapter({ url, chapnumber: e.target.name }, user, dispatch, loginSuccess)
+    //       .then(res => {
+    //         getChapter()
+    //         toast.success(res.message, { hideProgressBar: true, autoClose: 1000, pauseOnHover: false })
+    //       })
+    //       .catch(err => {
+    //         console.log(err)
+    //         toast.error(err.response.details.message, { hideProgressBar: true, autoClose: 1000, pauseOnHover: false })
+    //       })
+    //   }
+    // }
+
+    // const getChapter = useCallback(async () => {
+    //   apiMain.getNameChapters(url, {})
+    //     .then(res => setChapters(res))})
+
+    // useEffect(() => {
+    //     getChapter()
+    // }, [])
+    console.log(chapters)
+    const onClickAddChapter = (e) => {
+        e.preventDefault()
+
+        setChapnumber(null)
+    }
+    const onClickBackFromAddChap = useCallback(() => {
+
+    })
+    const confirm = (e) => {
+        console.log(e);
+        message.success('Click on Yes');
+    };
+    const cancel = (e) => {
+        console.log(e);
+        message.error('Click on No');
+    };
+    const closeModal = () => {
+        setModalVisible(false)
+    }
+    const onFinish = (values) => {
+        console.log('Success:', values);
+    };
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+    const ThemButDanh = async (e) => {
+        e.preventDefault();
+        const data = {
+            tenButDanh
+        }
+        const result = await ThemButDanhAction(data)
+    }
+    return (
+        <>
+            {/* {
+            addChap ? <AddChapter url={url} chapnumber={chapnumber} user={user} dispatch={dispatch}
+                onClickBackFromAddChap={onClickBackFromAddChap}
+                getChapters={getChapter} /> : */}
+
+            <div className='mt-2'>
+                <div className='d-flex mb-1' style={{ 'justifyContent': 'space-between' }}>
+
+                    <a onClick={() => { nav(-1) }}
+                    //  onClick={onClickBackFromListChap}
+                    ><i className="fa-solid fa-angle-left"></i> Danh sách truyện</a>
+                    <span className='fs-20 fw-6'>Danh sách chương</span>
+                    <button className='btn-primary' style={{ 'margin': '0px 10px' }} onClick={() => { setModalVisible(true) }}> Thêm bút danh</button>
+                </div>
+                <Grid gap={15} col={2} snCol={1}>
+                    {
+                        chapters.map((item, index) => {
+                            return (
+                                <div key={item.maButDanh}>
+                                    <div className='d-flex'>
+                                        <div className="col-9 d-flex" style={{ 'alignItems': 'center' }}>
+                                            <Link className='cursor-pointer
+                    '  to={`/QuanLyTruyen/${item.maButDanh}`}>{item.tenButDanh}</Link>
+                                        </div>
+                                        <div className="col-3">
+                                            <Link to={`/ChinhSuaChuong/${item.maButDanh} `}
+                                                // onClick={onClickUpdateChap}
+                                                className=''><Button><EditOutlined /></Button> </Link>
+                                            <Popconfirm
+                                                title="Bạn có muốn khóa bút danh không"
+                                                description="Bạn có chắc không?"
+                                                onConfirm={confirm}
+                                                onCancel={cancel}
+                                                okText="Có"
+                                                cancelText="Không"
+                                            >
+                                                <Button><DeleteOutlined /></Button>
+                                            </Popconfirm>
+
+                                        </div>
+                                    </div><hr /></div>
+                            )
+                        })
+                    }
+                </Grid>
+
+                <Modal active={modalVisible}>
+                    <ModalContent onClose={closeModal}>
+
+                        <form className="max-w-sm mx-auto" onSubmit={ThemButDanh}>
+                            <div className="mb-5 flex flex-col items-center">
+                                <label htmlFor="email" className="block mb-2 text-lg font-medium text-gray-900 ">Nhập vào tên bút danh</label>
+
+                                <input onChange={(e) => {
+                                    setTenButDanh(e.target.value)
+                                }} className="bg-gray-50 border  text-gray-900 text-sm rounded-lg ring-blue-500 border-blue-500 block w-full p-2.5 " placeholder="Tên bút danh" required />
+                                <button type="submit" className="mt-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+
+                            </div>
+                        </form>
+
+
+                    </ModalContent>
+                </Modal>
+            </div >
+            {/* } */}
+        </>
+    )
+}
 export const AddChapter = () => {
     const { idChuong } = useParams()
     const nav = useNavigate()

@@ -8,7 +8,7 @@ import HomePage from "../layout/HomePage";
 import Admin from './../layout/Account/Admin';
 import Feedback from './../layout/Feedback/Feedback';
 import FeedbackAdmin from '../layout/Feedback/FeedbackAdmin';
-import TuTruyen, { AddChapter, EditChapter, EditNovel, ListChap, StoryCreate } from './../layout/Account/TuTruyen';
+import TuTruyen, { AddChapter, EditChapter, EditNovel, ListButDanh, ListChap, StoryCreate } from './../layout/Account/TuTruyen';
 import CreateNovel from './../layout/Account/CreateNovel';
 import StoryDetail from "../layout/StoryDetail/StoryDetail";
 
@@ -121,6 +121,20 @@ const ROUTES = [
         index: 15,
         path: "ThemTruyen/:idChuong",
         element: <AddChapter></AddChapter>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 16,
+        path: "QuanLyButDanh/:idNguoiDung",
+        element: <ListButDanh></ListButDanh>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 16,
+        path: "ThemButDanh/:idNguoiDung",
+        element: <ListButDanh></ListButDanh>,
         auth: true,
         roles: [],
     }
