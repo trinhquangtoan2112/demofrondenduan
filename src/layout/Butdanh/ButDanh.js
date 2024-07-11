@@ -5,7 +5,7 @@ import {
   layDanhSachButDanh,
   suaButDanh,
 } from "../../service/actions/ButDanhAction";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const { Search } = Input;
@@ -133,6 +133,7 @@ const ButDanh = () => {
       dataIndex: "tenButDanh",
       key: "tenButDanh",
       sorter: (a, b) => a.tenButDanh.localeCompare(b.tenButDanh),
+      render: (text, record, index) => <Link to={`/QuanLyTruyen/${record.maButDanh}`}>{record.tenButDanh}</Link>,
     },
     {
       title: "Hành động",

@@ -12,7 +12,6 @@ import { Button, Table, Tag, DatePicker, Form, Input, InputNumber, Checkbox, Sel
 import { DeleteOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined, FormOutlined, UserOutlined } from '@ant-design/icons';
 
 import dayjs from 'dayjs';
-import { GetButDanhTheoTokenAction, ThemButDanhAction } from '../../service/actions/ButDanhAction';
 import Modal, { ModalContent } from '../../components/Modal';
 const nav = [
     {
@@ -403,17 +402,9 @@ export const ListButDanh = (props) => {
         setChapnumber(e.target.name)
 
     }
-    const getData = async () => {
-        const result = await GetButDanhTheoTokenAction()
-        console.log(result)
-        if (result.status == 200) {
-            setChapters(result.data)
-        } else {
-            setChapters(null)
-        }
-    }
+
     useEffect(() => {
-        getData()
+
     }, [idNguoiDung])
     // const onClickDeleteChap = (e) => {
     //   if (e.target.name) {
@@ -462,13 +453,7 @@ export const ListButDanh = (props) => {
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
-    const ThemButDanh = async (e) => {
-        e.preventDefault();
-        const data = {
-            tenButDanh
-        }
-        const result = await ThemButDanhAction(data)
-    }
+
     return (
         <>
             {/* {
@@ -520,7 +505,7 @@ export const ListButDanh = (props) => {
                 <Modal active={modalVisible}>
                     <ModalContent onClose={closeModal}>
 
-                        <form className="max-w-sm mx-auto" onSubmit={ThemButDanh}>
+                        <form className="max-w-sm mx-auto" >
                             <div className="mb-5 flex flex-col items-center">
                                 <label htmlFor="email" className="block mb-2 text-lg font-medium text-gray-900 ">Nhập vào tên bút danh</label>
 
