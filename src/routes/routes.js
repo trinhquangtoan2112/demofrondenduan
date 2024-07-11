@@ -10,6 +10,7 @@ import Feedback from './../layout/Feedback/Feedback';
 import FeedbackAdmin from '../layout/Feedback/FeedbackAdmin';
 import ButDanh from '../layout/Butdanh/ButDanh';
 import ButDanhAdmin from '../layout/Butdanh/ButDanhAdmin';
+import TheLoaiAdmin from '../layout/TheLoai/TheLoaiAdmin';
 
 
 const ROUTES = [
@@ -85,6 +86,13 @@ const ROUTES = [
         index: 9,
         path: "ButDanhAdmin",
         element: <ButDanhAdmin></ButDanhAdmin>,
+        auth: false,
+        roles: [],
+    }  ,
+    {
+        index: 10,
+        path: "TheLoaiAdmin",
+        element: <TheLoaiAdmin></TheLoaiAdmin>,
         auth: false,
         roles: [],
     }  

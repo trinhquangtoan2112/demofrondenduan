@@ -10,8 +10,8 @@ const menu = [
         icon: ""
     },
     {
-        path: "change-password",
-        display: "Đổi mật khẩu",
+        path: "TheLoaiAdmin",
+        display: "Thể Loại",
         icon: ""
     },
     {
