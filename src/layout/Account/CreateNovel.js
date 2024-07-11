@@ -5,6 +5,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Loading from './../../components/Loading';
 import { useDispatch } from 'react-redux';
 import { DangTruyen } from '../../service/actions/TruyenAction';
+import { useNavigate, useParams } from 'react-router-dom';
 const types = [
     {
         id: 1,
@@ -37,14 +38,15 @@ const types = [
 ]
 export default function CreateNovel(props) {
     const { userInfo } = props;
-
+    const navigate = useNavigate();
+    const { idButDanh } = useParams();
     const [ckValue, setCkValue] = useState(true);
     // const user = useSelector(state=>state.auth.login.user)
     const [image, setImage] = useState("");
     const [preview, setPreview] = useState(avt)
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [tacgia, setTacgia] = useState(1);
+    const [tacgia, setTacgia] = useState(idButDanh);
     const [theloai, setTheloai] = useState(types[0]);
     // const loading = useSelector(state => state.message.loading)
     const [loadingUser, setLoadingUser] = useState(true)
@@ -98,7 +100,7 @@ export default function CreateNovel(props) {
             setName("")
             setDescription("")
             setPreview(avt)
-
+            navigate(-1);
         }
     }
 

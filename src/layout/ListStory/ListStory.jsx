@@ -75,7 +75,7 @@ export default function ListStory() {
                                     <p>{data.tenButDanh}</p>
                                     <p>{data.tenTheLoai}</p>
                                 </div>
-                                {data.coPhi ? <p className='bg-yellow-300 text-white px-3'>Vip</p> : <p className='bg-gray-300 px-3'>Free</p>}
+                                {/* {data.coPhi ? <p className='bg-yellow-300 text-white px-3'>Vip</p> : <p className='bg-gray-300 px-3'>Free</p>} */}
                             </div>
                         </Link>
                     )

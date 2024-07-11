@@ -113,8 +113,9 @@ export const GetTruyenTheoButDanh = async (id) => {
             return result.data
         }
     } catch (error) {
-        console.log(error)
         message.error("Lỗi xảy ra")
+        return error.response
+
     }
 }
 export const AnTruyenAction = async (id) => {
@@ -144,6 +145,79 @@ export const HienTruyenAction = async (id) => {
         if (result.status === 200) {
             return true
         }
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+    }
+}
+
+
+export const GetChuongTruyenTheoIDTruyen = async (id) => {
+    const data = {
+        maTruyen: id
+    }
+
+    console.log(data)
+    try {
+        let result = await apiKey.get("Chuongtruyens/Danhsachchuong", data)
+
+        if (result.status === 200) {
+            return result.data
+        }
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+        return error.response
+
+    }
+}
+export const GetCHiTietChuongTruyen = async (id) => {
+    const data = {
+        maChuong: id
+    }
+
+    console.log(data)
+    try {
+        let result = await apiKey.get("Chuongtruyens/GetChiTietChuong", data)
+
+        if (result.status === 200) {
+            return result.data
+        }
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+        return error.response
+
+    }
+}
+export const SuaChuongTruyenAction = async (id, data) => {
+    const data1 = {
+        id: id
+    }
+    try {
+
+
+        let result = await apiKey.put("Chuongtruyens/CapNhapChuongTruyen", data, data1)
+        console.log(result)
+        if (result.status === 201)
+            return true;
+
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+    }
+}
+
+export const DangChuongTruyenAction = async (data) => {
+    console.log(data)
+    try {
+
+
+        let result = await apiKey.post("Chuongtruyens", data)
+        console.log(result)
+        if (result.status === 201)
+            return true;
+
     } catch (error) {
         console.log(error)
         message.error("Lỗi xảy ra")
