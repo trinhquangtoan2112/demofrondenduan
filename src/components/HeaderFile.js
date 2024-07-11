@@ -77,6 +77,7 @@ export default function HeaderFile() {
                         </div>
 
                         <ul className='navbar-nav__list navbar-nav__list--right'>
+
                             {userInfo?.daXoa ? null : (
                                 userInfo?.trangThai ? (
                                     <>
@@ -94,6 +95,7 @@ export default function HeaderFile() {
                                     </>
                                 ) : null
                             )}
+
 
 
 

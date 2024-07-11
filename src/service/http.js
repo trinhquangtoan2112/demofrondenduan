@@ -52,6 +52,11 @@ class SetUpAxios {
         })
     }
 
+    deleteToken2 = async (url, data, params) => {
+        const updatedParams = { ...params, 'token': 'Bearer ' + localStorage.getItem(TOKEN) };
+        return this.axiosCreate.delete(url, { data, params: updatedParams });
+    }
+
 }
 
 export const apiKey = new SetUpAxios();

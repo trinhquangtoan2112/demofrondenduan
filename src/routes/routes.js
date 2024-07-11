@@ -8,9 +8,15 @@ import HomePage from "../layout/HomePage";
 import Admin from './../layout/Account/Admin';
 import Feedback from './../layout/Feedback/Feedback';
 import FeedbackAdmin from '../layout/Feedback/FeedbackAdmin';
+
+import ButDanh from '../layout/Butdanh/ButDanh';
+import ButDanhAdmin from '../layout/Butdanh/ButDanhAdmin';
+import TheLoaiAdmin from '../layout/TheLoai/TheLoaiAdmin';
+
 import TuTruyen, { AddChapter, EditChapter, EditNovel, ListButDanh, ListChap, StoryCreate } from './../layout/Account/TuTruyen';
 import CreateNovel from './../layout/Account/CreateNovel';
 import StoryDetail from "../layout/StoryDetail/StoryDetail";
+
 
 
 const ROUTES = [
@@ -83,6 +89,21 @@ const ROUTES = [
         roles: [],
     },
     {
+
+        index: 19,
+        path: "ButDanhAdmin",
+        element: <ButDanhAdmin></ButDanhAdmin>,
+        auth: false,
+        roles: [],
+    }  ,
+    {
+        index: 18,
+        path: "TheLoaiAdmin",
+        element: <TheLoaiAdmin></TheLoaiAdmin>,
+        auth: false,
+        roles: [],
+    },  
+{
         index: 10,
         path: "CapNhapTruyen/:id",
         element: <EditNovel></EditNovel>,
@@ -126,18 +147,19 @@ const ROUTES = [
     },
     {
         index: 16,
-        path: "QuanLyButDanh/:idNguoiDung",
-        element: <ListButDanh></ListButDanh>,
+        path: "ButDanh",
+        element: <ButDanh></ButDanh>,
         auth: true,
         roles: [],
     },
     {
-        index: 16,
+        index: 17,
         path: "ThemButDanh/:idNguoiDung",
         element: <ListButDanh></ListButDanh>,
         auth: true,
         roles: [],
     }
+
 ];
 
 export default ROUTES;
