@@ -106,6 +106,7 @@ class FeedbackAdmin extends Component {
         dataIndex: "tieude",
         key: "tieude",
         width: "200px",
+        sorter: (a, b) => a.tieude.localeCompare(b.tieude),
       },
       {
         title: "Trạng thái",
@@ -123,6 +124,7 @@ class FeedbackAdmin extends Component {
               return text;
           }
         },
+        sorter: (a, b) => a.trangThai - b.trangThai,
       },
       {
         title: "Người gửi",
@@ -140,6 +142,7 @@ class FeedbackAdmin extends Component {
           }/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
           return formattedDate;
         },
+        sorter: (a, b) => new Date(a.ngaytao) - new Date(b.ngaytao),
       },
 
       {
@@ -150,9 +153,11 @@ class FeedbackAdmin extends Component {
             <Button type="primary" onClick={() => this.showModal(record)}>
               Xem
             </Button>
-            <Button type="default" onClick={() => this.showEditModal(record)}>
-              Sửa
-            </Button>
+            {record.trangThai !== 2 && (
+              <Button type="default" onClick={() => this.showEditModal(record)}>
+                Sửa
+              </Button>
+            )}
             <Button
               danger
               onClick={() => this.deleteFeedback(record.maPhanHoi)}

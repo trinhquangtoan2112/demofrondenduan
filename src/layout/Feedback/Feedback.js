@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Feedback = () => {
   const userInfo = useSelector((state) => state.UserReducer.userInfo);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   const [feedback, setFeedback] = useState({
     NoiDung: "",

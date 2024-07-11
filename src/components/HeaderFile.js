@@ -90,7 +90,7 @@ export default function HeaderFile() {
 
                         <ul className='navbar-nav__list navbar-nav__list--right'>
                             <Link to={""}>
-                                <li><i style={{ marginRight: '4px' }} className="fa-regular fa-circle-up"></i> Đăng truyện</li>
+                                <li><i style={{ marginRight: '4px' }} className="fa-regular fa-circle-up"></i> Bút danh</li>
                             </Link>
 
                             {userInfo.maQuyen == 1 ?

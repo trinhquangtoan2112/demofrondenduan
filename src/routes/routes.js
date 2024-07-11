@@ -8,6 +8,8 @@ import HomePage from "../layout/HomePage";
 import Admin from './../layout/Account/Admin';
 import Feedback from './../layout/Feedback/Feedback';
 import FeedbackAdmin from '../layout/Feedback/FeedbackAdmin';
+import ButDanh from '../layout/Butdanh/ButDanh';
+import ButDanhAdmin from '../layout/Butdanh/ButDanhAdmin';
 
 
 const ROUTES = [
@@ -71,8 +73,21 @@ const ROUTES = [
         element: <FeedbackAdmin></FeedbackAdmin>,
         auth: false,
         roles: [],
-    }
-    
+    },
+    {
+        index: 9,
+        path: "ButDanh",
+        element: <ButDanh></ButDanh>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 9,
+        path: "ButDanhAdmin",
+        element: <ButDanhAdmin></ButDanhAdmin>,
+        auth: false,
+        roles: [],
+    }  
 ];
 
 export default ROUTES;

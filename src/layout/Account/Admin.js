@@ -39,6 +39,11 @@ const menu = [
         display: "Phản hồi",
         icon: ""
     },
+    {
+        path: "ButDanhAdmin",
+        display: "Quản lý bút danh",
+        icon: ""
+    },
 ]
 export default function Admin() {
     // const user = useSelector(state => state.auth.login?.user);
