@@ -13,10 +13,10 @@ const Grid = props => {
 
     return (
         <div className={`grid
-        //  ${col} ${mdCol} ${smCol}
+          ${col} ${mdCol} ${smCol}
          `
         } style={style}>
-            {/* {props.children} */}
+            {props.children}
         </div>
     )
 }

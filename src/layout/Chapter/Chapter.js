@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { GetChiTietChuongTruyenAction } from '../../service/actions/TruyenAction';
 import parse from 'html-react-parser';
+import { message } from 'antd';
 
 
 function Chapter(props) {
-    const { maChuong } = useParams()
+    const { maChuong, name } = useParams();
+
     const [chapter, setChapter] = useState({})
     const [fontsize, setFontsize] = useState(18);
     const [lineHeight, setLineHeight] = useState(1.5);
@@ -14,7 +16,6 @@ function Chapter(props) {
     // const user = useSelector(state => state.auth.login?.user)
     const dispatch = useDispatch()
     const contentRef = useRef(null)
-
     useEffect(() => {//xử lý đánh dấu truyện đang đọc
         const handleSetReading = async () => {//tạo hàm
 
@@ -22,15 +23,33 @@ function Chapter(props) {
                 maChuong: maChuong
             }
             const result = await GetChiTietChuongTruyenAction(data)
-            setChapter({
-                machuongtruyen: result.machuongtruyen,
-                tenChuong: result.tenChuong,
-                content: result.noiDung
-            })
+
+            if (result.status === 401) {
+                message.error("Lỗi xảy ra")
+                setChapter({
+                    ...data,
+                    content: "Hãy mua chương"
+                })
+                setManual({
+                    result: result
+                }
+                )
+            } else {
+                setChapter({
+                    machuongtruyen: result.data.data.machuongtruyen,
+                    tenChuong: result.data.data.tenChuong,
+                    content: result.data.data.noiDung,
+                    stt: result.data.data.stt
+                })
+                setManual({
+                    result
+                })
+            }
+            window.scrollTo(0, 0)
 
         }
         handleSetReading();//gọi hàm
-    }, [])
+    }, [maChuong])
 
     // useEffect(() => {//Xử lý load dữ liệu chương truyện
     //     const getChapter = async () => {//tạo hàm
@@ -57,6 +76,7 @@ function Chapter(props) {
     //     return () => { document.removeEventListener("click", handleClick) }
     // }, [])
     const renderNoiDung = () => {
+
         return <div>
             {
                 parse(chapter.content)
@@ -141,15 +161,21 @@ function Chapter(props) {
 
                     </ul> */}
                     <div className="d-lex" >
-                        <h1 className='chapter-name'>{chapter?.tenChuong}</h1>
+                        {chapter?.stt ? <h1 className='chapter-name'> Chương {chapter?.stt}: {chapter?.tenChuong}</h1> : null}
                         <div className={`fs-${fontsize}`} style={{ "lineHeight": `${lineHeight}` }}>
                             <div id="chapter-content">{chapter?.content ? renderNoiDung() : <p>Lỗi xảy ra hãy reset lại web</p>}</div>
                         </div>
-
+                    </div>
+                    <div className='w-1/6 mx-auto flex flex-row justify-between'>
+                        {manual?.result?.data.data.trangTruoc ? <Link className='cursor-pointer' to={`/truyen/${name}/${manual?.result.data.data.trangTruoc}`}><button className='px-5 py-1 bg-green-500'><i className="fa fa-arrow-left" /></button>
+                        </Link> : <button className='px-5 py-1 bg-green-300' disabled><i className="fa fa-arrow-left" /></button>}
+                        {manual?.result?.data.data.trangTiep ? <Link className='cursor-pointer' to={`/truyen/${name}/${manual?.result.data.data.trangTiep}`}>
+                            <button className='px-5 py-1 bg-green-500'><i className="fa fa-arrow-right" /></button>
+                        </Link> : <button className='px-5 py-1 bg-green-300' disabled> <i className="fa fa-arrow-right" /></button>}
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
 
 
     </>)
