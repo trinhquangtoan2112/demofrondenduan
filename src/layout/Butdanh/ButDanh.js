@@ -133,16 +133,28 @@ const ButDanh = () => {
       dataIndex: "tenButDanh",
       key: "tenButDanh",
       sorter: (a, b) => a.tenButDanh.localeCompare(b.tenButDanh),
-      render: (text, record, index) => <Link to={`/QuanLyTruyen/${record.maButDanh}`}>{record.tenButDanh}</Link>,
+      render: (text, record, index) => (
+        <Link to={`/QuanLyTruyen/${record.maButDanh}`}>
+          {record.tenButDanh}
+        </Link>
+      ),
+    },
+    {
+      title: "Số Truyện",
+      dataIndex: "soLuongTruyen",
+      key: "soLuongTruyen",
+      sorter: (a, b) => a.soLuongTruyen - b.soLuongTruyen,
     },
     {
       title: "Hành động",
       key: "action",
       render: (text, record) => (
         <Space size="middle">
-          <Button type="primary" onClick={() => handleEdit(record)}>
-            Sửa
-          </Button>
+          {record.soLuongTruyen == 0 && (
+            <Button type="primary" onClick={() => handleEdit(record)}>
+              Sửa
+            </Button>
+          )}
         </Space>
       ),
     },
@@ -150,7 +162,11 @@ const ButDanh = () => {
 
   return (
     <div>
-      <Button type="primary" onClick={handleAddClick} style={{ marginBottom: 16 }}>
+      <Button
+        type="primary"
+        onClick={handleAddClick}
+        style={{ marginBottom: 16 }}
+      >
         Thêm bút danh
       </Button>
       <Search
