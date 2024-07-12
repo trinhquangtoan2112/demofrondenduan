@@ -14,6 +14,7 @@ import {
 } from "../../service/actions/DanhDauAction";
 import dayjs from "dayjs";
 import parse from "html-react-parser";
+import { useSelector } from "react-redux";
 
 const nav = [
   //navigate
@@ -48,6 +49,7 @@ function StoryDetail() {
   const active = nav.findIndex((e) => e.path === tab);
   const [loadingData, setLoadingData] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const userInfo = useSelector((state) => state.UserReducer.userInfo);
 
   useEffect(() => {
     //load truyện
@@ -59,7 +61,9 @@ function StoryDetail() {
   }, []);
 
   useEffect(() => {
-    if (truyen) {
+    if (!userInfo) {
+      console.log("Chưa đăng nhập nên không checkBoomark được");
+    } else if (truyen) {
       const checkBookmark = async () => {
         try {
           const maid = {
@@ -67,38 +71,45 @@ function StoryDetail() {
           };
           const result = await checkDanhDau(maid);
           setIsBookmarked(result.data);
-          
         } catch (error) {
           console.error("Error checking bookmark:", error);
         }
       };
       checkBookmark();
     }
-  }, [truyen]);
+  }, [userInfo, truyen]);
 
   const handleBookmark = async () => {
-    const maid = {
-      maTruyen: truyen?.maTruyen,
-    };
-    try {
-      await themdanhdautruyen(maid);
-      setIsBookmarked(true);
-    } catch (error) {
-      console.error("Error:", error); // Log lỗi để kiểm tra chi tiết
-      message.error("Failed to add bookmark. It might already exist.");
+    if (!userInfo) {
+      message.success("Hãy đăng nhập để đánh dấu truyện");
+    } else {
+      const maid = {
+        maTruyen: truyen?.maTruyen,
+      };
+      try {
+        await themdanhdautruyen(maid);
+        setIsBookmarked(true);
+      } catch (error) {
+        console.error("Error:", error); // Log lỗi để kiểm tra chi tiết
+        message.error("Failed to add bookmark. It might already exist.");
+      }
     }
   };
 
   const handleRemoveBookmark = async () => {
-    const maid = {
-      maTruyen: truyen?.maTruyen,
-    };
-    try {
-      await XoaDanhDauTruyen(maid); // Implement removeBookmark tương tự như themdanhdautruyen
-      setIsBookmarked(false); // cập nhật trạng thái
-    } catch (error) {
-      console.error("Error:", error);
-      message.error("Failed to remove bookmark. Please try again.");
+    if (!userInfo) {
+      message.success("Hãy đăng nhập để đánh dấu truyện");
+    } else {
+      const maid = {
+        maTruyen: truyen?.maTruyen,
+      };
+      try {
+        await XoaDanhDauTruyen(maid); // Implement removeBookmark tương tự như themdanhdautruyen
+        setIsBookmarked(false); // cập nhật trạng thái
+      } catch (error) {
+        console.error("Error:", error);
+        message.error("Failed to remove bookmark. Please try again.");
+      }
     }
   };
 
