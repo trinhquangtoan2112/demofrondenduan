@@ -29,28 +29,12 @@ const nav = [
 ]
 const types = [
     {
-        id: 1,
-        tenTag: "Tiên Hiệp"
-    },
-    {
         id: 2,
-        tenTag: "Kiếm hiệp"
-    },
-    {
-        id: 3,
-        tenTag: "Dã sử"
-    },
-    {
-        id: 4,
-        tenTag: "Kì ảo"
+        tenTag: "Huyền Huyễn"
     },
     {
         id: 5,
-        tenTag: "Huyễn Huyền"
-    },
-    {
-        id: 6,
-        tenTag: "Khoa Huyễn"
+        tenTag: "Kiếm hiệp"
     },
     {
         id: 7,
@@ -355,7 +339,7 @@ export const ListChap = (props) => {
                 </div>
                 <Grid gap={15} col={2} snCol={1}>
                     {
-                        chapters.map((item, index) => {
+                        chapters?.map((item, index) => {
                             return (
                                 <div key={item.machuongtruyen}>
                                     <div className='d-flex'>
