@@ -130,7 +130,7 @@ class TheLoaiAdmin extends Component {
         sorter: (a, b) => a.soluongtruyen - b.soluongtruyen,
       },
       {
-        title: "Hành động",
+        title: "Hành động", 
         key: "action",
         render: (text, record) => (
           <span>

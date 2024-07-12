@@ -28,7 +28,7 @@ export const themTheLoai = async (theloai) => {
       message.error(`Thêm thất bại: ${error.response?.data?.message || error.message}`);
     }
   };
-
+ 
       // Function to add a pseudonym
 export const suaTheLoai = async (theloai) => {
     console.log(theloai)

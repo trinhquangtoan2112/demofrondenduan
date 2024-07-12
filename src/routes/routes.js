@@ -16,6 +16,7 @@ import TheLoaiAdmin from '../layout/TheLoai/TheLoaiAdmin';
 import TuTruyen, { AddChapter, EditChapter, EditNovel, ListButDanh, ListChap, StoryCreate } from './../layout/Account/TuTruyen';
 import CreateNovel from './../layout/Account/CreateNovel';
 import StoryDetail from "../layout/StoryDetail/StoryDetail";
+import DanhDau from "../layout/QLDanhDau/DanhDau";
 
 
 
@@ -156,6 +157,13 @@ const ROUTES = [
         index: 17,
         path: "ThemButDanh/:idNguoiDung",
         element: <ListButDanh></ListButDanh>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 18,
+        path: "DanhDau",
+        element: <DanhDau></DanhDau>,
         auth: true,
         roles: [],
     }
