@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import { GetChiTietChuongTruyenAction } from '../../service/actions/TruyenAction';
 import parse from 'html-react-parser';
 import { message } from 'antd';
+import { apiKey } from '../../service/http';
 
 
 function Chapter(props) {
@@ -48,7 +49,23 @@ function Chapter(props) {
             window.scrollTo(0, 0)
 
         }
+        const LuuLichSu = async () => {
+            const data = {
+                maChuong
+            }
+            const result = await apiKey.postToken("LichSuDoc/CapNhapLichSuDoc", null, data);
+            console.log(result)
+        }
         handleSetReading();//gọi hàm
+        if (localStorage.getItem("TOKEN")) {
+            try {
+                LuuLichSu()
+            } catch (error) {
+
+            }
+        }
+
+
     }, [maChuong])
 
     // useEffect(() => {//Xử lý load dữ liệu chương truyện

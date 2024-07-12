@@ -355,7 +355,7 @@ export const ListChap = (props) => {
                 </div>
                 <Grid gap={15} col={2} snCol={1}>
                     {
-                        chapters.map((item, index) => {
+                        chapters?.map((item, index) => {
                             return (
                                 <div key={item.machuongtruyen}>
                                     <div className='d-flex'>
