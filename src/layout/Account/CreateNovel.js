@@ -8,28 +8,12 @@ import { DangTruyen } from '../../service/actions/TruyenAction';
 import { useNavigate, useParams } from 'react-router-dom';
 const types = [
     {
-        id: 1,
-        tenTag: "Tiên Hiệp"
-    },
-    {
         id: 2,
-        tenTag: "Kiếm hiệp"
-    },
-    {
-        id: 3,
-        tenTag: "Dã sử"
-    },
-    {
-        id: 4,
-        tenTag: "Kì ảo"
+        tenTag: "Huyền Huyễn"
     },
     {
         id: 5,
-        tenTag: "Huyễn Huyền"
-    },
-    {
-        id: 6,
-        tenTag: "Khoa Huyễn"
+        tenTag: "Kiếm hiệp"
     },
     {
         id: 7,
