@@ -89,22 +89,8 @@ const ROUTES = [
         auth: true,
         roles: [],
     },
-    {
 
-        index: 19,
-        path: "ButDanhAdmin",
-        element: <ButDanhAdmin></ButDanhAdmin>,
-        auth: false,
-        roles: [],
-    }  ,
     {
-        index: 18,
-        path: "TheLoaiAdmin",
-        element: <TheLoaiAdmin></TheLoaiAdmin>,
-        auth: false,
-        roles: [],
-    },  
-{
         index: 10,
         path: "CapNhapTruyen/:id",
         element: <EditNovel></EditNovel>,
@@ -163,6 +149,28 @@ const ROUTES = [
     {
         index: 18,
         path: "DanhDau",
+        element: <DanhDau></DanhDau>,
+        auth: true,
+        roles: [],
+    },
+    {
+
+        index: 19,
+        path: "ButDanhAdmin",
+        element: <ButDanhAdmin></ButDanhAdmin>,
+        auth: false,
+        roles: [],
+    },
+    {
+        index: 20,
+        path: "TheLoaiAdmin",
+        element: <TheLoaiAdmin></TheLoaiAdmin>,
+        auth: false,
+        roles: [],
+    },
+    {
+        index: 21,
+        path: "LichSuDoc",
         element: <DanhDau></DanhDau>,
         auth: true,
         roles: [],
