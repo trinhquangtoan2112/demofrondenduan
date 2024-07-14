@@ -38,7 +38,7 @@ const ButDanh = () => {
     }
   }, [userInfo, navigate]);
 
-  const fetchData = async () => {
+  const fetchData = async () => { 
     try {
       const data = await layDanhSachButDanh();
       setButDanhList(data);

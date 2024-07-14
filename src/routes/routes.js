@@ -17,6 +17,7 @@ import TuTruyen, { AddChapter, EditChapter, EditNovel, ListButDanh, ListChap, St
 import CreateNovel from './../layout/Account/CreateNovel';
 import StoryDetail from "../layout/StoryDetail/StoryDetail";
 import DanhDau from "../layout/QLDanhDau/DanhDau";
+import LichSuDoc from "../components/LichSuDoc";
 
 
 
@@ -171,7 +172,7 @@ const ROUTES = [
     {
         index: 21,
         path: "LichSuDoc",
-        element: <DanhDau></DanhDau>,
+        element: <LichSuDoc></LichSuDoc>,
         auth: true,
         roles: [],
     }

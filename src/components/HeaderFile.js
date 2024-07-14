@@ -71,7 +71,7 @@ export default function HeaderFile() {
 
                     <div className="navbar-nav">
                         <ul className='navbar-nav__list'>
-                            <Link to='/'>
+                            <Link to='/LichSuDoc'>
                                 <li className='text-bold'>
                                     Lịch sử đọc
                                 </li>
