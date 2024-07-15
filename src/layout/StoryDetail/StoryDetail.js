@@ -14,6 +14,7 @@ import {
 } from "../../service/actions/DanhDauAction";
 import dayjs from "dayjs";
 import parse from "html-react-parser";
+import { apiKey } from "../../service/http";
 import { useSelector } from "react-redux";
 
 const nav = [
@@ -44,7 +45,7 @@ function StoryDetail() {
   const { id } = useParams();
   const [truyen, setTruyen] = useState(null);
   const [catGiu, setCatGiu] = useState(100);
-  const [main, setMain] = useState(null);
+  const [lichSu, setLichSu] = useState(null);
   const [tab, setTab] = useState("");
   const active = nav.findIndex((e) => e.path === tab);
   const [loadingData, setLoadingData] = useState(false);
@@ -55,6 +56,17 @@ function StoryDetail() {
     //load truyện
     const getStory = async () => {
       const result = await GetChiTietChuongTruyen(id);
+      const maTruyen = {
+        maTruyen: id
+      }
+      console.log(result)
+      try {
+        const getLichSuDoc = await apiKey.getToken("LichSuDoc/LichSuDocTheoTruyen", maTruyen);
+        console.log(getLichSuDoc)
+        setLichSu(getLichSuDoc.data.data)
+      } catch (error) {
+        console.log(error)
+      }
       setTruyen(result);
     };
     getStory();
@@ -116,6 +128,7 @@ function StoryDetail() {
   const handleSetPage = async () => {
     console.log(214124124);
   };
+
   // useEffect(() => {//xử lý đổi tab
   //   switch (tab) {
   //     case 'about':
@@ -190,14 +203,24 @@ function StoryDetail() {
                 */}
                 </div>
                 <div className="flex flex-row justify-between">
-                  {/* Nút đọc truyện */}
-                  <button
+                  {lichSu ? <Link to={`/truyen/${truyen?.tenTruyen}/${lichSu?.maChuongTruyen}`}
                     className="btn-primary m-0 p-0"
                     style={{ minWidth: "10px" }}
                   >
                     <i class="fa fa-book-reader"></i>
-                  </button>
-                  {/* nut dánh dấu */}
+                  </Link> : truyen?.data[0] ? <Link to={`/truyen/${truyen?.tenTruyen}/${truyen?.data[0].maChuong}`}
+                    className="btn-primary m-0 p-0"
+                    style={{ minWidth: "10px" }}
+                  >
+                    <i class="fa fa-book-reader"></i>
+                  </Link> : <button
+                    className="btn-primary m-0 p-0"
+                    style={{ minWidth: "10px" }}
+                    disabled
+                  >
+                    <i class="fa fa-book-reader" ></i>
+                  </button>}
+
                   {isBookmarked ? (
                     <button
                       className="btn-primary m-0 p-0"
@@ -283,7 +306,7 @@ export const ListChapter = (props) => {
   const [chapters, setChapters] = useState([dsChuong]);
   const [loadingData, setLoadingData] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  console.log(chapters, "124241241");
+
   useEffect(() => {
     setChapters(dsChuong);
   });

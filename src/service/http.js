@@ -39,9 +39,10 @@ class SetUpAxios {
             params: updatedParams,
         })
     }
-    deleteToken = async (url, data, params) => {
+    deleteToken = async (url, params) => {
         const updatedParams = await { ...params, 'token': 'Bearer ' + localStorage.getItem(TOKEN) };
-        return this.axiosCreate.delete(url, data, {
+        console.log(updatedParams)
+        return this.axiosCreate.delete(url, {
             params: updatedParams,
         })
     }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { message, Button } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import parse from "html-react-parser";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { dsDanhDau, XoaDanhDauTruyen } from "../../service/actions/DanhDauAction";
 import { useSelector } from "react-redux";
 

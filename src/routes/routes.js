@@ -17,6 +17,7 @@ import TuTruyen, { AddChapter, EditChapter, EditNovel, ListButDanh, ListChap, St
 import CreateNovel from './../layout/Account/CreateNovel';
 import StoryDetail from "../layout/StoryDetail/StoryDetail";
 import DanhDau from "../layout/QLDanhDau/DanhDau";
+import LichSuDoc from "../components/LichSuDoc";
 
 
 
@@ -89,22 +90,8 @@ const ROUTES = [
         auth: true,
         roles: [],
     },
-    {
 
-        index: 19,
-        path: "ButDanhAdmin",
-        element: <ButDanhAdmin></ButDanhAdmin>,
-        auth: false,
-        roles: [],
-    }  ,
     {
-        index: 18,
-        path: "TheLoaiAdmin",
-        element: <TheLoaiAdmin></TheLoaiAdmin>,
-        auth: false,
-        roles: [],
-    },  
-{
         index: 10,
         path: "CapNhapTruyen/:id",
         element: <EditNovel></EditNovel>,
@@ -164,6 +151,28 @@ const ROUTES = [
         index: 18,
         path: "DanhDau",
         element: <DanhDau></DanhDau>,
+        auth: true,
+        roles: [],
+    },
+    {
+
+        index: 19,
+        path: "ButDanhAdmin",
+        element: <ButDanhAdmin></ButDanhAdmin>,
+        auth: false,
+        roles: [],
+    },
+    {
+        index: 20,
+        path: "TheLoaiAdmin",
+        element: <TheLoaiAdmin></TheLoaiAdmin>,
+        auth: false,
+        roles: [],
+    },
+    {
+        index: 21,
+        path: "LichSuDoc",
+        element: <LichSuDoc></LichSuDoc>,
         auth: true,
         roles: [],
     }

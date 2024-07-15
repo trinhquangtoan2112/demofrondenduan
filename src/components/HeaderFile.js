@@ -66,9 +66,20 @@ export default function HeaderFile() {
 
                     <div className="logo">
                         <Link className="" to='/'><img src={logo} alt="" /></Link>
-                    </div>
-                    <div className="navbar-nav">
 
+                    </div>
+
+                    <div className="navbar-nav">
+                        <ul className='navbar-nav__list'>
+                            <Link to='/LichSuDoc'>
+                                <li className='text-bold'>
+                                    Lịch sử đọc
+                                </li>
+                            </Link>
+                            {/* <Link to='/truyen'>
+                                <li className='text-bold'>Bảng xếp hạng</li>
+                            </Link> */}
+                        </ul>
                         <div className='navbar-nav__list__search'>
                             <div className='form-group'>
                                 <input placeholder='Tìm truyện'></input>
