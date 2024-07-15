@@ -57,13 +57,13 @@ function Chapter(props) {
             console.log(result)
         }
         handleSetReading();//gọi hàm
-        if (localStorage.getItem("TOKEN")) {
-            try {
-                LuuLichSu()
-            } catch (error) {
+        // if (localStorage.getItem("TOKEN")) {
+        //     try {
+        //         LuuLichSu()
+        //     } catch (error) {
 
-            }
-        }
+        //     }
+        // }
 
 
     }, [maChuong])

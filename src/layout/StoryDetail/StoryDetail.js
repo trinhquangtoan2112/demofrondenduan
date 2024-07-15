@@ -116,7 +116,6 @@ function StoryDetail() {
   const handleSetPage = async () => {
     console.log(214124124);
   };
-  console.log(truyen);
   // useEffect(() => {//xử lý đổi tab
   //   switch (tab) {
   //     case 'about':
@@ -191,12 +190,14 @@ function StoryDetail() {
                 */}
                 </div>
                 <div className="flex flex-row justify-between">
+                  {/* Nút đọc truyện */}
                   <button
                     className="btn-primary m-0 p-0"
                     style={{ minWidth: "10px" }}
                   >
                     <i class="fa fa-book-reader"></i>
                   </button>
+                  {/* nut dánh dấu */}
                   {isBookmarked ? (
                     <button
                       className="btn-primary m-0 p-0"
@@ -214,7 +215,7 @@ function StoryDetail() {
                       <i className="fa fa-plus"></i>
                     </button>
                   )}
-
+                  {/* Nút like */}
                   <button
                     className="btn-outline m-0 p-0"
                     style={{ minWidth: "10px" }}
@@ -223,6 +224,7 @@ function StoryDetail() {
                   </button>
                 </div>
               </div>
+              
               <div className="col-9" style={{ overflowY: "scroll" }}>
                 {truyen?.moTa != null ? parse(truyen?.moTa) : "Khong co gi"}
               </div>
@@ -242,6 +244,7 @@ function StoryDetail() {
                 }
               </div>
             </div> */}
+            
 
             <div className="story-detail__tab__main">
               <ListChapter
