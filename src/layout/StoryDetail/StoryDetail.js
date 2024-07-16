@@ -1,44 +1,25 @@
 import { useCallback, useEffect, useState } from "react";
-
-import { Table, Button, Modal, Form, Input, Space, message } from "antd";
 import { Link, useParams } from "react-router-dom";
 import Layout from "../../components/Layout";
+import { message } from "antd";
 import LoadingData from "../../components/LoadingData";
 import Grid from "../../components/Grid";
 import Pagination from "./../../components/Pagination";
 import { GetChiTietChuongTruyen } from "../../service/actions/TruyenAction";
-import {
-  themdanhdautruyen,
-  checkDanhDau,
-  XoaDanhDauTruyen,
-} from "../../service/actions/DanhDauAction";
+import { themdanhdautruyen, checkDanhDau, XoaDanhDauTruyen } from "../../service/actions/DanhDauAction";
 import dayjs from "dayjs";
 import parse from "html-react-parser";
 import { apiKey } from "../../service/http";
 import { useSelector } from "react-redux";
+import RateForm from "./RateForm";
+import DSDanhGia from "./DSDanhGia";
+import {layDSDanhGia} from "../../service/actions/DanhGiaAction";
 
 const nav = [
-  //navigate
-  {
-    path: "about",
-    display: "Giới thiệu",
-  },
-  {
-    path: "rate",
-    display: "Đánh giá",
-  },
-  {
-    path: "chapter",
-    display: "Ds Chương",
-  },
-  {
-    path: "comment",
-    display: "Bình luận",
-  },
-  {
-    path: "donate",
-    display: "Hâm mộ",
-  },
+  { path: "rate", display: "Đánh giá" },
+  { path: "chapter", display: "Danh sách chương" },
+  { path: "comment", display: "Bình luận" },
+  { path: "donate", display: "Hâm mộ" },
 ];
 
 function StoryDetail() {
@@ -46,26 +27,23 @@ function StoryDetail() {
   const [truyen, setTruyen] = useState(null);
   const [catGiu, setCatGiu] = useState(100);
   const [lichSu, setLichSu] = useState(null);
-  const [tab, setTab] = useState("");
+  const [tab, setTab] = useState("rate");
   const active = nav.findIndex((e) => e.path === tab);
   const [loadingData, setLoadingData] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const userInfo = useSelector((state) => state.UserReducer.userInfo);
 
   useEffect(() => {
-    //load truyện
     const getStory = async () => {
       const result = await GetChiTietChuongTruyen(id);
-      const maTruyen = {
-        maTruyen: id
-      }
-      console.log(result)
+      const maTruyen = { maTruyen: id };
+      console.log(result);
       try {
         const getLichSuDoc = await apiKey.getToken("LichSuDoc/LichSuDocTheoTruyen", maTruyen);
-        console.log(getLichSuDoc)
-        setLichSu(getLichSuDoc.data.data)
+        console.log(getLichSuDoc);
+        setLichSu(getLichSuDoc.data.data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
       setTruyen(result);
     };
@@ -78,9 +56,7 @@ function StoryDetail() {
     } else if (truyen) {
       const checkBookmark = async () => {
         try {
-          const maid = {
-            maTruyen: truyen?.maTruyen,
-          };
+          const maid = { maTruyen: truyen?.maTruyen };
           const result = await checkDanhDau(maid);
           setIsBookmarked(result.data);
         } catch (error) {
@@ -95,14 +71,12 @@ function StoryDetail() {
     if (!userInfo) {
       message.success("Hãy đăng nhập để đánh dấu truyện");
     } else {
-      const maid = {
-        maTruyen: truyen?.maTruyen,
-      };
+      const maid = { maTruyen: truyen?.maTruyen };
       try {
         await themdanhdautruyen(maid);
         setIsBookmarked(true);
       } catch (error) {
-        console.error("Error:", error); // Log lỗi để kiểm tra chi tiết
+        console.error("Error:", error);
         message.error("Failed to add bookmark. It might already exist.");
       }
     }
@@ -112,12 +86,10 @@ function StoryDetail() {
     if (!userInfo) {
       message.success("Hãy đăng nhập để đánh dấu truyện");
     } else {
-      const maid = {
-        maTruyen: truyen?.maTruyen,
-      };
+      const maid = { maTruyen: truyen?.maTruyen };
       try {
-        await XoaDanhDauTruyen(maid); // Implement removeBookmark tương tự như themdanhdautruyen
-        setIsBookmarked(false); // cập nhật trạng thái
+        await XoaDanhDauTruyen(maid);
+        setIsBookmarked(false);
       } catch (error) {
         console.error("Error:", error);
         message.error("Failed to remove bookmark. Please try again.");
@@ -129,29 +101,10 @@ function StoryDetail() {
     console.log(214124124);
   };
 
-  // useEffect(() => {//xử lý đổi tab
-  //   switch (tab) {
-  //     case 'about':
-  //       setMain(<About key={'about'} truyen={truyen} />)
-  //       break
-  //     case 'rate':
-  //       setMain(<Rate key={'rate'} />)
-  //       break
-  //     case 'chapter':
-  //       setMain(<ListChapter key={'chapter'} url={truyen.url} />)
-  //       break
-  //     case 'comment':
-  //       setMain(<Comment key={'comment'} url={truyen.url} />)
-  //       break
-  //     default:
-  //       setMain(<Donate key={'donate'} />)
-  //   }
-  // }, [tab])
+  const handleTabChange = (e) => {
+    setTab(e.target.name);
+  };
 
-  // const onClickTab = async (e) => {
-  //   setTab(e.target.name)
-  // }
-  //style
   const liClass = "border-primary rounded-2 color-primary m-1";
   return (
     <Layout>
@@ -170,7 +123,6 @@ function StoryDetail() {
                   <ul className="flex flex-col w-full">
                     <li className={liClass}>Tác giả: {truyen?.tenButDanh}</li>
                     <li className={liClass}>Thể loại: {truyen?.tenTheLoai}</li>
-
                     <li className={liClass}>
                       Ngày cập nhập:{" "}
                       {dayjs(truyen?.ngayCapNhat).format("DD/MM/YYYY")}
@@ -184,43 +136,34 @@ function StoryDetail() {
                       <br />
                       <span>Lượt đọc</span>
                     </li>
-
-                    {/* <li>
-                    <span className='fs-16 bold'>{catGiu || '0'}</span>
-                    <br />
-                    <span>Cất giữ</span>
-                  </li> */}
                   </ul>
-
-                  {/* <div className="heroSide__rate">
-                  <span className={`fa fa-star ${truyen?.danhgia >= 1 ? 'checked' : ''}`}></span>
-                  <span className={`fa fa-star ${truyen?.danhgia >= 2 ? 'checked' : ''}`}></span>
-                  <span className={`fa fa-star ${truyen?.danhgia >= 3 ? 'checked' : ''}`}></span>
-                  <span className={`fa fa-star ${truyen?.danhgia >= 4 ? 'checked' : ''}`}></span>
-                  <span className={`fa fa-star ${truyen?.danhgia >= 5 ? 'checked' : ''}`}></span>
-                  <span>&nbsp;{truyen?.danhgia}/5   ({truyen?.soluongdanhgia} đánh giá)</span>
-                </div>
-                */}
                 </div>
                 <div className="flex flex-row justify-between">
-                  {lichSu ? <Link to={`/truyen/${truyen?.tenTruyen}/${lichSu?.maChuongTruyen}`}
-                    className="btn-primary m-0 p-0"
-                    style={{ minWidth: "10px" }}
-                  >
-                    <i class="fa fa-book-reader"></i>
-                  </Link> : truyen?.data[0] ? <Link to={`/truyen/${truyen?.tenTruyen}/${truyen?.data[0].maChuong}`}
-                    className="btn-primary m-0 p-0"
-                    style={{ minWidth: "10px" }}
-                  >
-                    <i class="fa fa-book-reader"></i>
-                  </Link> : <button
-                    className="btn-primary m-0 p-0"
-                    style={{ minWidth: "10px" }}
-                    disabled
-                  >
-                    <i class="fa fa-book-reader" ></i>
-                  </button>}
-
+                  {lichSu ? (
+                    <Link
+                      to={`/truyen/${truyen?.tenTruyen}/${lichSu?.maChuongTruyen}`}
+                      className="btn-primary m-0 p-0"
+                      style={{ minWidth: "10px" }}
+                    >
+                      <i className="fa fa-book-reader"></i>
+                    </Link>
+                  ) : truyen?.data[0] ? (
+                    <Link
+                      to={`/truyen/${truyen?.tenTruyen}/${truyen?.data[0].maChuong}`}
+                      className="btn-primary m-0 p-0"
+                      style={{ minWidth: "10px" }}
+                    >
+                      <i className="fa fa-book-reader"></i>
+                    </Link>
+                  ) : (
+                    <button
+                      className="btn-primary m-0 p-0"
+                      style={{ minWidth: "10px" }}
+                      disabled
+                    >
+                      <i className="fa fa-book-reader"></i>
+                    </button>
+                  )}
                   {isBookmarked ? (
                     <button
                       className="btn-primary m-0 p-0"
@@ -238,68 +181,57 @@ function StoryDetail() {
                       <i className="fa fa-plus"></i>
                     </button>
                   )}
-                  {/* Nút like */}
                   <button
                     className="btn-outline m-0 p-0"
                     style={{ minWidth: "10px" }}
                   >
-                    <i class="fa fa-heart"></i>
+                    <i className="fa fa-heart"></i>
                   </button>
                 </div>
               </div>
-              
               <div className="col-9" style={{ overflowY: "scroll" }}>
-                {truyen?.moTa != null ? parse(truyen?.moTa) : "Khong co gi"}
+                {truyen?.moTa != null ? parse(truyen?.moTa) : "Không có gì"}
               </div>
             </div>
 
-            {/* <div className="story-detail">
+            <div className="story-detail">
               <div className="navigate">
-                {
-                  nav.map((item, index) => {
-                    return (
-                      <a className={`navigate__tab fs-20 bold ${active === index ? 'tab_active' : ''}`}
-                        key={index}
-                        name={item.path}
-                      // onClick={onClickTab}
-                      >{item.display}</a>)
-                  })
-                }
+                {nav.map((item, index) => (
+                  <a
+                    className={`navigate__tab fs-20 bold ${
+                      active === index ? "tab_active" : ""
+                    }`}
+                    key={index}
+                    name={item.path}
+                    onClick={handleTabChange}
+                  >
+                    {item.display}
+                  </a>
+                ))}
               </div>
-            </div> */}
-            
+            </div>
 
             <div className="story-detail__tab__main">
-              <ListChapter
-                dsChuong={truyen?.data}
-                tenTruyen={truyen?.tenTruyen}
-              ></ListChapter>
+              {tab === "rate" && <Rate />}
+              {tab === "chapter" && (
+                <ListChapter dsChuong={truyen?.data} tenTruyen={truyen?.tenTruyen} />
+              )}
+              {tab === "comment" && <Comment />}
+              {tab === "donate" && <Donate />}
             </div>
-            {truyen?.totalCount ? (
+            {tab === "chapter" && (
               <Pagination
-                totalPage={truyen?.totalCount}
-                currentPage={truyen?.currentPage}
                 handleSetPage={handleSetPage}
-              ></Pagination>
-            ) : null}
+                itemsPerPage={15}
+                dataLength={truyen?.data?.length}
+              />
+            )}
           </>
         )}
       </div>
     </Layout>
   );
 }
-
-const About = (props) => {
-  return (
-    <>
-      <p>{props.truyen?.noidung}</p>
-    </>
-  );
-};
-
-const Rate = (props) => {
-  return <h1>Đánh giá</h1>;
-};
 
 export const ListChapter = (props) => {
   const { dsChuong, tenTruyen } = props;
@@ -337,7 +269,22 @@ export const ListChapter = (props) => {
   );
 };
 
-const Donate = (props) => {
-  return <h1>Hâm mộ</h1>;
+const Rate = () => {
+  return (
+    <div>
+      <RateForm />
+      <DSDanhGia  />
+    </div>
+  );
 };
+
+
+const Comment = () => {
+  return <h3>Bình luận</h3>;
+};
+
+const Donate = () => {
+  return <h3>Hâm mộ</h3>;
+};
+
 export default StoryDetail;
