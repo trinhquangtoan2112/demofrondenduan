@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { message, Modal, Form } from "antd";
+import { message, Modal, Form, Pagination } from "antd";
 import { layDSDanhGia, xoaDanhGia, DsDanhGiaChuaDangNhap, suaDanhGia } from "../../service/actions/DanhGiaAction";
 import { useParams } from "react-router-dom";
 import anhDaiDienmacdinh from "../../assets/img/avt.png";
@@ -8,7 +8,6 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const { confirm } = Modal;
 
-// Helper function to format date
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   const day = date.getDate().toString().padStart(2, "0");
@@ -102,6 +101,8 @@ const DSDanhGia = () => {
   const [loading, setLoading] = useState(true);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5; // Display 5 reviews per page
   const userInfo = useSelector((state) => state.UserReducer.userInfo);
 
   useEffect(() => {
@@ -113,7 +114,11 @@ const DSDanhGia = () => {
         } else {
           response = await DsDanhGiaChuaDangNhap({ maTruyen: id });
         }
-        setDanhSachDanhGia(response.data);
+
+        // Sort the reviews by date (ascending order)
+        const sortedData = response.data.sort((b,a) => new Date(a.ngaycapnhat) - new Date(b.ngaycapnhat));
+
+        setDanhSachDanhGia(sortedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -166,28 +171,34 @@ const DSDanhGia = () => {
     }
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
+
+  const paginatedReviews = danhSachDanhGia.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <div className="ds-danh-gia p-6 bg-gray-100 rounded-lg shadow-lg">
       <h3 className="text-xl font-semibold mb-4">Danh sách đánh giá</h3>
       <ul>
-        {danhSachDanhGia.length === 0 ? (
+        {paginatedReviews.length === 0 ? (
           <li className="text-gray-600">
             Chưa có đánh giá nào cho truyện này.
           </li>
         ) : (
-          danhSachDanhGia.map((danhGia) => (
+          paginatedReviews.map((sortedData) => (
             <li
-              key={danhGia.maDanhGia}
+              key={sortedData.maDanhGia}
               className="bg-white p-4 mb-4 rounded-lg shadow-md flex justify-between items-center"
             >
               <div>
                 <div className="flex items-center mb-1">
                   <img
-                    src={danhGia.anhDaiDien || anhDaiDienmacdinh}
+                    src={sortedData.anhDaiDien || anhDaiDienmacdinh}
                     alt="Avatar"
                     onError={(e) => {
                       e.target.onerror = null;
@@ -195,30 +206,30 @@ const DSDanhGia = () => {
                     }}
                     className="w-12 h-12 rounded-full mr-4"
                   />
-                  <span className="font-semibold">{danhGia.tenNguoiDung}</span>:{" "}
-                  {danhGia.noidung}
+                  <span className="font-semibold">{sortedData.tenNguoiDung}</span>:{" "}
+                  {sortedData.noidung}
                 </div>
                 <div className="text-gray-600">
-                  Điểm đánh giá: {danhGia.diemDanhGia}{" "}
+                  Điểm đánh giá: {sortedData.diemDanhGia}{" "}
                   <i className="fa-solid fa-star text-yellow-400"></i> - Ngày:{" "}
-                  {formatDate(danhGia.ngaycapnhat)}
+                  {formatDate(sortedData.ngaycapnhat)}
                 </div>
               </div>
               <div className="flex space-x-2">
-                {(danhGia.checkCuaToi === true) && (
+                {(sortedData.checkCuaToi === true) && (
                   <span
                     className="cursor-pointer"
-                    onClick={() => handleEditClick(danhGia)}
+                    onClick={() => handleEditClick(sortedData)}
                   >
                     <i className="fa-solid fa-edit text-blue-500"></i>
                   </span>
                 )}
-                {(userInfo?.maQuyen === 1 || danhGia.checkCuaToi === true) && (
+                {(userInfo?.maQuyen === 1 || sortedData.checkCuaToi === true) && (
                   <span
                     className="cursor-pointer"
-                    onClick={() => handleDeleteReview(danhGia.maDanhGia)}
+                    onClick={() => handleDeleteReview(sortedData.maDanhGia)}
                   >
-                    <i className="fa-solid fa-trash-alt text-red-500"></i>
+                    <i className="fa-solid fa-trash text-red-500"></i>
                   </span>
                 )}
               </div>
@@ -226,14 +237,18 @@ const DSDanhGia = () => {
           ))
         )}
       </ul>
-      {editingReview && (
-        <EditReviewForm
-          visible={editModalVisible}
-          onCancel={() => setEditModalVisible(false)}
-          onEdit={handleEditReview}
-          initialValues={editingReview}
-        />
-      )}
+      <Pagination
+        current={currentPage}
+        pageSize={pageSize}
+        total={danhSachDanhGia.length}
+        onChange={handlePageChange}
+      />
+      <EditReviewForm
+        visible={editModalVisible}
+        onCancel={() => setEditModalVisible(false)}
+        onEdit={handleEditReview}
+        initialValues={editingReview || {}}
+      />
     </div>
   );
 };

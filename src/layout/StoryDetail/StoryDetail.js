@@ -13,7 +13,7 @@ import { apiKey } from "../../service/http";
 import { useSelector } from "react-redux";
 import RateForm from "./RateForm";
 import DSDanhGia from "./DSDanhGia";
-import {layDSDanhGia} from "../../service/actions/DanhGiaAction";
+
 
 const nav = [
   { path: "rate", display: "Đánh giá" },

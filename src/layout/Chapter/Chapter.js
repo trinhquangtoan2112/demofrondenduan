@@ -66,6 +66,8 @@ function Chapter(props) {
         // }
         LuuLichSu()
 
+
+        LuuLichSu()
     }, [maChuong])
 
     // useEffect(() => {//Xử lý load dữ liệu chương truyện

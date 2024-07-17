@@ -62,3 +62,15 @@ export const suaDanhGia = async (danhgia) => {
     message.error(`${error.response?.data?.message || error.message}`);
   }
 };
+
+// Function to add a pseudonym
+export const checkDanhgia = async (danhgia) => {
+  try {
+    const response = await apiKey.getToken(`/api/Danhgias/CheckDanhgia`, danhgia);
+    if (response.status === 200) { // Created
+      return response.data;
+    }
+  } catch (error) {
+    message.error(`Kiểm tra thất bại: ${error.response?.data?.message || error.message}`);
+  }
+};
