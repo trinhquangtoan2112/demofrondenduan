@@ -4,8 +4,10 @@ import Home from '../layout/Home/Home';
 import { useSelector } from 'react-redux';
 import HomeAdmin from '../layout/Home/HomeAdmin';
 import Admin from '../layout/Account/Admin';
+import { useEffect } from 'react';
 const AppRoutes = () => {
     const { user, auth, userInfo } = useSelector(state => state.UserReducer);
+
 
     return (
         <Routes>

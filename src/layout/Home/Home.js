@@ -5,6 +5,7 @@ import ListStory from '../ListStory/ListStory';
 import HeaderFile from '../../components/HeaderFile';
 import { Outlet } from 'react-router-dom';
 export default function Home() {
+
     return (
         <>
 

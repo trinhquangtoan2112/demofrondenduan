@@ -11,17 +11,24 @@ import Auth from './Auth';
 import Comment from './Comment';
 import Grid from './Grid';
 import anhDaiDienmacdinh from '../assets/img/avt.png';
+import { layDanhSachTheLoaiAction } from '../service/actions/TheLoaiAction';
 
 export default function HeaderFile() {
     const { user, auth, userInfo } = useSelector(state => state.UserReducer);
     const [auth1, setAuth] = useState(false);
     const navigate = useNavigate();
-    console.log(userInfo)
+    const dispatch = useDispatch();
+    const getTheLoai = async () => {
+        const result = await layDanhSachTheLoaiAction(dispatch);
+
+    }
+
     useEffect(() => {
         setAuth(auth)
+        getTheLoai()
     }, [auth]);
 
-    const dispatch = useDispatch();
+
 
     const onClickLogout = () => {
         localStorage.removeItem("USER_LOGIN");
