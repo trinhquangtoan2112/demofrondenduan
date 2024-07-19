@@ -5,8 +5,7 @@ import { GetChiTietChuongTruyenAction } from '../../service/actions/TruyenAction
 import parse from 'html-react-parser';
 import { message } from 'antd';
 import { apiKey } from '../../service/http';
-
-
+import axios from 'axios';
 function Chapter(props) {
     const { maChuong, name } = useParams();
 
@@ -14,9 +13,14 @@ function Chapter(props) {
     const [fontsize, setFontsize] = useState(18);
     const [lineHeight, setLineHeight] = useState(1.5);
     const [manual, setManual] = useState("")
+
+    const [content, setContnet] = useState("Khong co gi")
+
+
     // const user = useSelector(state => state.auth.login?.user)
     const dispatch = useDispatch()
     const contentRef = useRef(null)
+
     useEffect(() => {//xử lý đánh dấu truyện đang đọc
         const handleSetReading = async () => {//tạo hàm
 
@@ -42,6 +46,7 @@ function Chapter(props) {
                     content: result.data.data.noiDung,
                     stt: result.data.data.stt
                 })
+                setContnet(getTextContent(result?.data?.data?.noiDung))
                 setManual({
                     result
                 })
@@ -67,9 +72,53 @@ function Chapter(props) {
         LuuLichSu()
 
 
-        LuuLichSu()
-    }, [maChuong])
 
+    }, [maChuong])
+    console.log(parse('<h1>single</h1>'))
+
+    const [operationName, setOperationName] = useState('');
+    const [audioUrl, setAudioUrl] = useState('');
+
+
+
+    const handleSpeak = async () => {
+
+
+
+        const data = {
+            noiDung: content
+        }
+        console.log(data)
+        try {
+            const result = await axios.post('https://localhost:7094/Chuongtruyens/DocChuongTruyen', data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                responseType: 'blob', // Đảm bảo nhận được phản hồi dưới dạng blob
+            });
+            const url = window.URL.createObjectURL(new Blob([result.data], { type: 'audio/mpeg' }));
+            setAudioUrl(url)
+        } catch (error) {
+            console.error('Error during text-to-speech:', error);
+        }
+    };
+
+
+    const getTextContent = (node) => {
+        let textContent = "";
+        if (typeof node === 'string') {
+            textContent += node;
+        } else if (Array.isArray(node)) {
+            node.forEach(getTextContent);
+        } else if (node && node.props && node.props.children) {
+            getTextContent(node.props.children);
+        }
+
+        const parser1 = new DOMParser();
+        const doc = parser1.parseFromString(textContent, 'text/html');
+
+        return doc.body.textContent || "";
+    };
     // useEffect(() => {//Xử lý load dữ liệu chương truyện
     //     const getChapter = async () => {//tạo hàm
     //         apiMain.getChapterByNumber(url, chapnum)
@@ -104,6 +153,7 @@ function Chapter(props) {
     }
     return (<>
         <div className="main" style={{ backgroundColor: "#ced9d9", paddingTop: "30px" }}>
+            {audioUrl && <audio controls src={audioUrl}></audio>}
             <div className="container">
                 <div className="main-content" style={{ "position": "relative", margin: "0 80px", backgroundColor: "#e1e8e8" }}>
                     {/* <ul className='chapter-manual fs-24'>
@@ -179,8 +229,11 @@ function Chapter(props) {
                         <li className='chapter-manual__item'><a><i className="fa-solid fa-comments"></i></a> </li>
 
                     </ul> */}
+                    <button onClick={handleSpeak}>
+                        Đọc văn bản
+                    </button>
                     <div className="d-lex" >
-                        {chapter?.stt ? <h1 className='chapter-name'> Chương {chapter?.stt}: {chapter?.tenChuong}</h1> : null}
+                        {chapter?.stt ? <h1 className='chapter-name'> CHƯƠNG {chapter?.stt}: {chapter?.tenChuong.toUpperCase()}</h1> : null}
                         <div className={`fs-${fontsize}`} style={{ "lineHeight": `${lineHeight}` }}>
                             <div id="chapter-content">{chapter?.content ? renderNoiDung() : <p>Lỗi xảy ra hãy reset lại web</p>}</div>
                         </div>
