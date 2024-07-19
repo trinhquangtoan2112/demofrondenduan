@@ -3,27 +3,16 @@ import avt from '../../assets/img/avt.png'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Loading from './../../components/Loading';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DangTruyen } from '../../service/actions/TruyenAction';
 import { useNavigate, useParams } from 'react-router-dom';
-const types = [
-    {
-        id: 2,
-        tenTag: "Huyền Huyễn"
-    },
-    {
-        id: 5,
-        tenTag: "Kiếm hiệp"
-    },
-    {
-        id: 7,
-        tenTag: "Ngôn tình"
-    },
-]
+
 export default function CreateNovel(props) {
     const { userInfo } = props;
     const navigate = useNavigate();
     const { idButDanh } = useParams();
+    const theLoai = useSelector(state => state.TheLoaiReducer.theLoai);
+    console.log(theLoai)
     const [ckValue, setCkValue] = useState(true);
     // const user = useSelector(state=>state.auth.login.user)
     const [image, setImage] = useState("");
@@ -31,19 +20,12 @@ export default function CreateNovel(props) {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [tacgia, setTacgia] = useState(idButDanh);
-    const [theloai, setTheloai] = useState(types[0]);
+    const [theloai, setTheloai] = useState(theLoai[0]);
     // const loading = useSelector(state => state.message.loading)
     const [loadingUser, setLoadingUser] = useState(true)
     const dispatch = useDispatch()
-
-
     useEffect(() => {
-        // const loadUser = async() => {
-        //     if (userInfo) {
-        //       setLoadingUser(false)
-        //     }
-        // }
-        // loadUser();
+
     }, [userInfo])
 
 
@@ -136,7 +118,7 @@ export default function CreateNovel(props) {
                                 <label for="types">Thể loại</label>
                                 <select style={labelStyle} onChange={e => { console.log(e.target.value); setTheloai(e.target.value) }} value={theloai} id="types" name="types">
                                     {
-                                        types.map(item => { return (<option value={item.id}>{item.tenTag}</option>) })
+                                        theLoai.map(item => { return (<option value={item.maTheLoai}>{item.tenTheLoai}</option>) })
                                     }
                                 </select>
                             </div>

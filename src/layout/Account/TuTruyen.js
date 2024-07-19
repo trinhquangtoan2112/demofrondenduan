@@ -13,6 +13,7 @@ import { DeleteOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined, FormOu
 
 import dayjs from 'dayjs';
 import Modal, { ModalContent } from '../../components/Modal';
+import { useSelector } from 'react-redux';
 const nav = [
     {
         path: 'reading',
@@ -27,20 +28,7 @@ const nav = [
         display: 'Đã đăng'
     },
 ]
-const types = [
-    {
-        id: 2,
-        tenTag: "Huyền Huyễn"
-    },
-    {
-        id: 5,
-        tenTag: "Kiếm hiệp"
-    },
-    {
-        id: 7,
-        tenTag: "Ngôn tình"
-    },
-]
+
 export default function TuTruyen(props) {
     const { id } = useParams();
     const [list, setList] = useState()
@@ -386,9 +374,9 @@ export const ListButDanh = (props) => {
         setChapnumber(e.target.name)
 
     }
- 
+
     useEffect(() => {
-       
+
     }, [idNguoiDung])
     // const onClickDeleteChap = (e) => {
     //   if (e.target.name) {
@@ -437,7 +425,7 @@ export const ListButDanh = (props) => {
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
-   
+
     return (
         <>
             {/* {
@@ -647,7 +635,8 @@ export const EditChapter = () => {
 
 export function EditNovel() {
     const { id } = useParams();
-
+    const theLoai1 = useSelector(state => state.TheLoaiReducer.theLoai);
+    console.log(theLoai1)
     const [image, setImage] = useState("");
     const [preview, setPreview] = useState(avt)
     const [name, setName] = useState("");
@@ -737,7 +726,7 @@ export function EditNovel() {
                                 onChange={e => { setTheloai(e.target.value) }}
                                 value={theloai} id="types" name="types">
                                 {
-                                    types.map(item => { return (<option value={item.id}>{item.tenTag}</option>) })
+                                    theLoai1.map(item => { return (<option value={item?.maTheLoai}>{item?.tenTheLoai}</option>) })
                                 }
                             </select>
                         </div>

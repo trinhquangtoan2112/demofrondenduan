@@ -64,6 +64,8 @@ function Chapter(props) {
 
         //     }
         // }
+        LuuLichSu()
+
 
         LuuLichSu()
     }, [maChuong])

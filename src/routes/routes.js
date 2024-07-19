@@ -18,6 +18,7 @@ import CreateNovel from './../layout/Account/CreateNovel';
 import StoryDetail from "../layout/StoryDetail/StoryDetail";
 import DanhDau from "../layout/QLDanhDau/DanhDau";
 import LichSuDoc from "../components/LichSuDoc";
+import AdminTruyen from "../components/AdminTruyen";
 
 
 
@@ -175,7 +176,15 @@ const ROUTES = [
         element: <LichSuDoc></LichSuDoc>,
         auth: true,
         roles: [],
-    }
+    },
+    {
+        index: 22,
+        path: 'TruyenAdmin',
+        element: <AdminTruyen></AdminTruyen>,
+        auth: false,
+        roles: [],
+
+    },
 
 ];
 

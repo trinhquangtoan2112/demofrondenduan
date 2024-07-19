@@ -223,3 +223,16 @@ export const DangChuongTruyenAction = async (data) => {
         message.error("Lỗi xảy ra")
     }
 }
+
+
+//Adminb
+
+export const GetDanhSachTruyenAdmin = async () => {
+    try {
+        const result = await apiKey.get("api/Truyens/GetDSTruyenAdmin");
+        console.log(result)
+        return result.data.data;
+    } catch (error) {
+        return null;
+    }
+}

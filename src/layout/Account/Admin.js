@@ -14,26 +14,14 @@ const menu = [
         display: "Thể Loại",
         icon: ""
     },
+
+
     {
-        path: "users",
-        display: "Thành viên",
+        path: "TruyenAdmin",
+        display: "Quản lý truyện",
         icon: ""
     },
-    {
-        path: "add-user",
-        display: "Thêm thành viên",
-        icon: ""
-    },
-    {
-        path: "tu-truyen/reading",
-        display: "Tủ truyện",
-        icon: ""
-    },
-    {
-        path: "dang-truyen",
-        display: "Đăng truyện",
-        icon: ""
-    },
+
     {
         path: "FeedbackAdmin",
         display: "Phản hồi",
