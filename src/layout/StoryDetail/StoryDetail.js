@@ -11,8 +11,10 @@ import dayjs from "dayjs";
 import parse from "html-react-parser";
 import { apiKey } from "../../service/http";
 import { useSelector } from "react-redux";
-import RateForm from "./RateForm";
+import Danhgiacha from "./Danhgiacha";
+
 import DSDanhGia from "./DSDanhGia";
+import BinhLuanSection from "./BinhLuanSection";
 
 
 const nav = [
@@ -272,15 +274,18 @@ export const ListChapter = (props) => {
 const Rate = () => {
   return (
     <div>
-      <RateForm />
-      <DSDanhGia  />
+      <Danhgiacha  />
     </div>
   );
 };
 
 
 const Comment = () => {
-  return <h3>Bình luận</h3>;
+  return (
+    <div>
+      <BinhLuanSection />
+    </div>
+  );
 };
 
 const Donate = () => {
