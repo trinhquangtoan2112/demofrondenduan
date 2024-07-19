@@ -14,7 +14,7 @@ export const themdanhgiatruyen = async (danhgia) => {
 };
 
 // Function to fetch reviews with login status check
-export const layDSDanhGia = async (maTruyen, userInfo) => {
+export const layDSDanhGia = async (maTruyen) => {
   try {
       const response = await apiKey.getToken(`/api/Danhgias`, maTruyen);
       if (response.status === 200) {

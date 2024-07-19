@@ -1,32 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { message, Modal, Form, Pagination } from "antd";
-import { layDSDanhGia, xoaDanhGia, DsDanhGiaChuaDangNhap, suaDanhGia } from "../../service/actions/DanhGiaAction";
-import { useParams } from "react-router-dom";
+import { message, Modal, Form } from "antd";
+import { xoaDanhGia, suaDanhGia } from "../../service/actions/DanhGiaAction";
 import anhDaiDienmacdinh from "../../assets/img/avt.png";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const { confirm } = Modal;
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const year = date.getFullYear();
-  return `${day}-${month}-${year}`;
+const formatTimeAgo = (dateString) => {
+  const now = new Date();
+  const diff = now - new Date(dateString);
+
+  const seconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30);
+
+  if (months > 0) {
+    return `${months} tháng trước`;
+  } else if (days > 0) {
+    return `${days} ngày trước`;
+  } else if (hours > 0) {
+    return `${hours} giờ trước`;
+  } else if (minutes > 0) {
+    return `${minutes} phút trước`;
+  } else {
+    return `Vừa xong`;
+  }
 };
 
 const EditReviewForm = ({ visible, onCancel, onEdit, initialValues }) => {
   const [form] = Form.useForm();
-  const [diemDanhGia, setDiemDanhGia] = useState(initialValues.diemDanhGia || 0);
-  const [noiDung, setNoiDung] = useState(initialValues.noidung || '');
+  const [diemDanhGia, setDiemDanhGia] = useState(0); // Default value
+  const [noiDung, setNoiDung] = useState("");
   const [hover, setHover] = useState(null);
 
   useEffect(() => {
-    if (visible) {
+    if (visible && initialValues) {
       form.setFieldsValue(initialValues);
-      setDiemDanhGia(initialValues.diemDanhGia);
-      setNoiDung(initialValues.noidung);
+      setDiemDanhGia(initialValues.diemDanhGia || 0); // Default to 0 if null
+      setNoiDung(initialValues.noidung || "");
     }
   }, [visible, initialValues, form]);
 
@@ -35,12 +49,12 @@ const EditReviewForm = ({ visible, onCancel, onEdit, initialValues }) => {
       const values = await form.validateFields();
       onEdit({
         ...values,
-        maDanhGia: initialValues.maDanhGia,
+        maDanhGia: initialValues ? initialValues.maDanhGia : null,
         diemDanhGia,
         noidung: noiDung,
       });
     } catch (info) {
-      console.log('Validate Failed:', info);
+      console.log("Validate Failed:", info);
     }
   };
 
@@ -54,86 +68,58 @@ const EditReviewForm = ({ visible, onCancel, onEdit, initialValues }) => {
       onOk={handleRateSubmit}
       className="edit-review-form-modal"
     >
-        <div className="mb-4">
-          <span className="text-gray-700">Điểm đánh giá:</span>
-          <div className="flex mt-1">
-            {[...Array(5)].map((star, index) => {
-              const ratingValue = index + 1;
-              return (
-                <label key={index}>
-                  <input
-                    type="radio"
-                    name="rating"
-                    value={ratingValue}
-                    onClick={() => setDiemDanhGia(ratingValue)}
-                    className="hidden"
-                  />
-                  <i
-                    className={`fa-solid fa-star text-3xl cursor-pointer transition transform duration-200 ${
-                      ratingValue <= (hover || diemDanhGia) ? "text-yellow-400 scale-125" : "text-gray-300"
-                    }`}
-                    onMouseEnter={() => setHover(ratingValue)}
-                    onMouseLeave={() => setHover(null)}
-                    onClick={() => setDiemDanhGia(ratingValue)}
-                  ></i>
-                </label>
-              );
-            })}
-          </div>
+      <div className="mb-4">
+        <span className="text-gray-700">Điểm đánh giá:</span>
+        <div className="flex mt-1">
+          {[...Array(5)].map((star, index) => {
+            const ratingValue = index + 1;
+            return (
+              <label key={index}>
+                <input
+                  type="radio"
+                  name="rating"
+                  value={ratingValue}
+                  onClick={() => setDiemDanhGia(ratingValue)}
+                  className="hidden"
+                />
+                <i
+                  className={`fa-solid fa-star text-3xl cursor-pointer transition transform duration-200 ${
+                    ratingValue <= (hover || diemDanhGia)
+                      ? "text-yellow-400 scale-125"
+                      : "text-gray-300"
+                  }`}
+                  onMouseEnter={() => setHover(ratingValue)}
+                  onMouseLeave={() => setHover(null)}
+                  onClick={() => setDiemDanhGia(ratingValue)}
+                ></i>
+              </label>
+            );
+          })}
         </div>
-        <label className="block mb-4">
-          <span className="text-gray-700">Nội dung:</span>
-          <textarea
-            value={noiDung}
-            onChange={(e) => setNoiDung(e.target.value)}
-            required
-            rows="4"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 border-2"
-          ></textarea>
-        </label>
+      </div>
+      <label className="block mb-4">
+        <span className="text-gray-700">Nội dung:</span>
+        <textarea
+          value={noiDung}
+          onChange={(e) => setNoiDung(e.target.value)}
+          required
+          rows="4"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 border-2"
+        ></textarea>
+      </label>
     </Modal>
   );
 };
 
-const DSDanhGia = () => {
-  const { id } = useParams();
-  const [danhSachDanhGia, setDanhSachDanhGia] = useState([]);
-  const [loading, setLoading] = useState(true);
+const DSDanhGia = ({ danhSachDanhGia, loading, fetchData }) => {
+  const userInfo = useSelector((state) => state.UserReducer.userInfo);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5; // Display 5 reviews per page
-  const userInfo = useSelector((state) => state.UserReducer.userInfo);
+  const [currentDisplayCount, setCurrentDisplayCount] = useState(5);
+  const [sortOption, setSortOption] = useState("newest");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let response;
-        if (userInfo) {
-          response = await layDSDanhGia({ maTruyen: id });
-        } else {
-          response = await DsDanhGiaChuaDangNhap({ maTruyen: id });
-        }
-
-        // Sort the reviews by date (ascending order)
-        const sortedData = response.data.sort((b,a) => new Date(a.ngaycapnhat) - new Date(b.ngaycapnhat));
-
-        setDanhSachDanhGia(sortedData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-        message.error(`Failed to fetch reviews: ${error.message}`);
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchData();
-    }
-  }, [id, userInfo]);
-
-  const handleDeleteReview = async (maDanhGia) => {
-    confirm({
+  const handleDeleteReview = (maDanhGia) => {
+    Modal.confirm({
       title: "Xác nhận xóa đánh giá?",
       icon: <ExclamationCircleOutlined />,
       okText: "Xóa",
@@ -141,8 +127,7 @@ const DSDanhGia = () => {
       async onOk() {
         try {
           await xoaDanhGia(maDanhGia);
-          const response = await layDSDanhGia({ maTruyen: id });
-          setDanhSachDanhGia(response.data);
+          await fetchData();
         } catch (error) {
           console.error("Error deleting review:", error);
           message.error(`Failed to delete review: ${error.message}`);
@@ -162,8 +147,7 @@ const DSDanhGia = () => {
   const handleEditReview = async (values) => {
     try {
       await suaDanhGia(values);
-      const response = await layDSDanhGia({ maTruyen: id });
-      setDanhSachDanhGia(response.data);
+      await fetchData();
       setEditModalVisible(false);
     } catch (error) {
       console.error("Error editing review:", error);
@@ -171,84 +155,139 @@ const DSDanhGia = () => {
     }
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const handleLoadMore = () => {
+    setCurrentDisplayCount((prevCount) => prevCount + 5);
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const handleSortChange = (option) => {
+    setSortOption(option);
+  };
 
-  const paginatedReviews = danhSachDanhGia.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const sortedDanhSachDanhGia = () => {
+    const sortedData = [...danhSachDanhGia];
+    switch (sortOption) {
+      case "newest":
+        return sortedData.sort(
+          (b, a) => new Date(a.ngaycapnhat) - new Date(b.ngaycapnhat)
+        );
+      case "oldest":
+        return sortedData.sort(
+          (a, b) => new Date(a.ngaycapnhat) - new Date(b.ngaycapnhat)
+        );
+      case "rating":
+        return sortedData.sort((b, a) => a.diemDanhGia - b.diemDanhGia);
+      default:
+        return sortedData;
+    }
+  };
+
+  const paginatedReviews = sortedDanhSachDanhGia().slice(
+    0,
+    currentDisplayCount
+  );
 
   return (
-    <div className="ds-danh-gia p-6 bg-gray-100 rounded-lg shadow-lg">
-      <h3 className="text-xl font-semibold mb-4">Danh sách đánh giá</h3>
-      <ul>
-        {paginatedReviews.length === 0 ? (
-          <li className="text-gray-600">
-            Chưa có đánh giá nào cho truyện này.
-          </li>
+    <div>
+      <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-300">
+        <h3 className="text-2xl font-semibold mb-4 text-center">
+          Danh sách đánh giá
+        </h3>
+
+        <div className="mb-4 flex items-center">
+          <select
+            id="sort"
+            value={sortOption}
+            onChange={(e) => handleSortChange(e.target.value)}
+            className="block w-full rounded-md border-[#ff7300] shadow-sm focus:ring focus:ring-[#ff7300] focus:ring-opacity-50 border-2"
+          >
+            <option value="newest">Mới nhất</option>
+            <option value="oldest">Cũ nhất</option>
+            <option value="rating">Xếp hạng</option>
+          </select>
+        </div>
+
+        {loading ? (
+          <div className="text-center">Loading...</div>
         ) : (
-          paginatedReviews.map((sortedData) => (
-            <li
-              key={sortedData.maDanhGia}
-              className="bg-white p-4 mb-4 rounded-lg shadow-md flex justify-between items-center"
-            >
-              <div>
-                <div className="flex items-center mb-1">
-                  <img
-                    src={sortedData.anhDaiDien || anhDaiDienmacdinh}
-                    alt="Avatar"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = anhDaiDienmacdinh;
-                    }}
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <span className="font-semibold">{sortedData.tenNguoiDung}</span>:{" "}
-                  {sortedData.noidung}
+          <>
+            {paginatedReviews.length === 0 ? (
+              <div className="text-center">Chưa có đánh giá nào</div>
+            ) : (
+              paginatedReviews.map((review) => (
+                <div
+                  key={review.maDanhGia}
+                  className="mb-4 p-4 bg-gray-100 rounded-lg shadow-md flex flex-col"
+                >
+                  <div className="flex items-start mb-4">
+                    <img
+                      src={review.anhDaiDien || anhDaiDienmacdinh}
+                      alt="Avatar"
+                      className="w-12 h-12 rounded-full mr-3 shadow-md"
+                    />
+                    <div className="flex-1">
+                      <p className="font-bold text-lg">{review.tenNguoiDung}</p>
+                      <p className="text-gray-500 text-sm">
+                        {formatTimeAgo(review.ngaycapnhat)}
+                      </p>
+                    </div>
+                    <div className="ml-4 flex items-center">
+                      <div className="flex space-x-2">
+                        {review.checkCuaToi && (
+                          <button
+                            className="text-blue-500 hover:text-blue-600"
+                            onClick={() => handleEditClick(review)}
+                          >
+                            <i className="fa-solid fa-edit"></i>
+                          </button>
+                        )}
+                        {(userInfo?.maQuyen === 1 || review.checkCuaToi) && (
+                          <button
+                            className="text-red-500 hover:text-red-600"
+                            onClick={() => handleDeleteReview(review.maDanhGia)}
+                          >
+                            <i className="fa-solid fa-trash"></i>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center mb-2">
+                    {[...Array(5)].map((_, index) => (
+                      <i
+                        key={index}
+                        className={`fa-solid fa-star ${
+                          index < review.diemDanhGia
+                            ? "text-yellow-400"
+                            : "text-gray-300"
+                        }`}
+                      ></i>
+                    ))}
+                  </div>
+                  <p>{review.noidung}</p>
                 </div>
-                <div className="text-gray-600">
-                  Điểm đánh giá: {sortedData.diemDanhGia}{" "}
-                  <i className="fa-solid fa-star text-yellow-400"></i> - Ngày:{" "}
-                  {formatDate(sortedData.ngaycapnhat)}
-                </div>
+              ))
+            )}
+
+            {currentDisplayCount < danhSachDanhGia.length && (
+              <div className="text-center mt-4">
+                <button
+                  onClick={handleLoadMore}
+                  className="w-full hover:bg-[#e66700] bg-[#ff7300] text-white font-bold py-2 px-4 rounded"
+                >
+                  Xem thêm
+                </button>
               </div>
-              <div className="flex space-x-2">
-                {(sortedData.checkCuaToi === true) && (
-                  <span
-                    className="cursor-pointer"
-                    onClick={() => handleEditClick(sortedData)}
-                  >
-                    <i className="fa-solid fa-edit text-blue-500"></i>
-                  </span>
-                )}
-                {(userInfo?.maQuyen === 1 || sortedData.checkCuaToi === true) && (
-                  <span
-                    className="cursor-pointer"
-                    onClick={() => handleDeleteReview(sortedData.maDanhGia)}
-                  >
-                    <i className="fa-solid fa-trash text-red-500"></i>
-                  </span>
-                )}
-              </div>
-            </li>
-          ))
+            )}
+          </>
         )}
-      </ul>
-      <Pagination
-        current={currentPage}
-        pageSize={pageSize}
-        total={danhSachDanhGia.length}
-        onChange={handlePageChange}
-      />
-      <EditReviewForm
-        visible={editModalVisible}
-        onCancel={() => setEditModalVisible(false)}
-        onEdit={handleEditReview}
-        initialValues={editingReview || {}}
-      />
+
+        <EditReviewForm
+          visible={editModalVisible}
+          onCancel={() => setEditModalVisible(false)}
+          onEdit={handleEditReview}
+          initialValues={editingReview}
+        />
+      </div>
     </div>
   );
 };

@@ -1,30 +1,14 @@
-import { useState, useEffect } from "react";
-import { themdanhgiatruyen, checkDanhgia } from "../../service/actions/DanhGiaAction";
+import { useState } from "react";
 import { message } from "antd";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const RateForm = () => {
+const RateForm = ({ onSubmit }) => {
   const { id } = useParams();
   const userInfo = useSelector((state) => state.UserReducer.userInfo);
-  const [diemDanhGia, setDiemDanhGia] = useState(0);
+  const [diemDanhGia, setDiemDanhGia] = useState(5);
   const [hover, setHover] = useState(null);
   const [noiDung, setNoiDung] = useState("");
-  const [isRated, setIsRated] = useState(false); // State để lưu trạng thái đã đánh giá hay chưa
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const maid = { maTruyen: id };
-        const result = await checkDanhgia(maid);
-        setIsRated(result.data); // Cập nhật trạng thái đã đánh giá dựa trên kết quả trả về
-      } catch (error) {
-        console.error("Error checking rating:", error);
-      }
-    };
-
-    fetchData(); // Gọi hàm fetchData khi component được render
-  }, [id]); // Thêm id vào dependency array để useEffect được gọi lại khi id thay đổi
 
   const handleRateSubmit = async (e) => {
     e.preventDefault();
@@ -37,27 +21,18 @@ const RateForm = () => {
       noiDung,
       maTruyen: id,
     };
-    try {
-      await themdanhgiatruyen(data);
-      setIsRated(true); // Đánh giá thành công, cập nhật trạng thái đã đánh giá
-      setDiemDanhGia(0);
-      setNoiDung("");
-    } catch (error) {
-      console.error("Error:", error);
-      message.error("Gửi đánh giá thất bại. Vui lòng thử lại.");
-    }
+    onSubmit(data);
   };
 
   return (
     <div>
-      {!isRated && (
         <form
           onSubmit={handleRateSubmit}
           className="rate-form bg-white shadow-md rounded-lg p-6 border border-gray-300"
         >
           <>
             <h3 className="text-xl font-semibold mb-4">Đánh giá</h3>
-            <div className="mb-4 ">
+            <div className="mb-4">
               <span className="text-gray-700">Điểm đánh giá:</span>
               <div className="flex mt-1">
                 {[...Array(5)].map((star, index) => {
@@ -69,6 +44,7 @@ const RateForm = () => {
                         name="rating"
                         value={ratingValue}
                         onClick={() => setDiemDanhGia(ratingValue)}
+                        checked={ratingValue === diemDanhGia}
                         className="hidden"
                       />
                       <i
@@ -104,7 +80,6 @@ const RateForm = () => {
             </button>
           </>
         </form>
-      )}
     </div>
   );
 };
