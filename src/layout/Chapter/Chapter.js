@@ -7,16 +7,14 @@ import { message } from 'antd';
 import { apiKey } from '../../service/http';
 import axios from 'axios';
 function Chapter(props) {
+    console.log(111)
     const { maChuong, name } = useParams();
-
     const [chapter, setChapter] = useState({})
+    const [manual, setManual] = useState("")
+    const [content, setContnet] = useState("Khong co gi")
     const [fontsize, setFontsize] = useState(18);
     const [lineHeight, setLineHeight] = useState(1.5);
-    const [manual, setManual] = useState("")
-
-    const [content, setContnet] = useState("Khong co gi")
-
-
+    const [fontName, setFontName] = useState("Arial");
     // const user = useSelector(state => state.auth.login?.user)
     const dispatch = useDispatch()
     const contentRef = useRef(null)
@@ -69,22 +67,16 @@ function Chapter(props) {
 
         //     }
         // }
-        LuuLichSu()
-
+        if (localStorage.getItem("TOKEN")) {
+            LuuLichSu()
+        }
 
 
     }, [maChuong])
     console.log(parse('<h1>single</h1>'))
-
     const [operationName, setOperationName] = useState('');
     const [audioUrl, setAudioUrl] = useState('');
-
-
-
     const handleSpeak = async () => {
-
-
-
         const data = {
             noiDung: content
         }
@@ -102,8 +94,6 @@ function Chapter(props) {
             console.error('Error during text-to-speech:', error);
         }
     };
-
-
     const getTextContent = (node) => {
         let textContent = "";
         if (typeof node === 'string') {
@@ -151,9 +141,44 @@ function Chapter(props) {
             }
         </div>
     }
+    const renderTienIchFontSize = () => {
+        const options = [];
+        for (let i = 10; i < 30; i++) {
+            options.push(<option key={i} value={i}>{i}px</option>);
+        }
+        return options
+    }
+    const renderTienIchFont = () => {
+        const fonts = [
+            { name: "Arial", style: 'Arial' },
+            { name: "Courier New", style: 'Courier New ' },
+            { name: "Georgia", style: 'Georgia' },
+            { name: "Times New Roman", style: 'Times New Roman' },
+            { name: "Verdana", style: 'Verdana' }
+        ];
+        const options = [];
+        for (let i = 0; i < fonts.length; i++) {
+            options.push(<option key={fonts[i].style} value={fonts[i].style}>{fonts[i].name}</option>);
+        }
+        return options
+    }
     return (<>
         <div className="main" style={{ backgroundColor: "#ced9d9", paddingTop: "30px" }}>
             {audioUrl && <audio controls src={audioUrl}></audio>}
+            <p>Font size</p>
+            <select defaultValue={18} onChange={(e) => {
+                setFontsize(e.target.value)
+            }}>
+                {renderTienIchFontSize()}
+
+            </select>
+            <p>Font</p>
+            <select defaultValue={"Arial"} onChange={(e) => {
+                console.log(e.target.value)
+                setFontName(e.target.value)
+            }}>
+                {renderTienIchFont()}
+            </select>
             <div className="container">
                 <div className="main-content" style={{ "position": "relative", margin: "0 80px", backgroundColor: "#e1e8e8" }}>
                     {/* <ul className='chapter-manual fs-24'>
@@ -232,10 +257,12 @@ function Chapter(props) {
                     <button onClick={handleSpeak}>
                         Đọc văn bản
                     </button>
-                    <div className="d-lex" >
+                    <div className="d-lex"
+                        style={{ fontSize: `${fontsize}px`, fontFamily: `${fontName}` }}
+                    >
                         {chapter?.stt ? <h1 className='chapter-name'> CHƯƠNG {chapter?.stt}: {chapter?.tenChuong.toUpperCase()}</h1> : null}
-                        <div className={`fs-${fontsize}`} style={{ "lineHeight": `${lineHeight}` }}>
-                            <div id="chapter-content">{chapter?.content ? renderNoiDung() : <p>Lỗi xảy ra hãy reset lại web</p>}</div>
+                        <div style={{ "lineHeight": `${lineHeight}` }}>
+                            <div id="chapter-content"  >{chapter?.content ? renderNoiDung() : <p>Lỗi xảy ra hãy reset lại web</p>}</div>
                         </div>
                     </div>
                     <div className='w-1/6 mx-auto flex flex-row justify-between'>

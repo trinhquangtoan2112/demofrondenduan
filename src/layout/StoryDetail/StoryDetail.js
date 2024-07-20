@@ -40,13 +40,16 @@ function StoryDetail() {
       const result = await GetChiTietChuongTruyen(id);
       const maTruyen = { maTruyen: id };
       console.log(result);
-      try {
-        const getLichSuDoc = await apiKey.getToken("LichSuDoc/LichSuDocTheoTruyen", maTruyen);
-        console.log(getLichSuDoc);
-        setLichSu(getLichSuDoc.data.data);
-      } catch (error) {
-        console.log(error);
+      if (localStorage.getItem("TOKEN")) {
+        try {
+          const getLichSuDoc = await apiKey.getToken("LichSuDoc/LichSuDocTheoTruyen", maTruyen);
+          console.log(getLichSuDoc);
+          setLichSu(getLichSuDoc.data.data);
+        } catch (error) {
+          console.log(error);
+        }
       }
+
       setTruyen(result);
     };
     getStory();
@@ -200,9 +203,8 @@ function StoryDetail() {
               <div className="navigate">
                 {nav.map((item, index) => (
                   <a
-                    className={`navigate__tab fs-20 bold ${
-                      active === index ? "tab_active" : ""
-                    }`}
+                    className={`navigate__tab fs-20 bold ${active === index ? "tab_active" : ""
+                      }`}
                     key={index}
                     name={item.path}
                     onClick={handleTabChange}
@@ -274,7 +276,7 @@ export const ListChapter = (props) => {
 const Rate = () => {
   return (
     <div>
-      <Danhgiacha  />
+      <Danhgiacha />
     </div>
   );
 };
