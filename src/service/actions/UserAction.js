@@ -200,3 +200,21 @@ export const deleteUserAdmin = async (id) => {
         return false;
     }
 }
+
+
+export const NapTienAction = async (id) => {
+
+    const dataUser = {
+        id: id
+    }
+    try {
+        const result = await apiKey.put("/Login/XoaTaikhoan", null, dataUser)
+        console.log(result)
+        if (result.status === 200) {
+            return true
+        }
+        return false;
+    } catch (error) {
+        return false;
+    }
+}

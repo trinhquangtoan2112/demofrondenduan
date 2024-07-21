@@ -188,6 +188,7 @@ export default function Profile(props) {
                                     >
                                         Cập nhật</button>
                                 </div>
+                                <button>Nạp tiền</button>
                             </form>
 
                         </div>

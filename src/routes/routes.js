@@ -20,6 +20,7 @@ import BaoCaoAdmin from "../layout/BaoCao/BaoCaoAdmin";
 import DanhDau from "../layout/QLDanhDau/DanhDau";
 import LichSuDoc from "../components/LichSuDoc";
 import AdminTruyen from "../components/AdminTruyen";
+import KetQuaGiaoDich from "../components/KetQuaGiaoDich";
 
 
 
@@ -192,6 +193,13 @@ const ROUTES = [
         path: "BaoCaoAdmin",
         element: <BaoCaoAdmin></BaoCaoAdmin>,
         auth: false,
+        roles: [],
+    },
+    {
+        index: 24,
+        path: "KetQuaGiaoDich",
+        element: <KetQuaGiaoDich></KetQuaGiaoDich>,
+        auth: true,
         roles: [],
     },
 
