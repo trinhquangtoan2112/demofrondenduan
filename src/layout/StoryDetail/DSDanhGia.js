@@ -4,6 +4,7 @@ import { message, Modal, Form } from "antd";
 import { xoaDanhGia, suaDanhGia } from "../../service/actions/DanhGiaAction";
 import anhDaiDienmacdinh from "../../assets/img/avt.png";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import ReportForm from "../BaoCao/ReportForm.js";
 
 const { confirm } = Modal;
 
@@ -117,6 +118,8 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData }) => {
   const [editingReview, setEditingReview] = useState(null);
   const [currentDisplayCount, setCurrentDisplayCount] = useState(5);
   const [sortOption, setSortOption] = useState("newest");
+  const [reportingReview, setReportingReview] = useState(null);
+  const [reportModalVisible, setReportModalVisible] = useState(false);
 
   const handleDeleteReview = (maDanhGia) => {
     Modal.confirm({
@@ -161,6 +164,15 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData }) => {
 
   const handleSortChange = (option) => {
     setSortOption(option);
+  };
+
+  const handleReportClick = (review) => {
+    if(userInfo) {
+      setReportingReview(review);
+      setReportModalVisible(true);
+    }else{
+      message.success("Hãy đăng nhập để báo cáo nội dung này")
+    }
   };
 
   const sortedDanhSachDanhGia = () => {
@@ -228,7 +240,7 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData }) => {
                       <p className="font-bold text-lg">{review.tenNguoiDung}</p>
                       <p className="text-gray-500 text-sm">
                         {formatTimeAgo(review.ngaycapnhat)}
-                      </p>
+                      </p> 
                     </div>
                     <div className="ml-4 flex items-center">
                       <div className="flex space-x-2">
@@ -248,6 +260,12 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData }) => {
                             <i className="fa-solid fa-trash"></i>
                           </button>
                         )}
+                        <button
+                          className="text-yellow-500 hover:text-yellow-600"
+                          onClick={() => handleReportClick(review)}
+                        >
+                          <i className="fa-solid fa-flag"></i>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -272,7 +290,7 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData }) => {
               <div className="text-center mt-4">
                 <button
                   onClick={handleLoadMore}
-                  className="w-full hover:bg-[#e66700] bg-[#ff7300] text-white font-bold py-2 px-4 rounded"
+                  className="hover:bg-[#e66700] bg-[#ff7300] text-white font-bold py-2 px-4 rounded"
                 >
                   Xem thêm
                 </button>
@@ -286,6 +304,13 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData }) => {
           onCancel={() => setEditModalVisible(false)}
           onEdit={handleEditReview}
           initialValues={editingReview}
+        />
+
+        <ReportForm
+          visible={reportModalVisible}
+          onCancel={() => setReportModalVisible(false)}
+          maThucThe={reportingReview ? reportingReview.maDanhGia : null}
+          LoaiBaoCao={1}
         />
       </div>
     </div>

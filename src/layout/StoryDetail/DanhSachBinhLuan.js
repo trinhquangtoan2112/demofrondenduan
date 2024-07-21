@@ -9,6 +9,7 @@ import {
 import { message, Modal } from "antd";
 import { useSelector } from "react-redux";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import ReportForm from "../BaoCao/ReportForm.js";
 
 const { confirm } = Modal;
 
@@ -44,6 +45,9 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded }) => {
   const [editId, setEditId] = useState(null);
   const [editType, setEditType] = useState(null); // "binhLuan" hoặc "phanHoi"
   const userInfo = useSelector((state) => state.UserReducer.userInfo);
+  const [maBinhLuanBaoCao, setReportingBinhLuan] = useState(null);
+  const [reportModalVisible, setReportModalVisible] = useState(false);
+  const [reportType, setReportType] = useState(null);
 
   const toggleReplies = (maBinhLuan) => {
     setOpenReplies((prevState) => ({
@@ -155,6 +159,16 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded }) => {
     }
   };
 
+  const handleReportClick = (maBinhLuan, loaiBaoCao) => {
+    if (userInfo) {
+      setReportingBinhLuan(maBinhLuan);
+      setReportType(loaiBaoCao);
+      setReportModalVisible(true);
+    } else {
+      message.success("Hãy đăng nhập để báo cáo nội dung này");
+    }
+  };
+
   const sortedBinhLuans = [...binhLuans].sort((a, b) => {
     switch (sortCriteria) {
       case "oldest":
@@ -168,7 +182,7 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded }) => {
   });
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-300">
+    <div className="bg-transparent shadow-lg rounded-lg p-6 border border-gray-300 m-4">
       <h3 className="text-2xl font-semibold mb-4">Danh sách bình luận</h3>
       <div className="mb-4 flex items-center">
         <select
@@ -201,7 +215,7 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded }) => {
             </div>
             <div className="ml-4 flex items-center">
               <div className="flex space-x-2">
-                {(binhLuan.checkCuaToi === true) && (
+                {binhLuan.checkCuaToi === true && (
                   <button
                     className="text-blue-500 hover:text-blue-600"
                     onClick={() =>
@@ -223,6 +237,12 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded }) => {
                     <i className="fa-solid fa-trash"></i>
                   </button>
                 )}
+                <button
+                  className="text-yellow-500 hover:text-yellow-600"
+                  onClick={() => handleReportClick(binhLuan.maBinhLuan, 2)}
+                >
+                  <i className="fa-solid fa-flag"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -270,31 +290,44 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded }) => {
                       <p className="mt-2">{phanHoi.noidung}</p>
                     </div>
                     <div className="ml-4 flex items-center">
-                      {(userInfo?.maQuyen === 1 ||
-                        phanHoi.checkCuaToi === true) && (
-                        <div className="flex space-x-2">
-                          <button
-                            className="text-blue-500 hover:text-blue-600"
-                            onClick={() =>
-                              handleEditClick(
-                                phanHoi.maPhanHoiBinhLuan,
-                                "phanHoi",
-                                phanHoi.noidung
-                              )
-                            }
-                          >
-                            <i className="fa-solid fa-edit"></i>
-                          </button>
-                          <button
-                            className="text-red-500 hover:text-red-600"
-                            onClick={() =>
-                              handleDeleteBinhLuan(phanHoi.maPhanHoiBinhLuan, 2)
-                            }
-                          >
-                            <i className="fa-solid fa-trash"></i>
-                          </button>
-                        </div>
-                      )}
+                      <div className="flex space-x-2">
+                        {(userInfo?.maQuyen === 1 ||
+                          phanHoi.checkCuaToi === true) && (
+                          <div className="flex space-x-2">
+                            <button
+                              className="text-blue-500 hover:text-blue-600"
+                              onClick={() =>
+                                handleEditClick(
+                                  phanHoi.maPhanHoiBinhLuan,
+                                  "phanHoi",
+                                  phanHoi.noidung
+                                )
+                              }
+                            >
+                              <i className="fa-solid fa-edit"></i>
+                            </button>
+                            <button
+                              className="text-red-500 hover:text-red-600"
+                              onClick={() =>
+                                handleDeleteBinhLuan(
+                                  phanHoi.maPhanHoiBinhLuan,
+                                  2
+                                )
+                              }
+                            >
+                              <i className="fa-solid fa-trash"></i>
+                            </button>
+                          </div>
+                        )}
+                        <button
+                          className="text-yellow-500 hover:text-yellow-600"
+                          onClick={() =>
+                            handleReportClick(phanHoi.maPhanHoiBinhLuan, 3)
+                          }
+                        >
+                          <i className="fa-solid fa-flag"></i>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -318,6 +351,13 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded }) => {
           rows={4}
         />
       </Modal>
+
+      <ReportForm
+        visible={reportModalVisible}
+        onCancel={() => setReportModalVisible(false)}
+        maThucThe={maBinhLuanBaoCao ? maBinhLuanBaoCao : null}
+        LoaiBaoCao={reportType}
+      />
     </div>
   );
 };
