@@ -46,13 +46,16 @@ function StoryDetail() {
       const result = await GetChiTietChuongTruyen(id);
       const maTruyen = { maTruyen: id };
       console.log(result);
-      try {
-        const getLichSuDoc = await apiKey.getToken("LichSuDoc/LichSuDocTheoTruyen", maTruyen);
-        console.log(getLichSuDoc);
-        setLichSu(getLichSuDoc.data.data);
-      } catch (error) {
-        console.log(error);
+      if (localStorage.getItem("TOKEN")) {
+        try {
+          const getLichSuDoc = await apiKey.getToken("LichSuDoc/LichSuDocTheoTruyen", maTruyen);
+          console.log(getLichSuDoc);
+          setLichSu(getLichSuDoc.data.data);
+        } catch (error) {
+          console.log(error);
+        }
       }
+
       setTruyen(result);
     };
     getStory();
