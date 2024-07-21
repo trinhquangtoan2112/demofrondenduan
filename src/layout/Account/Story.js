@@ -12,7 +12,7 @@ function Story(props) {
         </div>
         <div className='story-card__content'>
           <h2 className='story-card__tilte'>Tên truyện: {data.tenTruyen}</h2>
-          <div className='story-card__description'>Mô tả: {parse(data.moTa)}</div>
+          <div className='story-card__description'>Mô tả: {data?.moTa ? parse(data?.moTa) : null}</div>
           <div className='story-card__info'>
             <span className='story-card__author'>Tác giả: {data.tenButDanh}</span>
             <span className='story-card__type border border-primary color-primary fs-12' style={{ padding: 4 + 'px' }}>{data.tenTheLoai}</span>

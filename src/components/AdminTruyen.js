@@ -47,7 +47,38 @@ export default function AdminTruyen() {
 
 
     };
+    const AnTruyen = async (id) => {
+        const data = {
+            id
+        }
+        try {
 
+            const result = await apiKey.put("api/Truyens/AnTruyen", null, data);
+
+            message.success('Thành công');
+            getDs()
+        } catch (error) {
+            message.error('Không thành công');
+        }
+
+
+    };
+    const HienTruyen = async (id) => {
+        const data = {
+            id
+        }
+        try {
+
+            const result = await apiKey.put("api/Truyens/HienTruyen", null, data);
+            console.log(result)
+            message.success('Thành công');
+            getDs()
+        } catch (error) {
+            message.error('Không thành công');
+        }
+
+
+    };
     const cancel = (e) => {
         console.log(e);
         message.error('Click on No');
@@ -86,7 +117,7 @@ export default function AdminTruyen() {
             title: 'Trạng thái',
             dataIndex: 'trangThai',
             key: 'trangThai',
-            render: (th) => <Tag color={th != 4 ? "green" : "volcano"}>{th != 4 ? "Không khóa" : "Khóa"}</Tag>
+            render: (th) => <Tag color={th != 4 && th != 0 ? "green" : "volcano"}>{th != 4 && th != 0 ? "Không khóa" : "Khóa"}</Tag>
         },
         {
             title: 'Hiển thị',
@@ -105,25 +136,31 @@ export default function AdminTruyen() {
             render: (_, record) => (
                 <div>
                     {console.log(_)}
+                    {_.congBo == 0 ? <Popconfirm
+                        title="Hiển thị truyện"
+                        description="Bạn có chắc muốn hiển thị truyện không?"
+                        onConfirm={() => {
+                            HienTruyen(_.maTruyen)
+                        }}
+                        onCancel={cancel}
+                        okText="Có"
+                        cancelText="Không"
+                    >
+                        <Button><EyeOutlined /></Button>
+                    </Popconfirm> : <Popconfirm
+                        title="Không hiện truyện"
+                        description="Bạn có chắc muốn ẩn truyện không?"
+                        onConfirm={() => {
+                            AnTruyen(_.maTruyen)
+                        }}
+                        onCancel={cancel}
+                        okText="Có"
+                        cancelText="Không"
+                    >
+                        <Button><EyeInvisibleOutlined /></Button>
+                    </Popconfirm>}
 
-                    {/* {_.trangThai == 4 ? (
-                        _.trangThai == 4 ? (
-                            <>
-                                <Button><LockOutlined /></Button>
-                                <Button><UnlockOutlined /></Button>
-                            </>
-                        ) : (
-                            <>
-                                <Button><EyeOutlined /></Button>
-                                <Button><EyeInvisibleOutlined /></Button>
-                            </>
-                        )
-                    ) : (
-                        <>
 
-                            <Button><UnlockOutlined /></Button>
-                        </>
-                    )} */}
                     {_.trangThai == 4 ? <Popconfirm
                         title="Bỏ khóa truyện"
                         description="Bạn có chắc muốn bỏ khóa truyện không?"

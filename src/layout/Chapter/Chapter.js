@@ -11,29 +11,27 @@ import BinhLuanSection from "../StoryDetail/BinhLuanSection";
 import dayjs from "dayjs";
 import ReportForm from "../BaoCao/ReportForm";
 function Chapter(props) {
-  const { maChuong, name } = useParams();
+    const { maChuong, name } = useParams();
 
-  const [chapter, setChapter] = useState({});
-  const [fontsize, setFontsize] = useState(18);
-  const [lineHeight, setLineHeight] = useState(1.5);
-  const [manual, setManual] = useState("");
+    const [chapter, setChapter] = useState({})
+    const [fontsize, setFontsize] = useState(18);
+    const [lineHeight, setLineHeight] = useState(1.5);
+    const [manual, setManual] = useState("")
 
-  const [content, setContnet] = useState("Khong co gi");
-  const userInfo = useSelector((state) => state.UserReducer.userInfo);
-  // const user = useSelector(state => state.auth.login?.user)
-  const dispatch = useDispatch();
-  const contentRef = useRef(null);
-  const [maChuongTruyenBaoCao, setReportingChuongtruyen] = useState(null);
-  const [reportModalVisible, setReportModalVisible] = useState(false);
+    const [content, setContnet] = useState("Khong co gi")
 
-  useEffect(() => {
-    //xử lý đánh dấu truyện đang đọc
-    const handleSetReading = async () => {
-      //tạo hàm
-      const data = {
-        maChuong: maChuong,
-      };
-      const result = await GetChiTietChuongTruyenAction(data);
+
+    // const user = useSelector(state => state.auth.login?.user)
+    const dispatch = useDispatch()
+    const contentRef = useRef(null)
+
+    useEffect(() => {//xử lý đánh dấu truyện đang đọc
+        const handleSetReading = async () => {//tạo hàm
+
+            const data = {
+                maChuong: maChuong
+            }
+            const result = await GetChiTietChuongTruyenAction(data)
 
       if (result.status === 401) {
         message.error("Lỗi xảy ra");
@@ -76,49 +74,52 @@ function Chapter(props) {
     //         LuuLichSu()
     //     } catch (error) {
 
-    //     }
-    // }
-    LuuLichSu();
-  }, [maChuong]);
-  console.log(parse("<h1>single</h1>"));
+        //     }
+        // }
+        LuuLichSu()
 
-  const [operationName, setOperationName] = useState("");
-  const [audioUrl, setAudioUrl] = useState("");
 
-  const handleSpeak = async () => {
-    const data = {
-      noiDung: content,
-    };
-    console.log(data);
-    try {
-      const result = await axios.post(
-        "https://localhost:7094/Chuongtruyens/DocChuongTruyen",
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          responseType: "blob", // Đảm bảo nhận được phản hồi dưới dạng blob
+
+    }, [maChuong])
+    console.log(parse('<h1>single</h1>'))
+
+    const [operationName, setOperationName] = useState('');
+    const [audioUrl, setAudioUrl] = useState('');
+
+
+
+    const handleSpeak = async () => {
+
+
+
+        const data = {
+            noiDung: content
         }
-      );
-      const url = window.URL.createObjectURL(
-        new Blob([result.data], { type: "audio/mpeg" })
-      );
-      setAudioUrl(url);
-    } catch (error) {
-      console.error("Error during text-to-speech:", error);
-    }
-  };
+        console.log(data)
+        try {
+            const result = await axios.post('https://localhost:7094/Chuongtruyens/DocChuongTruyen', data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                responseType: 'blob', // Đảm bảo nhận được phản hồi dưới dạng blob
+            });
+            const url = window.URL.createObjectURL(new Blob([result.data], { type: 'audio/mpeg' }));
+            setAudioUrl(url)
+        } catch (error) {
+            console.error('Error during text-to-speech:', error);
+        }
+    };
 
-  const getTextContent = (node) => {
-    let textContent = "";
-    if (typeof node === "string") {
-      textContent += node;
-    } else if (Array.isArray(node)) {
-      node.forEach(getTextContent);
-    } else if (node && node.props && node.props.children) {
-      getTextContent(node.props.children);
-    }
+
+    const getTextContent = (node) => {
+        let textContent = "";
+        if (typeof node === 'string') {
+            textContent += node;
+        } else if (Array.isArray(node)) {
+            node.forEach(getTextContent);
+        } else if (node && node.props && node.props.children) {
+            getTextContent(node.props.children);
+        }
 
     const parser1 = new DOMParser();
     const doc = parser1.parseFromString(textContent, "text/html");
@@ -151,33 +152,27 @@ function Chapter(props) {
   //     contentRef.current.innerHTML = chapter?.content || ""
   // }, [chapter])
 
-  // useEffect(() => {//xử lý sự kiện click khi đọc truyện
-  //     const handleClick = () => {//khi click sẽ set manual về "" để ẩn manual
-  //         setManual("")
-  //     }
-  //     document.addEventListener("click", handleClick)
-  //     return () => { document.removeEventListener("click", handleClick) }
-  // }, [])
-  const renderNoiDung = () => {
-    return <div>{parse(chapter.content)}</div>;
-  };
-  return (
-    <>
-      <div
-        className="main"
-        style={{ backgroundColor: "#ced9d9", paddingTop: "30px" }}
-      >
-        {audioUrl && <audio controls src={audioUrl}></audio>}
-        <div className="container">
-          <div
-            className="main-content"
-            style={{
-              position: "relative",
-              margin: "0 80px",
-              backgroundColor: "#e1e8e8",
-            }}
-          >
-            {/* <ul className='chapter-manual fs-24'>
+    // useEffect(() => {//xử lý sự kiện click khi đọc truyện
+    //     const handleClick = () => {//khi click sẽ set manual về "" để ẩn manual
+    //         setManual("")
+    //     }
+    //     document.addEventListener("click", handleClick)
+    //     return () => { document.removeEventListener("click", handleClick) }
+    // }, [])
+    const renderNoiDung = () => {
+
+        return <div>
+            {
+                parse(chapter.content)
+            }
+        </div>
+    }
+    return (<>
+        <div className="main" style={{ backgroundColor: "#ced9d9", paddingTop: "30px" }}>
+            {audioUrl && <audio controls src={audioUrl}></audio>}
+            <div className="container">
+                <div className="main-content" style={{ "position": "relative", margin: "0 80px", backgroundColor: "#e1e8e8" }}>
+                    {/* <ul className='chapter-manual fs-24'>
                         <li className={`chapter-manual__item ${manual === 'list-chap' ? 'active' : ''}`} onClick={(e) => {
                             e.stopPropagation();
                             if (manual === 'list-chap')
@@ -250,80 +245,28 @@ function Chapter(props) {
                         <li className='chapter-manual__item'><a><i className="fa-solid fa-comments"></i></a> </li>
 
                     </ul> */}
-            <button onClick={handleSpeak}>Đọc văn bản</button>
-            <div className="d-lex">
-              {chapter?.stt ? (
-                <h1 className="chapter-name">
-                  {" "}
-                  CHƯƠNG {chapter?.stt}: {chapter?.tenChuong.toUpperCase()}
-                </h1>
-              ) : null}
-              <div
-                className={`fs-${fontsize}`}
-                style={{ lineHeight: `${lineHeight}` }}
-              >
-                <div id="chapter-content">
-                  {chapter?.content ? (
-                    renderNoiDung()
-                  ) : (
-                    <p>Lỗi xảy ra hãy reset lại web</p>
-                  )}
+                    <button onClick={handleSpeak}>
+                        Đọc văn bản
+                    </button>
+                    <div className="d-lex" >
+                        {chapter?.stt ? <h1 className='chapter-name'> CHƯƠNG {chapter?.stt}: {chapter?.tenChuong.toUpperCase()}</h1> : null}
+                        <div className={`fs-${fontsize}`} style={{ "lineHeight": `${lineHeight}` }}>
+                            <div id="chapter-content">{chapter?.content ? renderNoiDung() : <p>Lỗi xảy ra hãy reset lại web</p>}</div>
+                        </div>
+                    </div>
+                    <div className='w-1/6 mx-auto flex flex-row justify-between'>
+                        {manual?.result?.data.data.trangTruoc ? <Link className='cursor-pointer' to={`/truyen/${name}/${manual?.result.data.data.trangTruoc}`}><button className='px-5 py-1 bg-green-500'><i className="fa fa-arrow-left" /></button>
+                        </Link> : <button className='px-5 py-1 bg-green-300' disabled><i className="fa fa-arrow-left" /></button>}
+                        {manual?.result?.data.data.trangTiep ? <Link className='cursor-pointer' to={`/truyen/${name}/${manual?.result.data.data.trangTiep}`}>
+                            <button className='px-5 py-1 bg-green-500'><i className="fa fa-arrow-right" /></button>
+                        </Link> : <button className='px-5 py-1 bg-green-300' disabled> <i className="fa fa-arrow-right" /></button>}
+                    </div>
                 </div>
-              </div>
             </div>
-            <div className="w-1/6 mx-auto flex flex-row justify-between">
-              {manual?.result?.data.data.trangTruoc ? (
-                <Link
-                  className="cursor-pointer"
-                  to={`/truyen/${name}/${manual?.result.data.data.trangTruoc}`}
-                >
-                  <button className="px-5 py-1 bg-green-500">
-                    <i className="fa fa-arrow-left" />
-                  </button>
-                </Link>
-              ) : (
-                <button className="px-5 py-1 bg-green-300" disabled>
-                  <i className="fa fa-arrow-left" />
-                </button>
-              )}
+        </div >
 
-              <button
-                className="text-yellow-500 hover:text-yellow-600"
-                onClick={() => handleReportClick(maChuong)}
-              >
-                <i className="fa-solid fa-flag"></i>
-              </button>
 
-              {manual?.result?.data.data.trangTiep ? (
-                <Link
-                  className="cursor-pointer"
-                  to={`/truyen/${name}/${manual?.result.data.data.trangTiep}`}
-                >
-                  <button className="px-5 py-1 bg-green-500">
-                    <i className="fa fa-arrow-right" />
-                  </button>
-                </Link>
-              ) : (
-                <button className="px-5 py-1 bg-green-300" disabled>
-                  {" "}
-                  <i className="fa fa-arrow-right" />
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <BinhLuanSection id={chapter?.maTruyen} />
-
-        <ReportForm
-          visible={reportModalVisible}
-          onCancel={() => setReportModalVisible(false)}
-          maThucThe={maChuongTruyenBaoCao ? maChuongTruyenBaoCao: null}
-          LoaiBaoCao={5}
-        />
-      </div>
-    </>
-  );
+    </>)
 }
 
 export default Chapter;
