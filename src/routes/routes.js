@@ -16,9 +16,11 @@ import TheLoaiAdmin from '../layout/TheLoai/TheLoaiAdmin';
 import TuTruyen, { AddChapter, EditChapter, EditNovel, ListButDanh, ListChap, StoryCreate } from './../layout/Account/TuTruyen';
 import CreateNovel from './../layout/Account/CreateNovel';
 import StoryDetail from "../layout/StoryDetail/StoryDetail";
+import BaoCaoAdmin from "../layout/BaoCao/BaoCaoAdmin";
 import DanhDau from "../layout/QLDanhDau/DanhDau";
 import LichSuDoc from "../components/LichSuDoc";
 import AdminTruyen from "../components/AdminTruyen";
+
 
 
 
@@ -65,7 +67,7 @@ const ROUTES = [
     },
     {
         index: 6,
-        path: "truyen/:name/:maChuong",
+        path: ":truyen/:name/:maChuong",
         element: <Chapter></Chapter>,
         auth: true,
         roles: [],
@@ -184,6 +186,13 @@ const ROUTES = [
         auth: false,
         roles: [],
 
+    },
+    {
+        index: 23,
+        path: "BaoCaoAdmin",
+        element: <BaoCaoAdmin></BaoCaoAdmin>,
+        auth: false,
+        roles: [],
     },
 
 ];

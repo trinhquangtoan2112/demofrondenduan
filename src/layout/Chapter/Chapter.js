@@ -1,146 +1,184 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { useDispatch } from 'react-redux';
-import { useParams, Link } from 'react-router-dom';
-import { GetChiTietChuongTruyenAction } from '../../service/actions/TruyenAction';
-import parse from 'html-react-parser';
-import { message } from 'antd';
-import { apiKey } from '../../service/http';
-import axios from 'axios';
+import React, { useEffect, useState, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { useParams, Link } from "react-router-dom";
+import { GetChiTietChuongTruyenAction } from "../../service/actions/TruyenAction";
+import parse from "html-react-parser";
+import { message } from "antd";
+import { apiKey } from "../../service/http";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import BinhLuanSection from "../StoryDetail/BinhLuanSection";
+import dayjs from "dayjs";
+import ReportForm from "../BaoCao/ReportForm";
 function Chapter(props) {
-    console.log(111)
-    const { maChuong, name } = useParams();
-    const [chapter, setChapter] = useState({})
-    const [manual, setManual] = useState("")
-    const [content, setContnet] = useState("Khong co gi")
-    const [fontsize, setFontsize] = useState(18);
-    const [lineHeight, setLineHeight] = useState(1.5);
-    const [fontName, setFontName] = useState("Arial");
-    // const user = useSelector(state => state.auth.login?.user)
-    const dispatch = useDispatch()
-    const contentRef = useRef(null)
+  console.log(111);
+  const { maChuong, name } = useParams();
+  const [chapter, setChapter] = useState({});
+  const [manual, setManual] = useState("");
+  const [content, setContnet] = useState("Khong co gi");
+  const [fontsize, setFontsize] = useState(18);
+  const [lineHeight, setLineHeight] = useState(1.5);
+  const [fontName, setFontName] = useState("Arial");
+  // const user = useSelector(state => state.auth.login?.user)
+  const dispatch = useDispatch();
+  const contentRef = useRef(null);
+  const userInfo = useSelector((state) => state.UserReducer.userInfo);
+  const [maChuongTruyenBaoCao, setReportingChuongtruyen] = useState(null);
+  const [reportModalVisible, setReportModalVisible] = useState(false);
 
-    useEffect(() => {//xử lý đánh dấu truyện đang đọc
-        const handleSetReading = async () => {//tạo hàm
+  useEffect(() => {
+    //xử lý đánh dấu truyện đang đọc
+    const handleSetReading = async () => {
+      //tạo hàm
 
-            const data = {
-                maChuong: maChuong
-            }
-            const result = await GetChiTietChuongTruyenAction(data)
+      const data = {
+        maChuong: maChuong,
+      };
+      const result = await GetChiTietChuongTruyenAction(data);
 
-            if (result.status === 401) {
-                message.error("Lỗi xảy ra")
-                setChapter({
-                    ...data,
-                    content: "Hãy mua chương"
-                })
-                setManual({
-                    result: result
-                }
-                )
-            } else {
-                setChapter({
-                    machuongtruyen: result.data.data.machuongtruyen,
-                    tenChuong: result.data.data.tenChuong,
-                    content: result.data.data.noiDung,
-                    stt: result.data.data.stt
-                })
-                setContnet(getTextContent(result?.data?.data?.noiDung))
-                setManual({
-                    result
-                })
-            }
-            window.scrollTo(0, 0)
-
-        }
-        const LuuLichSu = async () => {
-            const data = {
-                maChuong
-            }
-            const result = await apiKey.postToken("LichSuDoc/CapNhapLichSuDoc", null, data);
-            console.log(result)
-        }
-        handleSetReading();//gọi hàm
-        // if (localStorage.getItem("TOKEN")) {
-        //     try {
-        //         LuuLichSu()
-        //     } catch (error) {
-
-        //     }
-        // }
-        if (localStorage.getItem("TOKEN")) {
-            LuuLichSu()
-        }
-
-
-    }, [maChuong])
-    console.log(parse('<h1>single</h1>'))
-    const [operationName, setOperationName] = useState('');
-    const [audioUrl, setAudioUrl] = useState('');
-    const handleSpeak = async () => {
-        const data = {
-            noiDung: content
-        }
-        console.log(data)
-        try {
-            const result = await axios.post('https://localhost:7094/Chuongtruyens/DocChuongTruyen', data, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                responseType: 'blob', // Đảm bảo nhận được phản hồi dưới dạng blob
-            });
-            const url = window.URL.createObjectURL(new Blob([result.data], { type: 'audio/mpeg' }));
-            setAudioUrl(url)
-        } catch (error) {
-            console.error('Error during text-to-speech:', error);
-        }
+      if (result.status === 401) {
+        message.error("Lỗi xảy ra");
+        setChapter({
+          ...data,
+          content: "Hãy mua chương",
+        });
+        setManual({
+          result: result,
+        });
+      } else {
+        setChapter({
+          machuongtruyen: result.data.data.machuongtruyen,
+          tenChuong: result.data.data.tenChuong,
+          content: result.data.data.noiDung,
+          stt: result.data.data.stt,
+          maTruyen: result.data.data.maTruyen,
+        });
+        setContnet(getTextContent(result?.data?.data?.noiDung));
+        setManual({
+          result,
+        });
+      }
+      window.scrollTo(0, 0);
     };
-    const getTextContent = (node) => {
-        let textContent = "";
-        if (typeof node === 'string') {
-            textContent += node;
-        } else if (Array.isArray(node)) {
-            node.forEach(getTextContent);
-        } else if (node && node.props && node.props.children) {
-            getTextContent(node.props.children);
-        }
-
-        const parser1 = new DOMParser();
-        const doc = parser1.parseFromString(textContent, 'text/html');
-
-        return doc.body.textContent || "";
+    const LuuLichSu = async () => {
+      const data = {
+        maChuong,
+      };
+      const result = await apiKey.postToken(
+        "LichSuDoc/CapNhapLichSuDoc",
+        null,
+        data
+      );
+      console.log(result);
     };
-    // useEffect(() => {//Xử lý load dữ liệu chương truyện
-    //     const getChapter = async () => {//tạo hàm
-    //         apiMain.getChapterByNumber(url, chapnum)
-    //             .then(res => {
-    //                 setChapter(getData(res))
-    //             })
-    //             .catch(err => {
-    //                 console.log(err)
-    //             })
+    handleSetReading(); //gọi hàm
+    // if (localStorage.getItem("TOKEN")) {
+    //     try {
+    //         LuuLichSu()
+    //     } catch (error) {
+
     //     }
-    //     getChapter()//gọi hàm
-    // }, [chapnum])
-
-    // useEffect(() => {//xử lý hiển thị nội dung truyện
-    //     contentRef.current.innerHTML = chapter?.content || ""
-    // }, [chapter])
-
-    // useEffect(() => {//xử lý sự kiện click khi đọc truyện
-    //     const handleClick = () => {//khi click sẽ set manual về "" để ẩn manual
-    //         setManual("")
-    //     }
-    //     document.addEventListener("click", handleClick)
-    //     return () => { document.removeEventListener("click", handleClick) }
-    // }, [])
-    const renderNoiDung = () => {
-
-        return <div>
-            {
-                parse(chapter.content)
-            }
-        </div>
+    // }
+    if (localStorage.getItem("TOKEN")) {
+      LuuLichSu();
     }
+  }, [maChuong]);
+  console.log(parse("<h1>single</h1>"));
+  const [operationName, setOperationName] = useState("");
+  const [audioUrl, setAudioUrl] = useState("");
+  const handleSpeak = async () => {
+    const data = {
+      noiDung: content,
+    };
+    console.log(data);
+    try {
+      const result = await axios.post(
+        "https://localhost:7094/Chuongtruyens/DocChuongTruyen",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          responseType: "blob", // Đảm bảo nhận được phản hồi dưới dạng blob
+        }
+      );
+      const url = window.URL.createObjectURL(
+        new Blob([result.data], { type: "audio/mpeg" })
+      );
+      setAudioUrl(url);
+    } catch (error) {
+      console.error("Error during text-to-speech:", error);
+    }
+  };
+  const getTextContent = (node) => {
+    let textContent = "";
+    if (typeof node === "string") {
+      textContent += node;
+    } else if (Array.isArray(node)) {
+      node.forEach(getTextContent);
+    } else if (node && node.props && node.props.children) {
+      getTextContent(node.props.children);
+    }
+
+    const parser1 = new DOMParser();
+    const doc = parser1.parseFromString(textContent, "text/html");
+
+    return doc.body.textContent || "";
+  };
+
+  const handleReportClick = (maChuongtruyenBaocao) => {
+    if (userInfo) {
+      setReportingChuongtruyen(maChuongtruyenBaocao);
+      setReportModalVisible(true);
+    } else {
+      message.success("Hãy đăng nhập để báo cáo nội dung này");
+    }
+  };
+  // useEffect(() => {//Xử lý load dữ liệu chương truyện
+  //     const getChapter = async () => {//tạo hàm
+  //         apiMain.getChapterByNumber(url, chapnum)
+  //             .then(res => {
+  //                 setChapter(getData(res))
+  //             })
+  //             .catch(err => {
+  //                 console.log(err)
+  //             })
+  //     }
+  //     getChapter()//gọi hàm
+  // }, [chapnum])
+
+  // useEffect(() => {//xử lý hiển thị nội dung truyện
+  //     contentRef.current.innerHTML = chapter?.content || ""
+  // }, [chapter])
+
+  // useEffect(() => {//xử lý sự kiện click khi đọc truyện
+  //     const handleClick = () => {//khi click sẽ set manual về "" để ẩn manual
+  //         setManual("")
+  //     }
+  //     document.addEventListener("click", handleClick)
+  //     return () => { document.removeEventListener("click", handleClick) }
+  // }, [])
+  const renderNoiDung = () => {
+    return <div>{parse(chapter.content)}</div>;
+  };
+  return (
+    <>
+      <div
+        className="main"
+        style={{ backgroundColor: "#ced9d9", paddingTop: "30px" }}
+      >
+        {audioUrl && <audio controls src={audioUrl}></audio>}
+        <div className="container">
+          <div
+            className="main-content"
+            style={{
+              position: "relative",
+              margin: "0 80px",
+              backgroundColor: "#e1e8e8",
+            }}
+          >
+            {/* <ul className='chapter-manual fs-24'>
+=======
     const renderTienIchFontSize = () => {
         const options = [];
         for (let i = 10; i < 30; i++) {
@@ -182,6 +220,7 @@ function Chapter(props) {
             <div className="container">
                 <div className="main-content" style={{ "position": "relative", margin: "0 80px", backgroundColor: "#e1e8e8" }}>
                     {/* <ul className='chapter-manual fs-24'>
+>>>>>>> 41ce47954822e76eebcbaad5b12dda37f49d7761
                         <li className={`chapter-manual__item ${manual === 'list-chap' ? 'active' : ''}`} onClick={(e) => {
                             e.stopPropagation();
                             if (manual === 'list-chap')
@@ -193,7 +232,7 @@ function Chapter(props) {
                             <div className="chapter-manual__popup" >
                                 <div className="list-chapter" style={{ width: "700px", "maxHeight": "500px", "overflow": "scroll" }}>
                                     {/* <ListChapter url={url} col={2} fontsize={15} /> */}
-                    {/* </div>
+            {/* </div>
                             </div>
 
                         </li>
@@ -254,30 +293,79 @@ function Chapter(props) {
                         <li className='chapter-manual__item'><a><i className="fa-solid fa-comments"></i></a> </li>
 
                     </ul> */}
-                    <button onClick={handleSpeak}>
-                        Đọc văn bản
-                    </button>
-                    <div className="d-lex"
-                        style={{ fontSize: `${fontsize}px`, fontFamily: `${fontName}` }}
-                    >
-                        {chapter?.stt ? <h1 className='chapter-name'> CHƯƠNG {chapter?.stt}: {chapter?.tenChuong.toUpperCase()}</h1> : null}
-                        <div style={{ "lineHeight": `${lineHeight}` }}>
-                            <div id="chapter-content"  >{chapter?.content ? renderNoiDung() : <p>Lỗi xảy ra hãy reset lại web</p>}</div>
-                        </div>
-                    </div>
-                    <div className='w-1/6 mx-auto flex flex-row justify-between'>
-                        {manual?.result?.data.data.trangTruoc ? <Link className='cursor-pointer' to={`/truyen/${name}/${manual?.result.data.data.trangTruoc}`}><button className='px-5 py-1 bg-green-500'><i className="fa fa-arrow-left" /></button>
-                        </Link> : <button className='px-5 py-1 bg-green-300' disabled><i className="fa fa-arrow-left" /></button>}
-                        {manual?.result?.data.data.trangTiep ? <Link className='cursor-pointer' to={`/truyen/${name}/${manual?.result.data.data.trangTiep}`}>
-                            <button className='px-5 py-1 bg-green-500'><i className="fa fa-arrow-right" /></button>
-                        </Link> : <button className='px-5 py-1 bg-green-300' disabled> <i className="fa fa-arrow-right" /></button>}
-                    </div>
+            <button onClick={handleSpeak}>Đọc văn bản</button>
+            <div
+              className="d-lex"
+              style={{ fontSize: `${fontsize}px`, fontFamily: `${fontName}` }}
+            >
+              {chapter?.stt ? (
+                <h1 className="chapter-name">
+                  {" "}
+                  CHƯƠNG {chapter?.stt}: {chapter?.tenChuong.toUpperCase()}
+                </h1>
+              ) : null}
+              <div style={{ lineHeight: `${lineHeight}` }}>
+                <div id="chapter-content">
+                  {chapter?.content ? (
+                    renderNoiDung()
+                  ) : (
+                    <p>Lỗi xảy ra hãy reset lại web</p>
+                  )}
                 </div>
+              </div>
             </div>
-        </div >
+            <div className="w-1/6 mx-auto flex flex-row justify-between">
+              {manual?.result?.data.data.trangTruoc ? (
+                <Link
+                  className="cursor-pointer"
+                  to={`/truyen/${name}/${manual?.result.data.data.trangTruoc}`}
+                >
+                  <button className="px-5 py-1 bg-green-500">
+                    <i className="fa fa-arrow-left" />
+                  </button>
+                </Link>
+              ) : (
+                <button className="px-5 py-1 bg-green-300" disabled>
+                  <i className="fa fa-arrow-left" />
+                </button>
+              )}
 
+              <button
+                className="text-yellow-500 hover:text-yellow-600"
+                onClick={() => handleReportClick(maChuong)}
+              >
+                <i className="fa-solid fa-flag"></i>
+              </button>
 
-    </>)
+              {manual?.result?.data.data.trangTiep ? (
+                <Link
+                  className="cursor-pointer"
+                  to={`/truyen/${name}/${manual?.result.data.data.trangTiep}`}
+                >
+                  <button className="px-5 py-1 bg-green-500">
+                    <i className="fa fa-arrow-right" />
+                  </button>
+                </Link>
+              ) : (
+                <button className="px-5 py-1 bg-green-300" disabled>
+                  {" "}
+                  <i className="fa fa-arrow-right" />
+                </button>
+              )}
+            </div>
+            <BinhLuanSection id={chapter?.maTruyen} />
+
+            <ReportForm
+              visible={reportModalVisible}
+              onCancel={() => setReportModalVisible(false)}
+              maThucThe={maChuongTruyenBaoCao ? maChuongTruyenBaoCao : null}
+              LoaiBaoCao={5}
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
 
-export default Chapter
+export default Chapter;

@@ -1,11 +1,17 @@
 import React, { Component } from "react";
-import { Table, Button, Modal, message, Input, Form } from "antd";
+import { Table, Button, Modal, message, Input } from "antd";
 import {
   layDanhSachTheloai,
   themTheLoai,
   xoaTheLoai,
   suaTheLoai,
 } from "../../service/actions/TheLoaiAction";
+import {
+  EyeOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 
 const { Search } = Input;
 
@@ -13,10 +19,11 @@ class TheLoaiAdmin extends Component {
   state = {
     theloaiList: [],
     loading: false,
-    modalVisible: false,
-    currentRecord: null,
+    viewModalVisible: false,
+    editModalVisible: false,
     addModalVisible: false,
-    searchText: "", 
+    currentRecord: null,
+    searchText: "",
   };
 
   componentDidMount() {
@@ -35,21 +42,18 @@ class TheLoaiAdmin extends Component {
   };
 
   handleView = (record) => {
-    this.setState({ currentRecord: record, modalVisible: true });
+    this.setState({ currentRecord: record, viewModalVisible: true });
   };
 
   handleEdit = (record) => {
-    this.setState({ currentRecord: record, modalVisible: true });
+    this.setState({ currentRecord: record, editModalVisible: true });
   };
 
-  handleEditSubmit = async (values) => {
+  handleEditSubmit = async () => {
+    const { currentRecord } = this.state;
     try {
-      const updatedRecord = {
-        ...this.state.currentRecord,
-        ...values,
-      };
-      await suaTheLoai(updatedRecord);
-      this.setState({ modalVisible: false });
+      await suaTheLoai(currentRecord);
+      this.setState({ editModalVisible: false });
       this.fetchTheloaiList(); // Refresh the list
     } catch (error) {
       message.error("Cập nhật thể loại thất bại");
@@ -65,7 +69,7 @@ class TheLoaiAdmin extends Component {
       cancelText: "Hủy",
       onOk: async () => {
         try {
-          await xoaTheLoai(record.maTheLoai); // Add token here
+          await xoaTheLoai(record.maTheLoai);
           message.success("Xóa thể loại thành công");
           this.fetchTheloaiList(); // Refresh the list
         } catch (error) {
@@ -79,18 +83,13 @@ class TheLoaiAdmin extends Component {
     this.setState({ addModalVisible: true });
   };
 
-  handleModalClose = () => {
-    this.setState({ modalVisible: false, currentRecord: null });
+  handleModalClose = (modal) => {
+    this.setState({ [modal]: false, currentRecord: null });
   };
 
-  handleAddModalClose = () => {
-    this.setState({ addModalVisible: false });
+  handleSearch = (value) => {
+    this.setState({ searchText: value });
   };
-
-    // Hàm cập nhật giá trị tìm kiếm
-    handleSearch = (value) => {
-      this.setState({ searchText: value });
-    };
 
   handleAddSubmit = async (values) => {
     try {
@@ -106,9 +105,10 @@ class TheLoaiAdmin extends Component {
     const {
       theloaiList,
       loading,
-      modalVisible,
-      currentRecord,
+      viewModalVisible,
+      editModalVisible,
       addModalVisible,
+      currentRecord,
     } = this.state;
 
     const columns = [
@@ -130,20 +130,33 @@ class TheLoaiAdmin extends Component {
         sorter: (a, b) => a.soluongtruyen - b.soluongtruyen,
       },
       {
-        title: "Hành động", 
+        title: "Hành động",
         key: "action",
+        width: 90,
         render: (text, record) => (
-          <span>
-            <Button type="primary" onClick={() => this.handleView(record)}>
-              Xem
-            </Button>
-            <Button type="default" onClick={() => this.handleEdit(record)}>
-              Sửa
-            </Button>
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px", // Khoảng cách giữa các nút
+            }}
+          >
+            <Button
+              icon={<EyeOutlined />}
+              type="link"
+              onClick={() => this.handleView(record)}
+            />
+            <Button
+              icon={<EditOutlined />}
+              type="link"
+              onClick={() => this.handleEdit(record)}
+            />
             {record.soluongtruyen == 0 && (
-            <Button danger onClick={() => this.handleDelete(record)}>
-              Xóa
-            </Button>
+              <Button
+                type="link"
+                icon={<DeleteOutlined />}
+                onClick={() => this.handleDelete(record)}
+              />
             )}
           </span>
         ),
@@ -151,15 +164,15 @@ class TheLoaiAdmin extends Component {
     ];
 
     return (
-      <div>
-        <h2>Quản Lý Thể Loại</h2>
+      <div className="p-4">
+        <h2 className="text-2xl font-bold mb-4">Quản Lý Thể Loại</h2>
         <Search
           placeholder="Tìm kiếm Thể loại"
           onSearch={this.handleSearch}
-          onChange={(e) => this.handleSearch(e.target.value)} // Cập nhật giá trị tìm kiếm khi người dùng nhập
-          enterButton="Tìm kiếm" // Thêm văn bản cho nút tìm kiếm
-          size="large" // Tăng kích thước của input và nút tìm kiếm
-          style={{ marginBottom: 20}} // Điều chỉnh chiều rộng của thanh tìm kiếm
+          onChange={(e) => this.handleSearch(e.target.value)}
+          enterButton="Tìm kiếm"
+          size="large"
+          style={{ marginBottom: 20 }}
         />
         <Button
           type="primary"
@@ -170,103 +183,160 @@ class TheLoaiAdmin extends Component {
         </Button>
         <Table
           columns={columns}
-          dataSource={theloaiList}
+          dataSource={theloaiList.filter((item) =>
+            item.tenTheLoai
+              .toLowerCase()
+              .includes(this.state.searchText.toLowerCase())
+          )}
           loading={loading}
           rowKey="maTheLoai"
         />
         <Modal
-          visible={modalVisible}
+          visible={viewModalVisible}
           title="Chi Tiết Thể Loại"
-          onCancel={this.handleModalClose}
+          onCancel={() => this.handleModalClose("viewModalVisible")}
           footer={[
-            <Button key="close" onClick={this.handleModalClose}>
+            <Button
+              key="close"
+              onClick={() => this.handleModalClose("viewModalVisible")}
+            >
               Đóng
             </Button>,
           ]}
+          width={600}
         >
           {currentRecord && (
             <div>
-              <p>Tên Thể Loại: {currentRecord.tenTheLoai}</p>
-              <p>Mô Tả: {currentRecord.moTa}</p>
-              <p>Số Lượng Truyện: {currentRecord.soluongtruyen}</p>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Tên Thể Loại
+                </label>
+                <p>{currentRecord.tenTheLoai}</p>
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Mô Tả
+                </label>
+                <p>{currentRecord.moTa}</p>
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Số Lượng Truyện
+                </label>
+                <p>{currentRecord.soluongtruyen}</p>
+              </div>
             </div>
           )}
         </Modal>
         <Modal
+          visible={editModalVisible}
+          title="Chỉnh Sửa Thể Loại"
+          onCancel={() => this.handleModalClose("editModalVisible")}
+          footer={[
+            <Button
+              key="cancel"
+              onClick={() => this.handleModalClose("editModalVisible")}
+            >
+              Hủy
+            </Button>,
+            <Button key="submit" type="primary" onClick={this.handleEditSubmit}>
+              Lưu
+            </Button>,
+          ]}
+          width={600}
+        >
+          {currentRecord && (
+            <>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Tên Thể Loại
+                </label>
+                <Input
+                  value={currentRecord.tenTheLoai}
+                  onChange={(e) =>
+                    this.setState({
+                      currentRecord: {
+                        ...currentRecord,
+                        tenTheLoai: e.target.value,
+                      },
+                    })
+                  }
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Mô Tả
+                </label>
+                <Input
+                  value={currentRecord.moTa}
+                  onChange={(e) =>
+                    this.setState({
+                      currentRecord: {
+                        ...currentRecord,
+                        moTa: e.target.value,
+                      },
+                    })
+                  }
+                />
+              </div>
+            </>
+          )}
+        </Modal>
+
+        <Modal
           visible={addModalVisible}
           title="Thêm Thể Loại"
-          onCancel={this.handleAddModalClose}
-          footer={null}
-        >
-          <Form onFinish={this.handleAddSubmit}>
-            <Form.Item
-              label="Tên Thể Loại"
-              name="tenTheLoai"
-              rules={[
-                { required: true, message: "Vui lòng nhập tên thể loại" },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Mô Tả"
-              name="moTa"
-              rules={[{ required: true, message: "Vui lòng nhập mô tả" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Thêm
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
-        <Modal
-          visible={modalVisible}
-          title="Chỉnh Sửa Thể Loại"
-          onCancel={this.handleModalClose}
+          onCancel={() => this.handleModalClose("addModalVisible")}
           footer={[
-            <Button key="cancel" onClick={this.handleModalClose}>
+            <Button
+              key="cancel"
+              onClick={() => this.handleModalClose("addModalVisible")}
+            >
               Hủy
             </Button>,
             <Button
               key="submit"
               type="primary"
-              form="editForm"
-              htmlType="submit"
+              onClick={() => this.handleAddSubmit({
+                tenTheLoai: this.state.currentRecord.tenTheLoai,
+                moTa: this.state.currentRecord.moTa
+              })}
             >
-              Lưu
+              Thêm
             </Button>,
           ]}
+          width={600}
         >
-          {currentRecord && (
-            <Form
-              id="editForm"
-              initialValues={{
-                tenTheLoai: currentRecord.tenTheLoai,
-                moTa: currentRecord.moTa,
-              }}
-              onFinish={this.handleEditSubmit}
-            >
-              <Form.Item
-                label="Tên Thể Loại"
-                name="tenTheLoai"
-                rules={[
-                  { required: true, message: "Vui lòng nhập tên thể loại" },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Mô Tả"
-                name="moTa"
-                rules={[{ required: true, message: "Vui lòng nhập mô tả" }]}
-              >
-                <Input />
-              </Form.Item>
-            </Form>
-          )}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Tên Thể Loại
+            </label>
+            <Input
+              onChange={(e) =>
+                this.setState({
+                  currentRecord: {
+                    ...this.state.currentRecord,
+                    tenTheLoai: e.target.value,
+                  },
+                })
+              }
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Mô Tả
+            </label>
+            <Input
+              onChange={(e) =>
+                this.setState({
+                  currentRecord: {
+                    ...this.state.currentRecord,
+                    moTa: e.target.value,
+                  },
+                })
+              }
+            />
+          </div>
         </Modal>
       </div>
     );

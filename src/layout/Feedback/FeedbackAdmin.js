@@ -6,6 +6,11 @@ import {
   updateFeedback,
   getFeedbackid,
 } from "../../service/actions/FeedbackAction";
+import {
+  EyeOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons"; // Import icons
 
 class FeedbackAdmin extends Component {
   state = {
@@ -148,22 +153,31 @@ class FeedbackAdmin extends Component {
       {
         title: "Hành động",
         key: "action",
+        width: 70,
         render: (text, record) => (
-          <span>
-            <Button type="primary" onClick={() => this.showModal(record)}>
-              Xem
-            </Button>
+          <span  style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px", // Khoảng cách giữa các nút
+          }}>
+            <Button
+              icon={<EyeOutlined />}
+              type="link"
+              onClick={() => this.showModal(record)}
+            />
             {record.trangThai !== 2 && (
-              <Button type="default" onClick={() => this.showEditModal(record)}>
-                Sửa
-              </Button>
+              <Button
+                icon={<EditOutlined />}
+                type="link"
+                onClick={() => this.showEditModal(record)}
+              />
             )}
             <Button
+              icon={<DeleteOutlined />}
               danger
+              type="link"
               onClick={() => this.deleteFeedback(record.maPhanHoi)}
-            >
-              Xóa
-            </Button>
+            />
           </span>
         ),
       },

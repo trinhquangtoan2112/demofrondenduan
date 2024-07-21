@@ -6,22 +6,25 @@ import LoadingData from "../../components/LoadingData";
 import Grid from "../../components/Grid";
 import Pagination from "./../../components/Pagination";
 import { GetChiTietChuongTruyen } from "../../service/actions/TruyenAction";
-import { themdanhdautruyen, checkDanhDau, XoaDanhDauTruyen } from "../../service/actions/DanhDauAction";
+import {
+  themdanhdautruyen,
+  checkDanhDau,
+  XoaDanhDauTruyen,
+} from "../../service/actions/DanhDauAction";
 import dayjs from "dayjs";
 import parse from "html-react-parser";
 import { apiKey } from "../../service/http";
 import { useSelector } from "react-redux";
 import Danhgiacha from "./Danhgiacha";
+import ReportForm from "../BaoCao/ReportForm.js";
 
 import DSDanhGia from "./DSDanhGia";
 import BinhLuanSection from "./BinhLuanSection";
-
 
 const nav = [
   { path: "rate", display: "Đánh giá" },
   { path: "chapter", display: "Danh sách chương" },
   { path: "comment", display: "Bình luận" },
-  { path: "donate", display: "Hâm mộ" },
 ];
 
 function StoryDetail() {
@@ -34,6 +37,9 @@ function StoryDetail() {
   const [loadingData, setLoadingData] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const userInfo = useSelector((state) => state.UserReducer.userInfo);
+  const [maTruyenBaoCao, setReportingTruyen] = useState(null);
+  const [reportModalVisible, setReportModalVisible] = useState(false);
+
 
   useEffect(() => {
     const getStory = async () => {
@@ -102,6 +108,15 @@ function StoryDetail() {
     }
   };
 
+  const handleReportClick = (maTruyenBaocao) => {
+    if(userInfo) {
+      setReportingTruyen(maTruyenBaocao);
+      setReportModalVisible(true);
+    }else{
+      message.success("Hãy đăng nhập để báo cáo nội dung này")
+    }
+  };
+
   const handleSetPage = async () => {
     console.log(214124124);
   };
@@ -124,7 +139,7 @@ function StoryDetail() {
               </div>
               <div className="col-3">
                 <div className="heroSide__main">
-                  <h2 className="mb-1">{truyen?.tenTruyen}</h2>
+                  <h2 className="mb-1 bold">{truyen?.tenTruyen}</h2>
                   <ul className="flex flex-col w-full">
                     <li className={liClass}>Tác giả: {truyen?.tenButDanh}</li>
                     <li className={liClass}>Thể loại: {truyen?.tenTheLoai}</li>
@@ -195,6 +210,16 @@ function StoryDetail() {
                 </div>
               </div>
               <div className="col-9" style={{ overflowY: "scroll" }}>
+                <div className="flex justify-between items-center">
+                  <div className="row bold">Giới Thiệu</div>
+                  <button
+                    className="text-yellow-500 hover:text-yellow-600"
+                    onClick={() => handleReportClick(truyen.maTruyen)}
+                  >
+                    <i className="fa-solid fa-flag"></i>
+                  </button>
+                </div>
+
                 {truyen?.moTa != null ? parse(truyen?.moTa) : "Không có gì"}
               </div>
             </div>
@@ -215,13 +240,22 @@ function StoryDetail() {
               </div>
             </div>
 
+            <ReportForm
+              visible={reportModalVisible}
+              onCancel={() => setReportModalVisible(false)}
+              maThucThe={maTruyenBaoCao ? maTruyenBaoCao : null}
+              LoaiBaoCao={4}
+            />
+
             <div className="story-detail__tab__main">
               {tab === "rate" && <Rate />}
               {tab === "chapter" && (
-                <ListChapter dsChuong={truyen?.data} tenTruyen={truyen?.tenTruyen} />
+                <ListChapter
+                  dsChuong={truyen?.data}
+                  tenTruyen={truyen?.tenTruyen}
+                />
               )}
               {tab === "comment" && <Comment />}
-              {tab === "donate" && <Donate />}
             </div>
             {tab === "chapter" && (
               <Pagination
@@ -281,17 +315,14 @@ const Rate = () => {
   );
 };
 
-
 const Comment = () => {
+  const { id } = useParams();
+
   return (
     <div>
-      <BinhLuanSection />
+      <BinhLuanSection id={id} />
     </div>
   );
-};
-
-const Donate = () => {
-  return <h3>Hâm mộ</h3>;
 };
 
 export default StoryDetail;

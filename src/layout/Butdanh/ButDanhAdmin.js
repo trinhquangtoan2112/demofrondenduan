@@ -5,6 +5,7 @@ import {
   layButDanhCuaAdmin,
   XoaButDanhCuaAdmin,
 } from "../../service/actions/ButDanhAction";
+import { LockOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const { Search } = Input;
 
@@ -100,25 +101,25 @@ export default class ButDanhAdmin extends Component {
       {
         title: "Hành Động",
         key: "action",
+        width: 70,
         render: (_, record) => (
-          <Button.Group>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             {record.trangthai !== 1 && (
               <Button
-                type="primary"
+                type="text"
+                icon={<LockOutlined />}
                 onClick={() => this.showLockModal(record.maButDanh)}
-              >
-                Khóa
-              </Button>
+              />
             )}
             {record.soLuongTruyen === 0 && (
               <Button
-                danger
+                type="text"
+                icon={<DeleteOutlined />}
                 onClick={() => this.showDeleteModal(record.maButDanh)}
-              >
-                Xóa
-              </Button>
+                danger
+              />
             )}
-          </Button.Group>
+          </div>
         ),
       },
     ];

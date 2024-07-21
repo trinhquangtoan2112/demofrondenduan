@@ -1,17 +1,15 @@
 import { useState, useEffect } from "react";
 import {
   layDSBinhLuanChuaDangNhap,
-  themBinhLuan,
   layDSBinhLuanDaDangNhap,
+  themBinhLuan,
 } from "../../service/actions/BinhLuanAction";
 import { message } from "antd";
-import { useParams } from "react-router-dom";
 import BinhLuanForm from "./BinhLuanForm";
 import DanhSachBinhLuan from "./DanhSachBinhLuan";
 import { useSelector } from "react-redux";
 
-const BinhLuanSection = () => {
-  const { id } = useParams();
+const BinhLuanSection = ({ id }) => {
   const [binhLuans, setBinhLuans] = useState([]);
   const [visibleCount, setVisibleCount] = useState(5);
   const userInfo = useSelector((state) => state.UserReducer.userInfo);
@@ -41,7 +39,7 @@ const BinhLuanSection = () => {
     };
 
     fetchBinhLuans();
-  }, [id]);
+  }, [id, userInfo]);
 
   const handleAddBinhLuan = async (noiDung) => {
     const data = {
@@ -87,7 +85,7 @@ const BinhLuanSection = () => {
 
   return (
     <div className="container mx-auto my-8">
-      <BinhLuanForm onAddBinhLuan={handleAddBinhLuan} />
+      <BinhLuanForm onAddBinhLuan={handleAddBinhLuan}/>
       <DanhSachBinhLuan
         binhLuans={binhLuans}
         visibleCount={visibleCount}
@@ -97,7 +95,7 @@ const BinhLuanSection = () => {
         <div className="text-center mt-4">
           <button
             onClick={handleShowMore}
-            className="w-full hover:bg-[#e66700] bg-[#ff7300]  text-white font-bold py-2 px-4 rounded"
+            className=" hover:bg-[#e66700] bg-[#ff7300] text-white font-bold py-2 px-4 rounded mb-4"
           >
             Xem thêm
           </button>

@@ -33,6 +33,11 @@ const menu = [
         icon: ""
     },
     {
+        path: "BaoCaoAdmin",
+        display: "Quản lý báo cáo",
+        icon: ""
+    },
+    {
         path: "DuyetTruyen",
         display: "Duyệt truyện",
         icon: ""
