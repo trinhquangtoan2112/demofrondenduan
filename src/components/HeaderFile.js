@@ -99,7 +99,7 @@ export default function HeaderFile() {
                             {userInfo?.daXoa ? null : (
                                 userInfo?.trangThai ? (
                                     <>
-                                        <Link to={`ButDanh`}>
+                                        <Link to={`/ButDanh`}>
                                             <li>
                                                 <i style={{ marginRight: '4px' }} className="fa-regular fa-circle-up"></i>
                                                 Bút danh

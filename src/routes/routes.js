@@ -22,6 +22,7 @@ import LichSuDoc from "../components/LichSuDoc";
 import AdminTruyen from "../components/AdminTruyen";
 import KetQuaGiaoDich from "../components/KetQuaGiaoDich";
 import DuyetTruyen from "../layout/Admin/DuyetTruyen";
+import DuyetChuong from "../layout/Admin/DuyetChuong";
 
 
 
@@ -210,7 +211,13 @@ const ROUTES = [
         auth: false,
         roles: [],
     },
-
+    {
+        index: 26,
+        path: "DuyetChuong",
+        element: <DuyetChuong></DuyetChuong>,
+        auth: false,
+        roles: [],
+    },
 ];
 
 export default ROUTES;

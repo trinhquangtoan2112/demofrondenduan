@@ -236,3 +236,30 @@ export const GetDanhSachTruyenAdmin = async () => {
         return null;
     }
 }
+
+export const GetDanhSachTruyenCanDuyet = async () => {
+    try {
+        const result = await apiKey.get("api/Truyens/DanhsachTruyenCanDuyet");
+        console.log(result)
+
+        return result.data.data
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
+export const DuyetTruyenaction = async (id) => {
+    const data = {
+        maTruyen: id
+    }
+    try {
+        const result = await apiKey.put("api/Truyens/DuyetTruyen", null, data);
+        console.log(result)
+
+        return result.data
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
