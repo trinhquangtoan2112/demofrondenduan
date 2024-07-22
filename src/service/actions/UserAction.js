@@ -35,12 +35,14 @@ export const CapNhapThongTin = async (dispatch) => {
         const result = await apiKey.getToken("/Login/updateInfo")
 
         if (result.status == 200) {
+            console.log("Successfully")
             dispatch(setUserInformation(result.data))
             localStorage.setItem("USER_LOGIN", JSON.stringify(result.data.data));
-            message.success("Cập nhập thành công")
+
         }
     } catch (error) {
         console.log(error)
+        window.location.reload()
         message.error("Lỗi xảy ra")
     }
 }
@@ -128,6 +130,17 @@ export const searchUserAction = async (search1) => {
         console.log(error)
         message.error("Lỗi xảy ra")
     }
+}
+export const napTienAction = async (data) => {
+    try {
+        const result = await apiKey.post("VNPay/ThanhToanVnPay", null, data);
+        return result.data.paymentUrl
+    } catch (error) {
+        console.log(error)
+        return false;
+    }
+
+
 }
 
 export const AddUserByAdmin = async (data) => {

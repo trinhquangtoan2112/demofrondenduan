@@ -21,6 +21,7 @@ import DanhDau from "../layout/QLDanhDau/DanhDau";
 import LichSuDoc from "../components/LichSuDoc";
 import AdminTruyen from "../components/AdminTruyen";
 import KetQuaGiaoDich from "../components/KetQuaGiaoDich";
+import DuyetTruyen from "../layout/Admin/DuyetTruyen";
 
 
 
@@ -200,6 +201,13 @@ const ROUTES = [
         path: "KetQuaGiaoDich",
         element: <KetQuaGiaoDich></KetQuaGiaoDich>,
         auth: true,
+        roles: [],
+    },
+    {
+        index: 25,
+        path: "DuyetTruyen",
+        element: <DuyetTruyen></DuyetTruyen>,
+        auth: false,
         roles: [],
     },
 
