@@ -42,6 +42,11 @@ const menu = [
         display: "Duyệt truyện",
         icon: ""
     },
+    {
+        path: "DuyetChuong",
+        display: "Duyệt chương",
+        icon: ""
+    },
 ]
 export default function Admin() {
     // const user = useSelector(state => state.auth.login?.user);

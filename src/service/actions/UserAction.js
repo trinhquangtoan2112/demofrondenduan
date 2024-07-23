@@ -35,12 +35,14 @@ export const CapNhapThongTin = async (dispatch) => {
         const result = await apiKey.getToken("/Login/updateInfo")
 
         if (result.status == 200) {
+            console.log("Successfully")
             dispatch(setUserInformation(result.data))
             localStorage.setItem("USER_LOGIN", JSON.stringify(result.data.data));
-            message.success("Cập nhập thành công")
+
         }
     } catch (error) {
         console.log(error)
+        window.location.reload()
         message.error("Lỗi xảy ra")
     }
 }
@@ -129,6 +131,17 @@ export const searchUserAction = async (search1) => {
         message.error("Lỗi xảy ra")
     }
 }
+export const napTienAction = async (data) => {
+    try {
+        const result = await apiKey.post("VNPay/ThanhToanVnPay", null, data);
+        return result.data.paymentUrl
+    } catch (error) {
+        console.log(error)
+        return false;
+    }
+
+
+}
 
 export const AddUserByAdmin = async (data) => {
     try {
@@ -185,6 +198,24 @@ export const getUserInAdmin = async (id) => {
     }
 }
 export const deleteUserAdmin = async (id) => {
+
+    const dataUser = {
+        id: id
+    }
+    try {
+        const result = await apiKey.put("/Login/XoaTaikhoan", null, dataUser)
+        console.log(result)
+        if (result.status === 200) {
+            return true
+        }
+        return false;
+    } catch (error) {
+        return false;
+    }
+}
+
+
+export const NapTienAction = async (id) => {
 
     const dataUser = {
         id: id

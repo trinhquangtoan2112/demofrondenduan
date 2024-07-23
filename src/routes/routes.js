@@ -20,6 +20,9 @@ import BaoCaoAdmin from "../layout/BaoCao/BaoCaoAdmin";
 import DanhDau from "../layout/QLDanhDau/DanhDau";
 import LichSuDoc from "../components/LichSuDoc";
 import AdminTruyen from "../components/AdminTruyen";
+import KetQuaGiaoDich from "../components/KetQuaGiaoDich";
+import DuyetTruyen from "../layout/Admin/DuyetTruyen";
+import DuyetChuong from "../layout/Admin/DuyetChuong";
 
 
 
@@ -194,7 +197,27 @@ const ROUTES = [
         auth: false,
         roles: [],
     },
-
+    {
+        index: 24,
+        path: "KetQuaGiaoDich",
+        element: <KetQuaGiaoDich></KetQuaGiaoDich>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 25,
+        path: "DuyetTruyen",
+        element: <DuyetTruyen></DuyetTruyen>,
+        auth: false,
+        roles: [],
+    },
+    {
+        index: 26,
+        path: "DuyetChuong",
+        element: <DuyetChuong></DuyetChuong>,
+        auth: false,
+        roles: [],
+    },
 ];
 
 export default ROUTES;

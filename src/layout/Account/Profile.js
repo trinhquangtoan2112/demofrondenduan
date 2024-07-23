@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import avt from '../../assets/img/avt.png'
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
-import { ChinhSuaThongTinDangNhap, sendEmail } from '../../service/actions/UserAction';
+import { CapNhapThongTin, ChinhSuaThongTinDangNhap, napTienAction, sendEmail } from '../../service/actions/UserAction';
+import { message } from 'antd';
 export default function Profile(props) {
     const { userInfo } = useSelector(state => state.UserReducer);
 
@@ -22,7 +23,8 @@ export default function Profile(props) {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        const loadUserInfo = async () => {//load thông tin của user
+        const loadUserInfo = async () => {
+            await CapNhapThongTin(dispatch)//load thông tin của user
             if (userInfo) {
                 setName(userInfo?.tenNguoiDung)
                 setBirthDate(userInfo.ngaySinh ? dayjs(userInfo.ngaySinh).format('YYYY-MM-DD') : '')
@@ -30,38 +32,8 @@ export default function Profile(props) {
             }
         }
         loadUserInfo();
+
     }, [])
-
-    // const upload = async () => { //upload ảnh lên firebase
-    //     if (image == null)
-    //         return;
-    //     const storageRef = ref(storage, `/images/${userInfo?.username}`);
-    //     uploadBytes(storageRef, image).then((result) => {
-    //         getDownloadURL(result.ref).then(async (url) => {//lấy liên kết tới ảnh
-    //             const data = {
-    //                 tenhienthi: name,
-    //                 image: url,
-    //                 birthdate: birthDate
-    //             }
-    //             await handleSubmitSaveProfile(data)  // xử lý update lại ảnh
-    //         })
-    //     })
-    // }
-
-    // const handleSubmitSaveProfile = async (data) => {//xử lý submit lưu thông tin
-    //     try {
-    //         dispatch(setLoading(true))
-    //         const update = await apiMain.updateUserInfo(user, dispatch, loginSuccess, data)
-    //         dispatch(setLoading(false))
-    //         toast.success("Cập nhật thông tin thành công", { autoClose: 1000, hideProgressBar: true, pauseOnHover: false })
-    //         const newUser = { ...user, image: update.image, tenhienthi: update.tenhienthi }
-    //         dispatch(loginSuccess(newUser))
-    //         changeUserInfo(update.userInfo)
-    //     } catch (error) {
-    //         console.log(error)
-    //         toast.error("Lỗi cập nhật thông tin", { autoClose: 1000, hideProgressBar: true, pauseOnHover: false })
-    //     }
-    // }
 
     const handleEdit = async (e) => {
         e.preventDefault()
@@ -94,6 +66,22 @@ export default function Profile(props) {
             setBirthDate(new Date())
         }
 
+    }
+
+    const napTien = async (e) => {
+
+        e.preventDefault();
+        const data = {
+            idUser: userInfo.maNguoiDung
+        }
+        const result = await napTienAction(data);
+        if (result == false) {
+            message.error("Lỗi xảy ra hãy thử lại")
+        } else {
+            console.log(1)
+            window.open(result, '_blank');
+        }
+        console.log(result)
     }
     const sendEmailToAuthen = (e) => {
         e.preventDefault();
@@ -188,6 +176,7 @@ export default function Profile(props) {
                                     >
                                         Cập nhật</button>
                                 </div>
+                                <button onClick={napTien}>Nạp tiền</button>
                             </form>
 
                         </div>

@@ -16,8 +16,10 @@ class SetUpAxios {
             }
         )
     }
-    post = async (url, data) => {
-        return this.axiosCreate.post(url, data)
+    post = async (url, data, params) => {
+        return this.axiosCreate.post(url, data, {
+            params
+        })
     }
     delete = async (url, data, params) => {
         return this.axiosCreate.delete(url, data)
