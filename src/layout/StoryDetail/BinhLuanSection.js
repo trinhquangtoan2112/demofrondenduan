@@ -84,12 +84,13 @@ const BinhLuanSection = ({ id }) => {
   };
 
   return (
-    <div className="container mx-auto my-8">
+    <div className="container mx-auto my-8"> 
       <BinhLuanForm onAddBinhLuan={handleAddBinhLuan}/>
       <DanhSachBinhLuan
         binhLuans={binhLuans}
         visibleCount={visibleCount}
         onReplyAdded={handleReplyAdded}
+        setBinhLuans={setBinhLuans}
       />
       {visibleCount < binhLuans.length && (
         <div className="text-center mt-4">
