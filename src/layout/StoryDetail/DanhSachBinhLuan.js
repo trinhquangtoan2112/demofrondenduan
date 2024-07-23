@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   themPhanHoiBinhLuan,
   xoaPhanHoiBinhLuan,
@@ -10,6 +10,11 @@ import { message, Modal } from "antd";
 import { useSelector } from "react-redux";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import ReportForm from "../BaoCao/ReportForm.js";
+import {
+  themlike,
+  xoalike,
+  checklike,
+} from "../../service/actions/LikeAction.js";
 
 const { confirm } = Modal;
 
@@ -36,7 +41,7 @@ const formatTimeAgo = (date) => {
   }
 };
 
-const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded }) => {
+const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded,setBinhLuans }) => {
   const [openReplies, setOpenReplies] = useState({});
   const [replyContent, setReplyContent] = useState({});
   const [sortCriteria, setSortCriteria] = useState("latest");
@@ -48,6 +53,64 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded }) => {
   const [maBinhLuanBaoCao, setReportingBinhLuan] = useState(null);
   const [reportModalVisible, setReportModalVisible] = useState(false);
   const [reportType, setReportType] = useState(null);
+  const [likesBinhLuan, setLikesBinhluan] = useState({});
+  const [likesPhanHoiBinhLuan, setLikesPhanHoiBinhluan] = useState({});
+
+  useEffect(() => {
+    if (!userInfo) {
+      console.log("Chưa đăng nhập nên không thể like được");
+    } else {
+      const checkLike = async () => {
+        try {
+          const maThucThes = binhLuans.map((binhLuan) => binhLuan.maBinhLuan); // Lấy danh sách mã bình luận
+          const maPhanHoiBinhLuans = binhLuans.flatMap((binhLuan) =>
+            binhLuan.dsPhBinhLuan.map(
+              (phbinhluan) => phbinhluan.maPhanHoiBinhLuan
+            )
+          );
+
+          const maid = {
+            loaiThucTheLike: 3,
+            maThucThes: maThucThes, // Truyền danh sách mã bình luận vào đây
+          };
+          const maid2 = {
+            loaiThucTheLike: 4,
+            maThucThes: maPhanHoiBinhLuans, // Truyền danh sách mã phản hồi vào đây
+          };
+
+          const result = await checklike(maid);
+          const result2 = await checklike(maid2);
+
+          const likesMap = {};
+          const likesMap2 = {};
+
+          if (result) {
+            // Create a map of maBinhLuan to like status
+            binhLuans.forEach((binhLuan) => {
+              likesMap[binhLuan.maBinhLuan] =
+                result[binhLuan.maBinhLuan] || false;
+            });
+          }
+
+          if (result2) {
+            // Create a map of maPhanHoiBinhLuan to like status
+            binhLuans.forEach((binhLuan) => {
+              binhLuan.dsPhBinhLuan.forEach((phbinhluan) => {
+                likesMap2[phbinhluan.maPhanHoiBinhLuan] =
+                  result2[phbinhluan.maPhanHoiBinhLuan] || false;
+              });
+            });
+          }
+
+          setLikesBinhluan(likesMap);
+          setLikesPhanHoiBinhluan(likesMap2);
+        } catch (error) {
+          console.error("Error checking like:", error);
+        }
+      };
+      checkLike();
+    }
+  }, [userInfo, binhLuans]); // Thêm danhSachDanhGia vào dependency array
 
   const toggleReplies = (maBinhLuan) => {
     setOpenReplies((prevState) => ({
@@ -169,6 +232,83 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded }) => {
     }
   };
 
+  const handLike = async (maBinhLuan, number, loaibinhluan) => {
+    if (!userInfo) {
+      message.success("Hãy đăng nhập để like bình luận");
+      return;
+    }
+    if (loaibinhluan == 0) {
+      const maid = {
+        loaiThucTheLike: 3,
+        maThucThe: maBinhLuan,
+      };
+
+      try {
+        if (number == 0) {
+          await themlike(maid);
+          setLikesBinhluan((prevLikes) => ({
+            ...prevLikes,
+            [maBinhLuan]: true, // Set like status for this review
+          }));
+          setBinhLuans((prevBinhLuans) =>
+            prevBinhLuans.map((binhLuan) =>
+              binhLuan.maBinhLuan == maBinhLuan
+                ? { ...binhLuan, solike: (binhLuan.solike || 0) + 1 }
+                : binhLuan
+            )
+          );
+        } else if (number == 1) {
+          await xoalike(maid);
+          setLikesBinhluan((prevLikes) => ({
+            ...prevLikes,
+            [maBinhLuan]: false, // Remove like status for this review
+          }));
+          setBinhLuans((prevBinhLuans) =>
+            prevBinhLuans.map((binhLuan) =>
+              binhLuan.maBinhLuan == maBinhLuan
+                ? { ...binhLuan, solike: Math.max((binhLuan.solike || 0) - 1, 0) }
+                : binhLuan
+            )
+          );
+        } else {
+          console.error("Invalid number value:", number);
+          message.error("Invalid like action.");
+        }
+      } catch (error) {
+        console.error("Error updating like status:", error);
+        message.error("Failed to update like status.");
+      }
+    }
+    if (loaibinhluan == 1) {
+      const maid = {
+        loaiThucTheLike: 4,
+        maThucThe: maBinhLuan,
+      };
+
+      try {
+        if (number == 0) {
+          await themlike(maid);
+          setLikesPhanHoiBinhluan((prevLikes) => ({
+            ...prevLikes,
+            [maBinhLuan]: true, // Set like status for this review
+          }));
+        } else if (number == 1) {
+          await xoalike(maid);
+          setLikesPhanHoiBinhluan((prevLikes) => ({
+            ...prevLikes,
+            [maBinhLuan]: false, // Remove like status for this review
+          }));
+        } else {
+          console.error("Invalid number value:", number);
+          message.error("Invalid like action.");
+        }
+      } catch (error) {
+        console.error("Error updating like status:", error);
+        message.error("Failed to update like status.");
+      }
+    }
+  };
+
   const sortedBinhLuans = [...binhLuans].sort((a, b) => {
     switch (sortCriteria) {
       case "oldest":
@@ -247,14 +387,37 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded }) => {
             </div>
           </div>
           <p className="mb-4">{binhLuan.noidung}</p>
-          <button
-            onClick={() => toggleReplies(binhLuan.maBinhLuan)}
-            className="text-[#ff7300] hover:text-[#ff4800] text-sm font-semibold"
-          >
-            {openReplies[binhLuan.maBinhLuan]
-              ? "Ẩn phản hồi"
-              : `Hiển thị phản hồi (${binhLuan.dsPhBinhLuan.length})`}
-          </button>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+            <div>{binhLuan.solike || 0}</div>
+              {likesBinhLuan[binhLuan.maBinhLuan] ? (
+                <button
+                  style={{ minWidth: "10px", color: "red" }}
+                  onClick={() => handLike(binhLuan.maBinhLuan, 1, 0)}
+                >
+                  <i className="fa fa-heart"></i>
+                </button>
+              ) : (
+                <button
+                  style={{ minWidth: "10px" }}
+                  onClick={() => handLike(binhLuan.maBinhLuan, 0, 0)}
+                >
+                  <i className="fa fa-heart"></i>
+                </button>
+              )}
+            </div>
+
+            <button
+              onClick={() => toggleReplies(binhLuan.maBinhLuan)}
+              className="text-[#ff7300] hover:text-[#ff4800] text-sm font-semibold"
+            >
+              {openReplies[binhLuan.maBinhLuan]
+                ? "Ẩn phản hồi"
+                : `Hiển thị phản hồi (${binhLuan.dsPhBinhLuan.length})`}
+            </button>
+            <div></div>
+          </div>
+
           {openReplies[binhLuan.maBinhLuan] && (
             <div className="mt-4 bg-white rounded-lg shadow p-4">
               <div className="mb-4">
@@ -288,6 +451,32 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded }) => {
                         {formatTimeAgo(phanHoi.ngayCapNhap)}
                       </p>
                       <p className="mt-2">{phanHoi.noidung}</p>
+                      <div
+                        style={{
+                          display: "flex",
+                        }}
+                      >
+                        <div>{phanHoi.solike}</div>
+                        {likesPhanHoiBinhLuan[phanHoi.maPhanHoiBinhLuan] ? (
+                          <button
+                            style={{ minWidth: "10px", color: "red" }}
+                            onClick={() =>
+                              handLike(phanHoi.maPhanHoiBinhLuan, 1, 1)
+                            }
+                          >
+                            <i className="fa fa-heart"></i>
+                          </button>
+                        ) : (
+                          <button
+                            style={{ minWidth: "10px" }}
+                            onClick={() =>
+                              handLike(phanHoi.maPhanHoiBinhLuan, 0, 1)
+                            }
+                          >
+                            <i className="fa fa-heart"></i>
+                          </button>
+                        )}
+                      </div>
                     </div>
                     <div className="ml-4 flex items-center">
                       <div className="flex space-x-2">
@@ -306,6 +495,7 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded }) => {
                             >
                               <i className="fa-solid fa-edit"></i>
                             </button>
+
                             <button
                               className="text-red-500 hover:text-red-600"
                               onClick={() =>

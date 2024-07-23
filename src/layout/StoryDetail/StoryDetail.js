@@ -11,6 +11,11 @@ import {
   checkDanhDau,
   XoaDanhDauTruyen,
 } from "../../service/actions/DanhDauAction";
+import {
+  themlike,
+  xoalike,
+  checklike,
+} from "../../service/actions/LikeAction.js";
 import dayjs from "dayjs";
 import parse from "html-react-parser";
 import { apiKey } from "../../service/http";
@@ -36,34 +41,42 @@ function StoryDetail() {
   const active = nav.findIndex((e) => e.path === tab);
   const [loadingData, setLoadingData] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [likesStatus, setLikesStatus] = useState({}); // New state for likes
   const userInfo = useSelector((state) => state.UserReducer.userInfo);
   const [maTruyenBaoCao, setReportingTruyen] = useState(null);
   const [reportModalVisible, setReportModalVisible] = useState(false);
-
+  const [likesCount, setLikesCount] = useState(0);
 
   useEffect(() => {
     const getStory = async () => {
       const result = await GetChiTietChuongTruyen(id);
       const maTruyen = { maTruyen: id };
-      console.log(result);
       if (localStorage.getItem("TOKEN")) {
         try {
-          const getLichSuDoc = await apiKey.getToken("LichSuDoc/LichSuDocTheoTruyen", maTruyen);
-          console.log(getLichSuDoc);
+          const getLichSuDoc = await apiKey.getToken(
+            "LichSuDoc/LichSuDocTheoTruyen",
+            maTruyen
+          );
           setLichSu(getLichSuDoc.data.data);
         } catch (error) {
           console.log(error);
         }
       }
+      const chapters = result?.data || []; // Default to an empty array if undefined
 
+        // Calculate chapter likes only if chapters is an array
+        const chapterLikes = Array.isArray(chapters)
+          ? chapters.reduce((sum, chapter) => sum + (chapter.solike || 0), 0)
+          : 0;
       setTruyen(result);
+      setLikesCount(result?.solike + chapterLikes || 0);
     };
     getStory();
   }, []);
 
   useEffect(() => {
     if (!userInfo) {
-      console.log("Chưa đăng nhập nên không checkBoomark được");
+      console.log("Chưa đăng nhập nên không checkBookmark, và like được");
     } else if (truyen) {
       const checkBookmark = async () => {
         try {
@@ -74,7 +87,23 @@ function StoryDetail() {
           console.error("Error checking bookmark:", error);
         }
       };
+
+      const checkLike = async () => {
+        try {
+          const maid = {
+            loaiThucTheLike: 1,
+            maThucThes: [truyen?.maTruyen], // Pass the list of IDs here
+          };
+          const result = await checklike(maid);
+          // Assume result.data is a dictionary with IDs as keys and like statuses as values
+          setLikesStatus(result[truyen?.maTruyen]);
+        } catch (error) {
+          console.error("Error checking like:", error);
+        }
+      };
+
       checkBookmark();
+      checkLike();
     }
   }, [userInfo, truyen]);
 
@@ -108,12 +137,37 @@ function StoryDetail() {
     }
   };
 
+  const handLike = async (number) => {
+    if (!userInfo) {
+      message.success("Hãy đăng nhập để like truyện");
+    } else {
+      const maid = {
+        loaiThucTheLike: 1,
+        maThucThe: truyen?.maTruyen,
+      };
+      try {
+        if (number === 0) {
+          await themlike(maid);
+          setLikesStatus(true);
+          setLikesCount((prevCount) => prevCount + 1); // Increment the likes count
+        } else if (number === 1) {
+          await xoalike(maid);
+          setLikesStatus(false);
+          setLikesCount((prevCount) => prevCount - 1); // Decrement the likes count
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        message.error("Failed to add bookmark. It might already exist.");
+      }
+    }
+  };
+
   const handleReportClick = (maTruyenBaocao) => {
-    if(userInfo) {
+    if (userInfo) {
       setReportingTruyen(maTruyenBaocao);
       setReportModalVisible(true);
-    }else{
-      message.success("Hãy đăng nhập để báo cáo nội dung này")
+    } else {
+      message.success("Hãy đăng nhập để báo cáo nội dung này");
     }
   };
 
@@ -148,21 +202,30 @@ function StoryDetail() {
                       {dayjs(truyen?.ngayCapNhat).format("DD/MM/YYYY")}
                     </li>
                   </ul>
-                  <ul className="heroSide__info">
-                    <li>
-                      <span className="fs-16 bold">
-                        {truyen?.tongLuotDoc || "0"}
-                      </span>
-                      <br />
-                      <span>Lượt đọc</span>
-                    </li>
-                  </ul>
+                  <div style={{ display: "flex" }}>
+                    <ul className="heroSide__info">
+                      <li>
+                        <span className="fs-16 bold">
+                          {truyen?.tongLuotDoc || "0"}
+                        </span>
+                        <br />
+                        <span>Lượt đọc</span>
+                      </li>
+                    </ul>
+                    <ul className="heroSide__info">
+                      <li>
+                        <span className="fs-16 bold">{likesCount}</span>
+                        <br />
+                        <span>Lượt like</span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
                 <div className="flex flex-row justify-between">
                   {lichSu ? (
                     <Link
                       to={`/truyen/${truyen?.tenTruyen}/${lichSu?.maChuongTruyen}`}
-                      className="btn-primary m-0 p-0"
+                      className="btn-outline m-0 p-0"
                       style={{ minWidth: "10px" }}
                     >
                       <i className="fa fa-book-reader"></i>
@@ -170,7 +233,7 @@ function StoryDetail() {
                   ) : truyen?.data[0] ? (
                     <Link
                       to={`/truyen/${truyen?.tenTruyen}/${truyen?.data[0].maChuong}`}
-                      className="btn-primary m-0 p-0"
+                      className="btn-outline m-0 p-0"
                       style={{ minWidth: "10px" }}
                     >
                       <i className="fa fa-book-reader"></i>
@@ -201,12 +264,23 @@ function StoryDetail() {
                       <i className="fa fa-plus"></i>
                     </button>
                   )}
-                  <button
-                    className="btn-outline m-0 p-0"
-                    style={{ minWidth: "10px" }}
-                  >
-                    <i className="fa fa-heart"></i>
-                  </button>
+                  {likesStatus ? (
+                    <button
+                      className="btn-primary m-0 p-0"
+                      style={{ minWidth: "10px" }}
+                      onClick={() => handLike(1)}
+                    >
+                      <i className="fa fa-heart"></i>
+                    </button>
+                  ) : (
+                    <button
+                      className="btn-outline m-0 p-0"
+                      style={{ minWidth: "10px" }}
+                      onClick={() => handLike(0)}
+                    >
+                      <i className="fa fa-heart"></i>
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="col-9" style={{ overflowY: "scroll" }}>
@@ -228,8 +302,9 @@ function StoryDetail() {
               <div className="navigate">
                 {nav.map((item, index) => (
                   <a
-                    className={`navigate__tab fs-20 bold ${active === index ? "tab_active" : ""
-                      }`}
+                    className={`navigate__tab fs-20 bold ${
+                      active === index ? "tab_active" : ""
+                    }`}
                     key={index}
                     name={item.path}
                     onClick={handleTabChange}

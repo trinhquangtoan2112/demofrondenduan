@@ -31,7 +31,7 @@ const DanhGiaPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }; 
 
   useEffect(() => {
     if (id) {
@@ -58,6 +58,7 @@ const DanhGiaPage = () => {
         danhSachDanhGia={danhSachDanhGia}
         loading={loading}
         fetchData={fetchData}
+        setDanhSachDanhGia={setDanhSachDanhGia}
       />
     </div>
   );

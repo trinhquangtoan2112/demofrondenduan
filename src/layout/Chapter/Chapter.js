@@ -10,6 +10,12 @@ import axios from "axios";
 import BinhLuanSection from "../StoryDetail/BinhLuanSection";
 import dayjs from "dayjs";
 import ReportForm from "../BaoCao/ReportForm";
+import {
+  themlike,
+  xoalike,
+  checklike,
+} from "../../service/actions/LikeAction.js";
+
 function Chapter(props) {
   console.log(111);
   const { maChuong, name } = useParams();
@@ -25,6 +31,7 @@ function Chapter(props) {
   const userInfo = useSelector((state) => state.UserReducer.userInfo);
   const [maChuongTruyenBaoCao, setReportingChuongtruyen] = useState(null);
   const [reportModalVisible, setReportModalVisible] = useState(false);
+  const [likesChuong, setLikesChuong] = useState({});
 
   useEffect(() => {
     //xử lý đánh dấu truyện đang đọc
@@ -52,6 +59,7 @@ function Chapter(props) {
           content: result.data.data.noiDung,
           stt: result.data.data.stt,
           maTruyen: result.data.data.maTruyen,
+          solike: result.data.data.maTruyen,
         });
         setContnet(getTextContent(result?.data?.data?.noiDung));
         setManual({
@@ -71,6 +79,23 @@ function Chapter(props) {
       );
       console.log(result);
     };
+
+    const checkLike = async () => {
+      try {
+        const maid = {
+          loaiThucTheLike: 5,
+          maThucThes: [maChuong], // Pass the list of IDs here
+        };
+        const result = await checklike(maid);
+        // Assume result.data is a dictionary with IDs as keys and like statuses as values
+        setLikesChuong(result[maChuong]);
+      } catch (error) {
+        console.error("Error checking like:", error);
+      }
+    };
+
+    checkLike();
+
     handleSetReading(); //gọi hàm
     // if (localStorage.getItem("TOKEN")) {
     //     try {
@@ -83,14 +108,12 @@ function Chapter(props) {
       LuuLichSu();
     }
   }, [maChuong]);
-  console.log(parse("<h1>single</h1>"));
   const [operationName, setOperationName] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
   const handleSpeak = async () => {
     const data = {
       noiDung: content,
     };
-    console.log(data);
     try {
       const result = await axios.post(
         "https://localhost:7094/Chuongtruyens/DocChuongTruyen",
@@ -132,6 +155,39 @@ function Chapter(props) {
       setReportModalVisible(true);
     } else {
       message.success("Hãy đăng nhập để báo cáo nội dung này");
+    }
+  };
+
+  const handLike = async (number) => {
+    if (!userInfo) {
+      message.success("Hãy đăng nhập để like truyện");
+      return;
+    }
+
+    const maid = {
+      loaiThucTheLike: 5,
+      maThucThe: maChuong,
+    };
+
+    try {
+      if (number === 0) {
+        await themlike(maid);
+        setLikesChuong(true);
+        setChapter((prev) => ({
+          ...prev,
+          solike: prev.solike + 1,
+        }));
+      } else if (number === 1) {
+        await xoalike(maid);
+        setLikesChuong(false);
+        setChapter((prev) => ({
+          ...prev,
+          solike: prev.solike - 1,
+        }));
+      }
+    }  catch (error) {
+      console.error("Error:", error);
+      message.error("Failed to update like status.");
     }
   };
   // useEffect(() => {//Xử lý load dữ liệu chương truyện
@@ -312,7 +368,9 @@ function Chapter(props) {
                     <p>Lỗi xảy ra hãy reset lại web</p>
                   )}
                 </div>
+                
               </div>
+              <div>Số Like: {chapter?.solike || 0}</div>
             </div>
             <div className="w-1/6 mx-auto flex flex-row justify-between">
               {manual?.result?.data.data.trangTruoc ? (
@@ -330,12 +388,30 @@ function Chapter(props) {
                 </button>
               )}
 
-              <button
-                className="text-yellow-500 hover:text-yellow-600"
-                onClick={() => handleReportClick(maChuong)}
-              >
-                <i className="fa-solid fa-flag"></i>
-              </button>
+              <div style={{ display: "flex" }}>
+                <button
+                  style={{ padding: "5px 10px", border: "1px solid #ff7300" ,margin:'0 5px'}}
+                  className="text-yellow-500 hover:text-yellow-600"
+                  onClick={() => handleReportClick(maChuong)}
+                >
+                  <i className="fa-solid fa-flag"></i>
+                </button>
+                {likesChuong ? (
+                  <button
+                    style={{ minWidth: "10px", color: "red" ,padding: "5px 10px", border: "1px solid #ff7300" ,margin:'0 5px'}}
+                    onClick={() => handLike(1)}
+                  >
+                    <i className="fa fa-heart"></i>
+                  </button>
+                ) : (
+                  <button
+                    style={{ minWidth: "10px" ,padding: "5px 10px", border: "1px solid #ff7300" ,margin:'0 5px'}}
+                    onClick={() => handLike(0)}
+                  >
+                    <i className="fa fa-heart"></i>
+                  </button>
+                )}
+              </div>
 
               {manual?.result?.data.data.trangTiep ? (
                 <Link

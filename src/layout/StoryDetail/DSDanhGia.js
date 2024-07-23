@@ -5,6 +5,11 @@ import { xoaDanhGia, suaDanhGia } from "../../service/actions/DanhGiaAction";
 import anhDaiDienmacdinh from "../../assets/img/avt.png";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import ReportForm from "../BaoCao/ReportForm.js";
+import {
+  themlike,
+  xoalike,
+  checklike,
+} from "../../service/actions/LikeAction.js";
 
 const { confirm } = Modal;
 
@@ -112,7 +117,7 @@ const EditReviewForm = ({ visible, onCancel, onEdit, initialValues }) => {
   );
 };
 
-const DSDanhGia = ({ danhSachDanhGia, loading, fetchData }) => {
+const DSDanhGia = ({ danhSachDanhGia, loading, fetchData,setDanhSachDanhGia }) => {
   const userInfo = useSelector((state) => state.UserReducer.userInfo);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
@@ -120,6 +125,36 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData }) => {
   const [sortOption, setSortOption] = useState("newest");
   const [reportingReview, setReportingReview] = useState(null);
   const [reportModalVisible, setReportModalVisible] = useState(false);
+  const [likesDanhGia, setLikesDanhGia] = useState({}); // New state for likes
+
+  useEffect(() => {
+    if (!userInfo) {
+      console.log("Chưa đăng nhập nên không thể like được");
+    } else {
+      const checkLike = async () => {
+        try {
+          const maThucThes = danhSachDanhGia.map((review) => review.maDanhGia); // Lấy danh sách mã đánh giá
+          const maid = {
+            loaiThucTheLike: 2,
+            maThucThes: maThucThes, // Truyền danh sách mã đánh giá vào đây
+          };
+          const result = await checklike(maid);
+          if (result) {
+            // Create a map of maDanhGia to like status
+            const likesMap = danhSachDanhGia.reduce((acc, review) => {
+              acc[review.maDanhGia] = result[review.maDanhGia] || false; // Default to false if not found
+              return acc;
+            }, {});
+            setLikesDanhGia(likesMap);
+          }
+        } catch (error) {
+          console.error("Error checking like:", error);
+        }
+      };
+      checkLike();
+    }
+  }, [userInfo, danhSachDanhGia]); // Thêm danhSachDanhGia vào dependency array
+
 
   const handleDeleteReview = (maDanhGia) => {
     Modal.confirm({
@@ -167,13 +202,64 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData }) => {
   };
 
   const handleReportClick = (review) => {
-    if(userInfo) {
+    if (userInfo) {
       setReportingReview(review);
       setReportModalVisible(true);
-    }else{
-      message.success("Hãy đăng nhập để báo cáo nội dung này")
+    } else {
+      message.success("Hãy đăng nhập để báo cáo nội dung này");
     }
   };
+
+  const handLike = async (maDanhGia, number) => {
+    if (!userInfo) {
+      message.success("Hãy đăng nhập để like truyện");
+      return;
+    }
+  
+    const maid = {
+      loaiThucTheLike: 2,
+      maThucThe: maDanhGia,
+    };
+  
+    try {
+      if (number === 0) {
+        // Add like
+        await themlike(maid);
+        setLikesDanhGia((prevLikes) => ({
+          ...prevLikes,
+          [maDanhGia]: true,
+        }));
+        // Update the like count
+        setDanhSachDanhGia((prevReviews) =>
+          prevReviews.map((review) =>
+            review.maDanhGia === maDanhGia
+              ? { ...review, solike: (review.solike || 0) + 1 }
+              : review
+          )
+        );
+      } else if (number === 1) {
+        // Remove like
+        await xoalike(maid);
+        setLikesDanhGia((prevLikes) => ({
+          ...prevLikes,
+          [maDanhGia]: false,
+        }));
+        // Update the like count
+        setDanhSachDanhGia((prevReviews) =>
+          prevReviews.map((review) =>
+            review.maDanhGia === maDanhGia
+              ? { ...review, solike: Math.max((review.solike || 0) - 1, 0) }
+              : review
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      message.error("Failed to update like status.");
+    }
+  };
+  
+  
 
   const sortedDanhSachDanhGia = () => {
     const sortedData = [...danhSachDanhGia];
@@ -240,7 +326,7 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData }) => {
                       <p className="font-bold text-lg">{review.tenNguoiDung}</p>
                       <p className="text-gray-500 text-sm">
                         {formatTimeAgo(review.ngaycapnhat)}
-                      </p> 
+                      </p>
                     </div>
                     <div className="ml-4 flex items-center">
                       <div className="flex space-x-2">
@@ -282,6 +368,30 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData }) => {
                     ))}
                   </div>
                   <p>{review.noidung}</p>
+
+                  <div
+                    key={review.maDanhGia}
+                  >
+                    {/* Other review details */}
+                    <div style={{ display: "flex" }}>
+                      <div >{review.solike || 0}</div>
+                      {likesDanhGia[review.maDanhGia] ? (
+                        <button
+                          style={{ minWidth: "10px", color: "red" }}
+                          onClick={() => handLike(review.maDanhGia, 1)}
+                        >
+                          <i className="fa fa-heart"></i>
+                        </button>
+                      ) : (
+                        <button
+                          style={{ minWidth: "10px" }}
+                          onClick={() => handLike(review.maDanhGia, 0)}
+                        >
+                          <i className="fa fa-heart"></i>
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </div>
               ))
             )}
