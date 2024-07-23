@@ -16,13 +16,17 @@ import { layDanhSachTheLoaiAction } from '../service/actions/TheLoaiAction';
 export default function HeaderFile() {
     const { user, auth, userInfo } = useSelector(state => state.UserReducer);
     const [auth1, setAuth] = useState(false);
+    const [search, setSearch] = useState(null);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const getTheLoai = async () => {
         const result = await layDanhSachTheLoaiAction(dispatch);
 
     }
-
+    const searching = () => {
+        navigate(`/searchlist/${search}`, { state: search })
+    }
     useEffect(() => {
         setAuth(auth)
         getTheLoai()
@@ -89,8 +93,17 @@ export default function HeaderFile() {
                         </ul>
                         <div className='navbar-nav__list__search'>
                             <div className='form-group'>
-                                <input placeholder='Tìm truyện'></input>
-                                <button ><i className="fa-solid fa-magnifying-glass"></i></button>
+                                <input placeholder='Tìm truyện' onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        // Perform the action you want on Enter key press
+                                        searching()
+                                    }
+                                }} onChange={(e) => {
+                                    setSearch(e.target.value);
+                                }}></input>
+                                <button onClick={() => {
+                                    searching()
+                                }}><i className="fa-solid fa-magnifying-glass"></i></button>
                             </div>
                         </div>
 

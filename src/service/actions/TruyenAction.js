@@ -263,3 +263,19 @@ export const DuyetTruyenaction = async (id) => {
         return false;
     }
 }
+
+
+export const TimKiemTruyenAcion = async (tenTruyen) => {
+    const data = {
+        tenTruyen
+    }
+    try {
+        const result = await apiKey.get("api/Truyens/GetTruyenTheoTenTruyen", data);
+        console.log(result)
+
+        return result.data
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}

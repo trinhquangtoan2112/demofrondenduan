@@ -23,6 +23,7 @@ import AdminTruyen from "../components/AdminTruyen";
 import KetQuaGiaoDich from "../components/KetQuaGiaoDich";
 import DuyetTruyen from "../layout/Admin/DuyetTruyen";
 import DuyetChuong from "../layout/Admin/DuyetChuong";
+import Searching from "../components/Searching";
 
 
 
@@ -216,6 +217,13 @@ const ROUTES = [
         path: "DuyetChuong",
         element: <DuyetChuong></DuyetChuong>,
         auth: false,
+        roles: [],
+    },
+    {
+        index: 27,
+        path: "searchlist/:id",
+        element: <Searching></Searching>,
+        auth: true,
         roles: [],
     },
 ];
