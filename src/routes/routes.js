@@ -25,6 +25,7 @@ import DuyetTruyen from "../layout/Admin/DuyetTruyen";
 import DuyetChuong from "../layout/Admin/DuyetChuong";
 import Searching from "../components/Searching";
 import QuanLyTruyenAllButDanh from "../layout/Account/QuanLyTruyenAllButDanh";
+import QuanLyButDanhUser from "../layout/Account/QuanLyButDanhUser";
 
 
 
@@ -231,6 +232,13 @@ const ROUTES = [
         index: 28,
         path: "QuanLyTruyenCuaMinh",
         element: <QuanLyTruyenAllButDanh></QuanLyTruyenAllButDanh>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 29,
+        path: "QuanLyBanThao",
+        element: <QuanLyButDanhUser></QuanLyButDanhUser>,
         auth: true,
         roles: [],
     },

@@ -76,42 +76,45 @@ export default function QuanLyTruyenAllButDanh() {
         },
         {
             title: 'Tên bút danh',
-            dataIndex: 'coPhi',
-            key: 'coPhi',
-            render: (th) => <>{th ? <i className="fa fa-check bg-green-500 p-2 rounded-2xl" />
-                : <p>Không</p>} </>
+            dataIndex: 'tenButDanh',
+            key: 'tenButDanh',
+
         },
         {
             title: 'Action',
             key: 'action',
             render: (_, record) => (
-                < div >
-                    <Link to={`/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
-                    <Link to={`/QuanLyChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
-                    {_.congBo == 1 ? <Popconfirm
-                        title="Ẩn truyện"
-                        description="Bạn có chắc muốn ẩn truyện ko không?"
-                        onConfirm={() => {
-                            AnTruyen(_.maTruyen)
-                        }}
-                        onCancel={cancel}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button><EyeInvisibleOutlined /></Button>
-                    </Popconfirm> : <Popconfirm
-                        title="Hiện truyện"
-                        description="Bạn có chắc muốn hiện truyện không?"
-                        onConfirm={() => {
-                            HienTruyen(_.maTruyen)
-                        }}
-                        onCancel={cancel}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button><EyeOutlined /></Button>
-                    </Popconfirm>}
-                </div >
+                <>
+                    {
+                        _.trangThaiButDanh == 1 ? <p>Bạn đã bị khóa bút danh</p> : < div >
+                            <Link to={`/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
+                            <Link to={`/QuanLyChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
+                            {_.congBo == 1 ? <Popconfirm
+                                title="Ẩn truyện"
+                                description="Bạn có chắc muốn ẩn truyện ko không?"
+                                onConfirm={() => {
+                                    AnTruyen(_.maTruyen)
+                                }}
+                                onCancel={cancel}
+                                okText="Yes"
+                                cancelText="No"
+                            >
+                                <Button><EyeInvisibleOutlined /></Button>
+                            </Popconfirm> : <Popconfirm
+                                title="Hiện truyện"
+                                description="Bạn có chắc muốn hiện truyện không?"
+                                onConfirm={() => {
+                                    HienTruyen(_.maTruyen)
+                                }}
+                                onCancel={cancel}
+                                okText="Yes"
+                                cancelText="No"
+                            >
+                                <Button><EyeOutlined /></Button>
+                            </Popconfirm>}
+                        </div >
+                    }
+                </>
             ),
         }
     ];

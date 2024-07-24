@@ -112,6 +112,11 @@ export default function HeaderFile() {
                             {userInfo?.daXoa ? null : (
                                 userInfo?.trangThai ? (
                                     <>
+                                        <Link to={`/QuanLyBanThao`}>
+                                            <li>
+                                                Quản lý bản thảo
+                                            </li>
+                                        </Link>
                                         <Link to={`/QuanLyTruyenCuaMinh`}>
                                             <li>
                                                 Quản lý truyện

@@ -15,6 +15,7 @@ import {
   xoalike,
   checklike,
 } from "../../service/actions/LikeAction.js";
+import { setFontStyle, setFormChu } from "../../store/reducer/TienIchReducer.js";
 
 function Chapter(props) {
   console.log(111);
@@ -22,7 +23,7 @@ function Chapter(props) {
   const [chapter, setChapter] = useState({});
   const [manual, setManual] = useState("");
   const [content, setContnet] = useState("Khong co gi");
-  const [fontsize, setFontsize] = useState(18);
+
   const [lineHeight, setLineHeight] = useState(1.5);
   const [fontName, setFontName] = useState("Arial");
   const dispatch = useDispatch();
@@ -31,7 +32,10 @@ function Chapter(props) {
   const [maChuongTruyenBaoCao, setReportingChuongtruyen] = useState(null);
   const [reportModalVisible, setReportModalVisible] = useState(false);
   const [likesChuong, setLikesChuong] = useState({});
-
+  const allFontKieuChu = useSelector((state) => state.TienIchReducer.allFontKieuChu);
+  const fontChu = useSelector((state) => state.TienIchReducer.fontChu);
+  const fontStyle = useSelector((state) => state.TienIchReducer.fontStyle);
+  console.log(allFontKieuChu)
   useEffect(() => {
     const handleSetReading = async () => {
       const data = {
@@ -190,16 +194,9 @@ function Chapter(props) {
     return options
   }
   const renderTienIchFont = () => {
-    const fonts = [
-      { name: "Arial", style: 'Arial' },
-      { name: "Courier New", style: 'Courier New ' },
-      { name: "Georgia", style: 'Georgia' },
-      { name: "Times New Roman", style: 'Times New Roman' },
-      { name: "Verdana", style: 'Verdana' }
-    ];
     const options = [];
-    for (let i = 0; i < fonts.length; i++) {
-      options.push(<option key={fonts[i].style} value={fonts[i].style}>{fonts[i].name}</option>);
+    for (let i = 0; i < allFontKieuChu.length; i++) {
+      options.push(<option key={allFontKieuChu[i].style} value={allFontKieuChu[i].style}>{allFontKieuChu[i].name}</option>);
     }
     return options
   }
@@ -212,16 +209,14 @@ function Chapter(props) {
 
         {audioUrl && <audio controls src={audioUrl}></audio>}
         <p>Font size</p>
-        <select defaultValue={18} onChange={(e) => {
-          setFontsize(e.target.value)
+        <select defaultValue={fontChu} onChange={(e) => {
+          dispatch(setFormChu(e.target.value))
         }}>
           {renderTienIchFontSize()}
-
         </select>
         <p>Font</p>
-        <select defaultValue={"Arial"} onChange={(e) => {
-          console.log(e.target.value)
-          setFontName(e.target.value)
+        <select defaultValue={fontStyle} onChange={(e) => {
+          dispatch(setFontStyle(e.target.value))
         }}>
           {renderTienIchFont()}
         </select>
@@ -241,7 +236,7 @@ function Chapter(props) {
             <button onClick={handleSpeak}>Đọc văn bản</button>
             <div
               className="d-lex"
-              style={{ fontSize: `${fontsize}px`, fontFamily: `${fontName}` }}
+              style={{ fontSize: `${fontChu}px`, fontFamily: `${fontStyle}` }}
             >
               {chapter?.stt ? (
                 <h1 className="chapter-name">
