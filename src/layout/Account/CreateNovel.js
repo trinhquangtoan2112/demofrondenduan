@@ -38,7 +38,6 @@ export default function CreateNovel(props) {
             setListTacGia(result)
             setTacgia(result[0].maButDanh)
         }
-
     }
     console.log(listTacgia)
     // const handleCreateNovel = async (data) => {//xử lý gọi tạo truyện mới
