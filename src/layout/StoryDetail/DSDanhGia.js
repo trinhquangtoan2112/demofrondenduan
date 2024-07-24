@@ -282,8 +282,7 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData,setDanhSachDanhGia }) =
   const paginatedReviews = sortedDanhSachDanhGia().slice(
     0,
     currentDisplayCount
-  );
-
+  ); 
   return (
     <div>
       <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-300">
