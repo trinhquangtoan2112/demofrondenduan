@@ -61,12 +61,7 @@ export default function QuanLyTruyenAllButDanh() {
             key: 'ngayCapNhat',
             render: (th) => <>{th != null ? <p>{dayjs(th).format("DD-MM-YYYY")}</p> : <p>Không có</p>} </>
         },
-        {
-            title: 'Lượt đọc',
-            dataIndex: 'luotdoc',
-            key: 'luotdoc',
-            render: (th) => <>{th != null ? <p>{th}</p> : <p>Không xác định</p>} </>
-        },
+
         {
             title: 'Công bố',
             dataIndex: 'congBo',
