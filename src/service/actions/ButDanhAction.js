@@ -23,9 +23,11 @@ export const layDanhSachButDanh = async () => {
       return response.data.data;
     } else {
       message.error(`Lấy danh sách thất bại: ${response.data.message}`);
+      return false;
     }
   } catch (error) {
     message.error(`Lấy danh sách thất bại: ${error.response?.data?.message || error.message}`);
+    return false;
   }
 };
 
@@ -71,7 +73,7 @@ export const layButDanhCuaAdmin = async () => {
   } catch (error) {
     message.error(`Lấy danh sách thất bại: ${error.response?.data?.message || error.message}`);
   }
-  
+
 };
 
 // Function to get the list of pseudonyms for admin including the count of stories

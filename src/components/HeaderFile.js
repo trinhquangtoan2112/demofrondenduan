@@ -112,6 +112,11 @@ export default function HeaderFile() {
                             {userInfo?.daXoa ? null : (
                                 userInfo?.trangThai ? (
                                     <>
+                                        <Link to={`/QuanLyTruyenCuaMinh`}>
+                                            <li>
+                                                Quản lý truyện
+                                            </li>
+                                        </Link>
                                         <Link to={`/ButDanh`}>
                                             <li>
                                                 <i style={{ marginRight: '4px' }} className="fa-regular fa-circle-up"></i>

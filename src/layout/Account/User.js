@@ -177,7 +177,7 @@ export default function User() {
                 />
                 <Button onClick={handleClickAddUser} type="primary">Thêm tài khoản</Button>
             </div>
-            <Table columns={columns} dataSource={isSearching ? searchUser : listUser} />
+            <Table columns={columns} dataSource={isSearching ? searchUser : listUser ? listUser : null} />
             <div className={selectedUser ? null : 'add-user-admin'}>
 
                 <Modal active={modalVisible}>

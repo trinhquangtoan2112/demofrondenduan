@@ -279,3 +279,21 @@ export const TimKiemTruyenAcion = async (tenTruyen) => {
         return false;
     }
 }
+
+export const GetTruyenTheoIDNguoiDung = async (id) => {
+
+    try {
+        if (localStorage.getItem("TOKEN")) {
+            let result = await apiKey.getToken("api/Truyens/GetTruyenTheoIDNguoiDung")
+
+            if (result.status === 200) {
+                return result.data
+            }
+        }
+
+    } catch (error) {
+        message.error("Lỗi xảy ra")
+        return false
+
+    }
+}

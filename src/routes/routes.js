@@ -24,6 +24,7 @@ import KetQuaGiaoDich from "../components/KetQuaGiaoDich";
 import DuyetTruyen from "../layout/Admin/DuyetTruyen";
 import DuyetChuong from "../layout/Admin/DuyetChuong";
 import Searching from "../components/Searching";
+import QuanLyTruyenAllButDanh from "../layout/Account/QuanLyTruyenAllButDanh";
 
 
 
@@ -92,7 +93,7 @@ const ROUTES = [
     },
     {
         index: 9,
-        path: "DangTruyen/:idButDanh",
+        path: "DangTruyen",
         element: <CreateNovel></CreateNovel>,
         auth: true,
         roles: [],
@@ -223,6 +224,13 @@ const ROUTES = [
         index: 27,
         path: "searchlist/:id",
         element: <Searching></Searching>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 28,
+        path: "QuanLyTruyenCuaMinh",
+        element: <QuanLyTruyenAllButDanh></QuanLyTruyenAllButDanh>,
         auth: true,
         roles: [],
     },

@@ -6,29 +6,41 @@ import Loading from './../../components/Loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { DangTruyen } from '../../service/actions/TruyenAction';
 import { useNavigate, useParams } from 'react-router-dom';
+import { layDanhSachButDanh } from '../../service/actions/ButDanhAction';
 
 export default function CreateNovel(props) {
-    const { userInfo } = props;
+
+
     const navigate = useNavigate();
-    const { idButDanh } = useParams();
+
     const theLoai = useSelector(state => state.TheLoaiReducer.theLoai);
-    console.log(theLoai)
+
     const [ckValue, setCkValue] = useState(true);
     // const user = useSelector(state=>state.auth.login.user)
     const [image, setImage] = useState("");
     const [preview, setPreview] = useState(avt)
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [tacgia, setTacgia] = useState(idButDanh);
+    const [listTacgia, setListTacGia] = useState(null);
+    const [tacgia, setTacgia] = useState();
     const [theloai, setTheloai] = useState(theLoai[0]);
     // const loading = useSelector(state => state.message.loading)
     const [loadingUser, setLoadingUser] = useState(true)
     const dispatch = useDispatch()
     useEffect(() => {
+        getButDanh()
+    }, [])
+    const getButDanh = async () => {
+        const result = await layDanhSachButDanh();
+        if (result === false) {
+            setListTacGia(null);
+        } else {
+            setListTacGia(result)
+            setTacgia(result[0].maButDanh)
+        }
 
-    }, [userInfo])
-
-
+    }
+    console.log(listTacgia)
     // const handleCreateNovel = async (data) => {//xử lý gọi tạo truyện mới
     //     try {
     //         apiMain.createNovel(data,user, dispatch, loginSuccess )
@@ -88,7 +100,7 @@ export default function CreateNovel(props) {
             {/* {
                 loadingUser ? <LoadingData />
                     : */}
-            <div className="">
+            {listTacgia != null ? <div className="">
 
                 <div className="profile__wrap ">
                     <div className="profile__main ">
@@ -101,11 +113,11 @@ export default function CreateNovel(props) {
                             </div>
 
                             {/* <div className="group-info col-3">
-                                <label style={labelStyle}>Tác giả</label>
-                                <input required
-                                    onChange={e => { setTacgia(e.target.value) }} value={tacgia}
-                                ></input>
-                            </div> */}
+                <label style={labelStyle}>Tác giả</label>
+                <input required
+                    onChange={e => { setTacgia(e.target.value) }} value={tacgia}
+                ></input>
+            </div> */}
                             <div className="group-info col-6">
                                 <div className=" profile__avt flex flex-row items-center" style={{ flexDirection: "row" }}>
                                     <img src={preview} alt="" />
@@ -119,6 +131,20 @@ export default function CreateNovel(props) {
                                 <select style={labelStyle} onChange={e => { console.log(e.target.value); setTheloai(e.target.value) }} value={theloai} id="types" name="types">
                                     {
                                         theLoai.map(item => { return (<option value={item.maTheLoai}>{item.tenTheLoai}</option>) })
+                                    }
+                                </select>
+                            </div>
+                            <div className="group-info col-3">
+                                <label for="types">Bút danh</label>
+                                <select style={labelStyle} onChange={e => { console.log(e.target.value); setTacgia(e.target.value) }} defaultValue={listTacgia[0].maButDanh} id="types" name="types">
+                                    {
+                                        listTacgia?.map(item => (
+                                            item.trangthai === 0 ? (
+                                                <option key={item.maButDanh} value={item.maButDanh}>
+                                                    {item.tenButDanh}
+                                                </option>
+                                            ) : null
+                                        ))
                                     }
                                 </select>
                             </div>
@@ -151,7 +177,8 @@ export default function CreateNovel(props) {
                         </form>
                     </div>
                 </div>
-            </div>
+            </div> : <p>Lỗi xảy ra </p>}
+
             {/* } */}
         </>
 

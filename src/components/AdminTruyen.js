@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Modal, { ModalContent } from './Modal';
 import { DeleteOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined, LockOutlined, UnlockOutlined, UserOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { GetDanhSachTruyenAdmin } from '../service/actions/TruyenAction';
+import { GetDanhSachTruyenAdmin, TimKiemTruyenAcion } from '../service/actions/TruyenAction';
 import { apiKey } from '../service/http';
 
 export default function AdminTruyen() {
@@ -11,6 +11,7 @@ export default function AdminTruyen() {
     const [isSearching, setIsSearching] = useState(false);
     const [searchUser, setSearchUser] = useState([]);
     const [listUser, setListUser] = useState([]);
+    const [search, setSearch] = useState("");
     const closeModal = () => {
 
         setModalVisible(false);
@@ -193,6 +194,23 @@ export default function AdminTruyen() {
 
         setListUser(result)
     }
+
+    const handleSearchUsers = async () => {
+        console.log(search)
+        if (search != null && search.trim() !== "") {
+            const result = await TimKiemTruyenAcion(search);
+            console.log(result);
+            if (result.status === 200) {
+                setSearchUser(result.data);
+                setIsSearching(true);
+            }
+        } else {
+            getDs()
+            setIsSearching(false);
+        }
+
+    };
+
     useEffect(() => {
         getDs()
     }, [])
@@ -203,14 +221,14 @@ export default function AdminTruyen() {
                 <input
                     className='w-3/4'
                     placeholder='Tìm kiếm'
-                // onChange={
-                //     (e) => setSearch(e.target.value)
-                // }
-                // onKeyDown={(e) => {
-                //     if (e.key === 'Enter') {
-                //         handleSearchUsers();
-                //     }
-                // }}
+                    onChange={
+                        (e) => setSearch(e.target.value)
+                    }
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            handleSearchUsers();
+                        }
+                    }}
                 />
                 {/* <Button onClick={handleClickAddUser} type="primary">Thêm tài khoản</Button> */}
             </div>
