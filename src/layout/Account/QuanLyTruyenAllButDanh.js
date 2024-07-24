@@ -80,7 +80,7 @@ export default function QuanLyTruyenAllButDanh() {
             render: (th) => (th == 1 ? <p> Hiển thị</p> : <p>Không hiển thị</p>)
         },
         {
-            title: 'Có phí',
+            title: 'Tên bút danh',
             dataIndex: 'coPhi',
             key: 'coPhi',
             render: (th) => <>{th ? <i className="fa fa-check bg-green-500 p-2 rounded-2xl" />
@@ -105,8 +105,8 @@ export default function QuanLyTruyenAllButDanh() {
                     >
                         <Button><EyeInvisibleOutlined /></Button>
                     </Popconfirm> : <Popconfirm
-                        title="Hiện người dùng"
-                        description="Bạn có chắc muốn hiện người dùng không?"
+                        title="Hiện truyện"
+                        description="Bạn có chắc muốn hiện truyện không?"
                         onConfirm={() => {
                             HienTruyen(_.maTruyen)
                         }}
@@ -130,18 +130,18 @@ export default function QuanLyTruyenAllButDanh() {
             <button className='btn-primary' style={{ 'margin': '0px 10px' }}
                 onClick={onClickAddChapter}
             >Thêm truyện</button>
-
-            {list?.map((item) => {
+            <Table columns={columns} dataSource={list && list.length > 0 ? list : null} />
+            {/* {list?.map((item) => {
                 return (
                     <div>
                         <h1>Truyện của: {item?.tenButDanh}</h1>
-                        {item.truyen.length > 0 ? <Table columns={columns} dataSource={item.truyen.length > 0 ? item.truyen : null} /> : <p>Chưa có truyện</p>}
+                        {item.truyen.length > 0 ? : <p>Chưa có truyện</p>}
 
                     </div>
                 )
             }
             )
-            }
+            } */}
 
 
         </>
