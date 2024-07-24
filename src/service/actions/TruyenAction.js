@@ -1,254 +1,281 @@
 import { message } from "antd";
-import { apiKey } from "../http";
+import { apiKey } from "../http"
 
 export const GetChiTietChuongTruyenAction = async (id) => {
-  console.log(id, "4142142");
-  try {
-    let result;
-    if (localStorage.getItem("TOKEN")) {
-      result = await apiKey.getToken("Chuongtruyens/GetChiTietChuong", id);
-    } else {
-      result = await apiKey.get("Chuongtruyens/GetChiTietChuong", id);
+    console.log(id, "4142142")
+    try {
+        let result;
+        if (localStorage.getItem("TOKEN")) {
+            result = await apiKey.getToken("Chuongtruyens/GetChiTietChuong", id)
+        } else {
+            result = await apiKey.get("Chuongtruyens/GetChiTietChuong", id)
+
+        }
+        console.log(result)
+        if (result.status === 200)
+            return result
+
+    } catch (error) {
+        return error.response;
+
     }
-    console.log(result);
-    if (result.status === 200) return result;
-  } catch (error) {
-    return error.response;
-  }
-};
+}
 
 export const DangTruyen = async (data) => {
-  console.log(data);
-  try {
-    let result = await apiKey.post("api/Truyens", data);
-    console.log(result);
-    if (result.status === 201) return true;
-  } catch (error) {
-    console.log(error);
-    message.error("Lỗi xảy ra");
-  }
-};
+    console.log(data)
+    try {
+
+
+        let result = await apiKey.post("api/Truyens", data)
+        console.log(result)
+        if (result.status === 201)
+            return true;
+
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+    }
+}
 
 export const GetThongTinTruyen = async (id) => {
-  const data = {
-    id: id,
-  };
-  try {
-    let result = await apiKey.get("api/Truyens/GetTruyenID", data);
-    console.log(result);
-    if (result.status === 200) {
-      return result.data.data;
+    const data = {
+        id: id
     }
-  } catch (error) {
-    console.log(error);
-    message.error("Lỗi xảy ra");
-  }
-};
-export const GetTruyenMain = async () => {
-  try {
-    let result = await apiKey.get("api/Truyens/TrangChu");
+    try {
 
-    if (result.status === 200) {
-      return result.data;
+
+        let result = await apiKey.get("api/Truyens/GetTruyenID", data)
+        console.log(result)
+        if (result.status === 200) {
+            return result.data.data
+        }
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
     }
-  } catch (error) {
-    console.log(error);
-    message.error("Lỗi xảy ra");
-  }
-};
+}
+export const GetTruyenMain = async () => {
+    try {
+        let result = await apiKey.get("api/Truyens/TrangChu")
+
+        if (result.status === 200) {
+            return result.data
+        }
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+    }
+}
 export const SuaTruyen = async (id, data) => {
-  const data1 = {
-    id: id,
-  };
-  try {
-    let result = await apiKey.put("api/Truyens/SuaTruyen", data, data1);
-    console.log(result);
-    if (result.status === 201) return true;
-  } catch (error) {
-    console.log(error);
-    message.error("Lỗi xảy ra");
-  }
-};
-export const GetChiTietChuongTruyen = async (id) => {
-  const data = {
-    id: id,
-  };
-  try {
-    let result = await apiKey.get("api/Truyens/GetTruyenID", data);
-    console.log(result);
-    if (result.status === 200) {
-      return result.data.data;
+    const data1 = {
+        id: id
     }
-  } catch (error) {
-    console.log(error);
-    message.error("Lỗi xảy ra");
-  }
-};
+    try {
+
+
+        let result = await apiKey.put("api/Truyens/SuaTruyen", data, data1)
+        console.log(result)
+        if (result.status === 201)
+            return true;
+
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+    }
+}
+export const GetChiTietChuongTruyen = async (id) => {
+    const data = {
+        id: id
+    }
+    try {
+
+
+        let result = await apiKey.get("api/Truyens/GetTruyenID", data)
+        console.log(result)
+        if (result.status === 200) {
+            return result.data.data
+        }
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+    }
+}
+
 
 export const GetTruyenTheoButDanh = async (id) => {
-  const data = {
-    id: id,
-  };
-  try {
-    let result = await apiKey.get("api/Truyens/GetTruyenTheoButDanh", data);
-
-    if (result.status === 200) {
-      return result.data;
+    const data = {
+        id: id
     }
-  } catch (error) {
-    message.error("Lỗi xảy ra");
-    return error.response;
-  }
-};
+    try {
+        let result = await apiKey.get("api/Truyens/GetTruyenTheoButDanh", data)
+
+        if (result.status === 200) {
+            return result.data
+        }
+    } catch (error) {
+        message.error("Lỗi xảy ra")
+        return error.response
+
+    }
+}
 export const AnTruyenAction = async (id) => {
-  const data = {
-    id: id,
-  };
-  console.log(data);
-  try {
-    let result = await apiKey.put("api/Truyens/AnTruyen", null, data);
-
-    if (result.status === 200) {
-      return true;
+    const data = {
+        id: id
     }
-  } catch (error) {
-    console.log(error);
-    message.error("Lỗi xảy ra");
-  }
-};
+    console.log(data)
+    try {
+        let result = await apiKey.put("api/Truyens/AnTruyen", null, data)
+
+        if (result.status === 200) {
+            return true
+        }
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+    }
+}
 export const HienTruyenAction = async (id) => {
-  const data = {
-    id: id,
-  };
-  console.log(data);
-  try {
-    let result = await apiKey.put("api/Truyens/HienTruyen", null, data);
-
-    if (result.status === 200) {
-      return true;
+    const data = {
+        id: id
     }
-  } catch (error) {
-    console.log(error);
-    message.error("Lỗi xảy ra");
-  }
-};
+    console.log(data)
+    try {
+        let result = await apiKey.put("api/Truyens/HienTruyen", null, data)
+
+        if (result.status === 200) {
+            return true
+        }
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+    }
+}
+
 
 export const GetChuongTruyenTheoIDTruyen = async (id) => {
-  const data = {
-    maTruyen: id,
-  };
-
-  console.log(data);
-  try {
-    let result = await apiKey.getToken("Chuongtruyens/Danhsachchuong", data);
-
-    if (result.status === 200) {
-      return result.data;
+    const data = {
+        maTruyen: id
     }
-  } catch (error) {
-    console.log(error);
-    message.error("Lỗi xảy ra");
-    return error.response;
-  }
-};
+
+    console.log(data)
+    try {
+        let result = await apiKey.get("Chuongtruyens/Danhsachchuong", data)
+
+        if (result.status === 200) {
+            return result.data
+        }
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+        return error.response
+
+    }
+}
 export const GetCHiTietChuongTruyen = async (id) => {
-  const data = {
-    maChuong: id,
-  };
-
-  console.log(data);
-  try {
-    let result = await apiKey.get("Chuongtruyens/GetChiTietChuong", data);
-
-    if (result.status === 200) {
-      return result.data;
+    const data = {
+        maChuong: id
     }
-  } catch (error) {
-    console.log(error);
-    message.error("Lỗi xảy ra");
-    return error.response;
-  }
-};
+
+    console.log(data)
+    try {
+        let result = await apiKey.get("Chuongtruyens/GetChiTietChuong", data)
+
+        if (result.status === 200) {
+            return result.data
+        }
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+        return error.response
+
+    }
+}
 export const SuaChuongTruyenAction = async (id, data) => {
-  const data1 = {
-    id: id,
-  };
-  try {
-    let result = await apiKey.put(
-      "Chuongtruyens/CapNhapChuongTruyen",
-      data,
-      data1
-    );
-    console.log(result);
-    if (result.status === 201) return true;
-  } catch (error) {
-    console.log(error);
-    message.error("Lỗi xảy ra");
-  }
-};
+    const data1 = {
+        id: id
+    }
+    try {
+
+
+        let result = await apiKey.put("Chuongtruyens/CapNhapChuongTruyen", data, data1)
+        console.log(result)
+        if (result.status === 201)
+            return true;
+
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+    }
+}
 
 export const DangChuongTruyenAction = async (data) => {
-  console.log(data);
-  try {
-    let result = await apiKey.post("Chuongtruyens", data);
-    console.log(result);
-    if (result.status === 201) return true;
-  } catch (error) {
-    console.log(error);
-    message.error("Lỗi xảy ra");
-  }
-};
+    console.log(data)
+    try {
+
+
+        let result = await apiKey.post("Chuongtruyens", data)
+        console.log(result)
+        if (result.status === 201)
+            return true;
+
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+    }
+}
+
 
 //Adminb
 
 export const GetDanhSachTruyenAdmin = async () => {
-  try {
-    const result = await apiKey.get("api/Truyens/GetDSTruyenAdmin");
-    console.log(result);
-    return result.data.data;
-  } catch (error) {
-    return null;
-  }
-};
+    try {
+        const result = await apiKey.get("api/Truyens/GetDSTruyenAdmin");
+        console.log(result)
+        return result.data.data;
+    } catch (error) {
+        return null;
+    }
+}
 
 export const GetDanhSachTruyenCanDuyet = async () => {
-  try {
-    const result = await apiKey.get("api/Truyens/DanhsachTruyenCanDuyet");
-    console.log(result);
+    try {
+        const result = await apiKey.get("api/Truyens/DanhsachTruyenCanDuyet");
+        console.log(result)
 
-    return result.data.data;
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-};
+        return result.data.data
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
 
 export const DuyetTruyenaction = async (id) => {
-  const data = {
-    maTruyen: id,
-  };
-  try {
-    const result = await apiKey.put("api/Truyens/DuyetTruyen", null, data);
-    console.log(result);
+    const data = {
+        maTruyen: id
+    }
+    try {
+        const result = await apiKey.put("api/Truyens/DuyetTruyen", null, data);
+        console.log(result)
 
-    return result.data;
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-};
+        return result.data
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 
 export const TimKiemTruyenAcion = async (tenTruyen) => {
-  const data = {
-    tenTruyen,
-  };
-  try {
-    const result = await apiKey.get("api/Truyens/GetTruyenTheoTenTruyen", data);
-    console.log(result);
+    const data = {
+        tenTruyen
+    }
+    try {
+        const result = await apiKey.get("api/Truyens/GetTruyenTheoTenTruyen", data);
+        console.log(result)
 
-    return result.data;
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-};
+        return result.data
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
