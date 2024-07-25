@@ -54,7 +54,7 @@ export default function HeaderFile() {
 
   const toggleUserMenu = () => {
     setUserMenuOpen(!isUserMenuOpen);
-};
+  };
 
   return (
     <>
@@ -66,26 +66,12 @@ export default function HeaderFile() {
             </button>
             <div className="navbar__items__expand">
               <ul className="navbar-nav__list__expand">
-                <Link to={"/"}>
-                  <li>Đăng truyện</li>
-                </Link>
-                {user ? (
-                  <Link to="/userDetail">
-                    <i
-                      style={{ marginRight: "4px" }}
-                      className="fa-solid fa-user"
-                    ></i>
-                  </Link>
-                ) : (
-                  <>
-                    <a onClick={hienDangNha}>
-                      <li>Đăng nhập</li>
-                    </a>
-                    <a onClick={hienDangKy}>
-                      <li>Đăng ký</li>
-                    </a>
-                  </>
-                )}
+                <a onClick={hienDangNha}>
+                  <li>Đăng nhập</li>
+                </a>
+                <a onClick={hienDangKy}>
+                  <li>Đăng ký</li>
+                </a>
               </ul>
             </div>
           </div>
@@ -97,8 +83,7 @@ export default function HeaderFile() {
           </div>
 
           <div className="navbar-nav">
-            <ul className="navbar-nav__list">
-            </ul>
+            <ul className="navbar-nav__list"></ul>
             <div className="navbar-nav__list__search">
               <div className="form-group">
                 <input
@@ -130,7 +115,10 @@ export default function HeaderFile() {
                     <div className="navbar-nav__profile__name cursor-pointer">
                       {userInfo.anhDaiDien !== "string" &&
                       userInfo.anhDaiDien !== null ? (
-                        <div onClick={toggleUserMenu} className="navbar-nav__avatar">
+                        <div
+                          onClick={toggleUserMenu}
+                          className="navbar-nav__avatar"
+                        >
                           <img
                             src={userInfo.anhDaiDien}
                             alt={`${userInfo.email} picture`}
@@ -141,79 +129,13 @@ export default function HeaderFile() {
                           />
                         </div>
                       ) : (
-                        <div onClick={toggleUserMenu} >
+                        <div onClick={toggleUserMenu}>
                           <i
                             style={{ marginRight: "4px" }}
                             className="fa-solid fa-user"
                           ></i>
                         </div>
                       )}
-                      <a>{user.name || user.tenhienthi || user.username}</a>
-
-                        <ul className='navbar-nav__list navbar-nav__list--right'>
-
-                            {userInfo?.daXoa ? null : (
-                                userInfo?.trangThai ? (
-                                    <>
-                                        <Link to={`/QuanLyBanThao`}>
-                                            <li>
-                                                Quản lý bản thảo
-                                            </li>
-                                        </Link>
-                                        <Link to={`/QuanLyTruyenCuaMinh`}>
-                                            <li>
-                                                Quản lý truyện
-                                            </li>
-                                        </Link>
-                                        <Link to={`/ButDanh`}>
-                                            <li>
-                                                <i style={{ marginRight: '4px' }} className="fa-regular fa-circle-up"></i>
-                                                Bút danh
-                                            </li>
-                                        </Link>
-                                        {userInfo.maQuyen === 1 && (
-                                            <Link to="/admin">
-                                                <li>Quản lý</li>
-                                            </Link>
-                                        )}
-                                    </>
-                                ) : null
-                            )}
-
-
-
-
-
-
-                            {
-                                user ?
-                                    <div className='navbar-nav__profile d-flex items-center'>
-                                        {userInfo?.daXoa ? null : <div className="navbar-nav__profile__name cursor-pointer">
-                                            {userInfo.anhDaiDien !== "string" && userInfo.anhDaiDien !== null ?
-                                                <Link to={"/UserDetail"} className='navbar-nav__avatar'>
-                                                    <img
-                                                        src={userInfo.anhDaiDien}
-                                                        alt={`${userInfo.email} picture`}
-                                                        onError={(e) => { e.target.onerror = null; e.target.src = anhDaiDienmacdinh; }}
-                                                    />
-                                                </Link>
-                                                :
-                                                <Link to={"/UserDetail"}>
-                                                    <i style={{ marginRight: '4px' }} className="fa-solid fa-user"></i>
-                                                </Link>
-                                            }
-                                            <a>{user.name || user.tenhienthi || user.username}</a>
-                                        </div>}
-
-                                        <a onClick={onClickLogout}>Đăng xuất</a>
-                                    </div>
-                                    :
-                                    <>
-                                        <a onClick={hienDangNha}><li>Đăng nhập</li></a>
-                                        <a onClick={hienDangKy}><li>Đăng ký</li></a>
-                                    </>
-                            }
-                        </ul>
                     </div>
                   )}
 

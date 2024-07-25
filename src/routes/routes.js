@@ -248,7 +248,7 @@ const ROUTES = [
         index: 29,
         path: "QuanLyBanThao",
         element: <QuanLyButDanhUser></QuanLyButDanhUser>,
-        auth: true,
+        auth: false,
         roles: [],
     },
 ];

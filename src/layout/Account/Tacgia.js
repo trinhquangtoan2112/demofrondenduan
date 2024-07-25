@@ -14,6 +14,11 @@ const menu = [
         display: "Quản lý truyện",
         icon: ""
     },
+    {
+        path: "QuanLyBanThao",
+        display: "Quản lý bản thảo",
+        icon: ""
+    },
 
 ]
 export default function Tacgia() {
