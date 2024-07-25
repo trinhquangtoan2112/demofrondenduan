@@ -5,65 +5,18 @@ import { Link, Outlet } from 'react-router-dom';
 import HeaderFile from '../../components/HeaderFile';
 const menu = [
     {
-        path: "quanlynguoidung", 
-        display: "Quản lý thành viên",
+        path: "ButDanh",
+        display: "Bút Danh",
         icon: ""
     },
     {
-        path: "TheLoaiAdmin",
-        display: "Thể Loại",
-        icon: ""
-    },
-
-
-    {
-        path: "TruyenAdmin",
+        path: "QuanLyTruyenCuaMinh",
         display: "Quản lý truyện",
         icon: ""
     },
 
-    {
-        path: "FeedbackAdmin",
-        display: "Phản hồi",
-        icon: ""
-    },
-    {
-        path: "ButDanhAdmin",
-        display: "Quản lý bút danh",
-        icon: ""
-    },
-    {
-        path: "BaoCaoAdmin",
-        display: "Quản lý báo cáo",
-        icon: ""
-    },
-    {
-        path: "DuyetTruyen",
-        display: "Duyệt truyện",
-        icon: ""
-    },
-    {
-        path: "DuyetChuong",
-        display: "Duyệt chương",
-        icon: ""
-    },
 ]
-export default function Admin() {
-    // const user = useSelector(state => state.auth.login?.user);
-    const [userInfo, setUserInfo] = useState(null);
-    // const { pathname } = useLocation();
-    // const dispatch = useDispatch();
-    // const active = menu.findIndex(e => e.path === pathname.split('/')[2]);
-
-    // useEffect(() => {
-    //   const getUser = async () => {
-    //     const res = getData(await apiMain.getUserInfo(user, dispatch, loginSuccess));
-    //     setUserInfo(res.userInfo)
-    //   }
-    //   getUser()
-    // }, [])
-
-
+export default function Tacgia() {
 
     return (
         <>

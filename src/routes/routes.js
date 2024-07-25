@@ -3,7 +3,7 @@ import Profile from "../layout/Account/Profile";
 import User from "../layout/Account/User";
 import Active from "../layout/Actiive/Active";
 import Chapter from "../layout/Chapter/Chapter";
-import Home from "../layout/Home/Home";
+import Home from "../layout/Home/Home"; 
 import HomePage from "../layout/HomePage";
 import Admin from './../layout/Account/Admin';
 import Feedback from './../layout/Feedback/Feedback';
@@ -24,6 +24,7 @@ import KetQuaGiaoDich from "../components/KetQuaGiaoDich";
 import DuyetTruyen from "../layout/Admin/DuyetTruyen";
 import DuyetChuong from "../layout/Admin/DuyetChuong";
 import Searching from "../components/Searching";
+import UserMenuModal from "../components/UserMenuModal";
 import QuanLyTruyenAllButDanh from "../layout/Account/QuanLyTruyenAllButDanh";
 
 
@@ -64,7 +65,7 @@ const ROUTES = [
     },
     {
         index: 5,
-        path: '',
+        path: 'quanlynguoidung',
         element: <User></User>,
         auth: false,
         roles: [],
@@ -145,7 +146,7 @@ const ROUTES = [
         index: 16,
         path: "ButDanh",
         element: <ButDanh></ButDanh>,
-        auth: true,
+        auth: false,
         roles: [],
     },
     {
@@ -231,8 +232,16 @@ const ROUTES = [
         index: 28,
         path: "QuanLyTruyenCuaMinh",
         element: <QuanLyTruyenAllButDanh></QuanLyTruyenAllButDanh>,
+        auth: false,
+        roles: [],
+    },
+    {
+        index: 29,
+        path: 'UserMenuModal',
+        element: <UserMenuModal></UserMenuModal>,
         auth: true,
         roles: [],
+
     },
 ];
 
