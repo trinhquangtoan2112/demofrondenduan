@@ -64,10 +64,10 @@ function StoryDetail() {
       }
       const chapters = result?.data || []; // Default to an empty array if undefined
 
-        // Calculate chapter likes only if chapters is an array
-        const chapterLikes = Array.isArray(chapters)
-          ? chapters.reduce((sum, chapter) => sum + (chapter.solike || 0), 0)
-          : 0;
+      // Calculate chapter likes only if chapters is an array
+      const chapterLikes = Array.isArray(chapters)
+        ? chapters.reduce((sum, chapter) => sum + (chapter.solike || 0), 0)
+        : 0;
       setTruyen(result);
       setLikesCount(result?.solike + chapterLikes || 0);
     };
@@ -160,6 +160,18 @@ function StoryDetail() {
         message.error("Failed to add bookmark. It might already exist.");
       }
     }
+  };
+
+  const copyToClipboard = () => {
+    const link = window.location.href;
+    navigator.clipboard
+      .writeText(link)
+      .then(() => {
+        alert("Lấy đường dẫn chia sẻ thành công: "+ link );
+      })
+      .catch((err) => {
+        console.error("Thất bại", err);
+      });
   };
 
   const handleReportClick = (maTruyenBaocao) => {
@@ -286,12 +298,22 @@ function StoryDetail() {
               <div className="col-9" style={{ overflowY: "scroll" }}>
                 <div className="flex justify-between items-center">
                   <div className="row bold">Giới Thiệu</div>
-                  <button
-                    className="text-yellow-500 hover:text-yellow-600"
-                    onClick={() => handleReportClick(truyen.maTruyen)}
-                  >
-                    <i className="fa-solid fa-flag"></i>
-                  </button>
+                  <div>
+                    <button
+                    style={{border:'1px solid gray', padding:'5px 10px', borderRadius:'50%'}}
+                      className="text-yellow-500 hover:text-yellow-600"
+                      onClick={() => handleReportClick(truyen.maTruyen)}
+                    >
+                      <i className="fa-solid fa-flag"></i>
+                    </button>
+                    <button
+                    style={{border:'1px solid gray', padding:'5px 10px', borderRadius:'50%', marginLeft:'10px'}}
+                      className="text-yellow-500 hover:text-yellow-600"
+                      onClick={copyToClipboard}
+                    >
+                      <i className="fa-solid fa-share"></i>
+                    </button>
+                  </div>
                 </div>
 
                 {truyen?.moTa != null ? parse(truyen?.moTa) : "Không có gì"}
