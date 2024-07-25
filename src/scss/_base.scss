@@ -1,5 +1,4 @@
-@each $color,
-$val in $colors {
+@each $color, $val in $colors {
     .color-#{$color} {
         color: $val;
     }
@@ -32,7 +31,7 @@ $val in $colors {
 
 @each $val in $numbers {
     .col-#{$val} {
-        width: ($val/12)*100%;
+        width: ($val/12) * 100%;
         padding-left: 10px;
         padding-right: 10px;
     }
@@ -66,7 +65,7 @@ $val in $colors {
 
 .main {
     margin-top: 72px;
-    margin-bottom: 2rem;
+    // margin-bottom: 2rem;
     min-height: 100vh;
 }
 
@@ -83,7 +82,7 @@ form {
         color: #fff;
         font-size: 16px;
         font-weight: 600;
-        border: .5px solid rgba(248, 170, 106, 0.514);
+        border: 0.5px solid rgba(248, 170, 106, 0.514);
         border-radius: 20px;
         background-color: $main-color;
         cursor: pointer;
@@ -101,7 +100,7 @@ form {
     color: #fff;
     font-size: 16px;
     font-weight: 600;
-    border: .5px solid rgba(248, 170, 106, 0.514);
+    border: 0.5px solid rgba(248, 170, 106, 0.514);
     border-radius: 20px;
     background-color: $main-color;
     cursor: pointer;
@@ -117,7 +116,7 @@ form {
     color: #333;
     font-size: 16px;
     font-weight: 600;
-    border: .5px solid #444;
+    border: 0.5px solid #444;
     border-radius: 20px;
     background-color: transparent;
     cursor: pointer;
@@ -132,15 +131,15 @@ select {
     height: 42px;
     margin: 0 10px;
     padding: 4px 12px;
-    transition: border-color .2s ease-in-out;
+    transition: border-color 0.2s ease-in-out;
     font-size: 15px;
     &:focus {
-        border-color: rgba($main-color, .6);
+        border-color: rgba($main-color, 0.6);
     }
 }
 
 .Toastify__toast-container--top-right {
-    top: 4rem !important
+    top: 4rem !important;
 }
 
 .text-overflow-1-lines {

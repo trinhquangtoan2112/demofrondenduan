@@ -3,7 +3,7 @@ import Profile from "../layout/Account/Profile";
 import User from "../layout/Account/User";
 import Active from "../layout/Actiive/Active";
 import Chapter from "../layout/Chapter/Chapter";
-import Home from "../layout/Home/Home"; 
+import Home from "../layout/Home/Home";
 import HomePage from "../layout/HomePage";
 import Admin from './../layout/Account/Admin';
 import Feedback from './../layout/Feedback/Feedback';
@@ -27,6 +27,9 @@ import Searching from "../components/Searching";
 import UserMenuModal from "../components/UserMenuModal";
 import QuanLyTruyenAllButDanh from "../layout/Account/QuanLyTruyenAllButDanh";
 import QuanLyButDanhUser from "../layout/Account/QuanLyButDanhUser";
+import ThembanThao from "../layout/BanThao/ThembanThao";
+import DanhSachBanThao from "../layout/BanThao/DanhSachBanThao";
+import ListChuongAdmin from "../layout/Chapter/ListChuongAdmin";
 
 
 
@@ -245,9 +248,30 @@ const ROUTES = [
 
     },
     {
-        index: 29,
+        index: 30,
         path: "QuanLyBanThao",
         element: <QuanLyButDanhUser></QuanLyButDanhUser>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 31,
+        path: "ThemBanThao/:id",
+        element: <ThembanThao></ThembanThao>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 32,
+        path: "DanhSachBanThaoCuaTruyen/:id",
+        element: <DanhSachBanThao></DanhSachBanThao>,
+        auth: true,
+        roles: [],
+    },
+    {
+        index: 33,
+        path: "TruyenAdmin/ListChuong/:id",
+        element: <ListChuongAdmin></ListChuongAdmin>,
         auth: false,
         roles: [],
     },
