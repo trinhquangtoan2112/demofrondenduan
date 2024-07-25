@@ -112,10 +112,12 @@ export default function HeaderFile() {
               {user ? (
                 <div className="navbar-nav__profile d-flex items-center">
                   {userInfo?.daXoa ? null : (
-                    <div className="navbar-nav__profile__name cursor-pointer">
+                    <div
+                    className="navbar-nav__profile__name cursor-pointer">
                       {userInfo.anhDaiDien !== "string" &&
                       userInfo.anhDaiDien !== null ? (
                         <div
+                        style={{marginRight:'10px'}}
                           onClick={toggleUserMenu}
                           className="navbar-nav__avatar"
                         >
