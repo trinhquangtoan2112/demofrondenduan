@@ -15,6 +15,7 @@ import {
   xoalike,
   checklike,
 } from "../../service/actions/LikeAction.js";
+import { setFontStyle, setFormChu } from "../../store/reducer/TienIchReducer.js";
 
 function Chapter(props) {
   console.log(111);
@@ -22,22 +23,21 @@ function Chapter(props) {
   const [chapter, setChapter] = useState({});
   const [manual, setManual] = useState("");
   const [content, setContnet] = useState("Khong co gi");
-  const [fontsize, setFontsize] = useState(18);
+
   const [lineHeight, setLineHeight] = useState(1.5);
   const [fontName, setFontName] = useState("Arial");
-  // const user = useSelector(state => state.auth.login?.user)
   const dispatch = useDispatch();
   const contentRef = useRef(null);
   const userInfo = useSelector((state) => state.UserReducer.userInfo);
   const [maChuongTruyenBaoCao, setReportingChuongtruyen] = useState(null);
   const [reportModalVisible, setReportModalVisible] = useState(false);
   const [likesChuong, setLikesChuong] = useState({});
-
+  const allFontKieuChu = useSelector((state) => state.TienIchReducer.allFontKieuChu);
+  const fontChu = useSelector((state) => state.TienIchReducer.fontChu);
+  const fontStyle = useSelector((state) => state.TienIchReducer.fontStyle);
+  console.log(allFontKieuChu)
   useEffect(() => {
-    //xử lý đánh dấu truyện đang đọc
     const handleSetReading = async () => {
-      //tạo hàm
-
       const data = {
         maChuong: maChuong,
       };
@@ -96,14 +96,7 @@ function Chapter(props) {
 
     checkLike();
 
-    handleSetReading(); //gọi hàm
-    // if (localStorage.getItem("TOKEN")) {
-    //     try {
-    //         LuuLichSu()
-    //     } catch (error) {
-
-    //     }
-    // }
+    handleSetReading();
     if (localStorage.getItem("TOKEN")) {
       LuuLichSu();
     }
@@ -185,45 +178,50 @@ function Chapter(props) {
           solike: prev.solike - 1,
         }));
       }
-    }  catch (error) {
+    } catch (error) {
       console.error("Error:", error);
       message.error("Failed to update like status.");
     }
   };
-  // useEffect(() => {//Xử lý load dữ liệu chương truyện
-  //     const getChapter = async () => {//tạo hàm
-  //         apiMain.getChapterByNumber(url, chapnum)
-  //             .then(res => {
-  //                 setChapter(getData(res))
-  //             })
-  //             .catch(err => {
-  //                 console.log(err)
-  //             })
-  //     }
-  //     getChapter()//gọi hàm
-  // }, [chapnum])
-
-  // useEffect(() => {//xử lý hiển thị nội dung truyện
-  //     contentRef.current.innerHTML = chapter?.content || ""
-  // }, [chapter])
-
-  // useEffect(() => {//xử lý sự kiện click khi đọc truyện
-  //     const handleClick = () => {//khi click sẽ set manual về "" để ẩn manual
-  //         setManual("")
-  //     }
-  //     document.addEventListener("click", handleClick)
-  //     return () => { document.removeEventListener("click", handleClick) }
-  // }, [])
   const renderNoiDung = () => {
     return <div>{parse(chapter.content)}</div>;
   };
+  const renderTienIchFontSize = () => {
+    const options = [];
+    for (let i = 10; i < 30; i++) {
+      options.push(<option key={i} value={i}>{i}px</option>);
+    }
+    return options
+  }
+  const renderTienIchFont = () => {
+    const options = [];
+    for (let i = 0; i < allFontKieuChu.length; i++) {
+      options.push(<option key={allFontKieuChu[i].style} value={allFontKieuChu[i].style}>{allFontKieuChu[i].name}</option>);
+    }
+    return options
+  }
   return (
     <>
       <div
         className="main"
         style={{ backgroundColor: "#ced9d9", paddingTop: "30px" }}
       >
+
         {audioUrl && <audio controls src={audioUrl}></audio>}
+        <p>Font size</p>
+        <select defaultValue={fontChu} onChange={(e) => {
+          dispatch(setFormChu(e.target.value))
+        }}>
+          {renderTienIchFontSize()}
+        </select>
+        <p>Font</p>
+        <select defaultValue={fontStyle} onChange={(e) => {
+          dispatch(setFontStyle(e.target.value))
+        }}>
+          {renderTienIchFont()}
+        </select>
+
+
         <div className="container">
           <div
             className="main-content"
@@ -233,126 +231,12 @@ function Chapter(props) {
               backgroundColor: "#e1e8e8",
             }}
           >
-            {/* <ul className='chapter-manual fs-24'>
-=======
-    const renderTienIchFontSize = () => {
-        const options = [];
-        for (let i = 10; i < 30; i++) {
-            options.push(<option key={i} value={i}>{i}px</option>);
-        }
-        return options
-    }
-    const renderTienIchFont = () => {
-        const fonts = [
-            { name: "Arial", style: 'Arial' },
-            { name: "Courier New", style: 'Courier New ' },
-            { name: "Georgia", style: 'Georgia' },
-            { name: "Times New Roman", style: 'Times New Roman' },
-            { name: "Verdana", style: 'Verdana' }
-        ];
-        const options = [];
-        for (let i = 0; i < fonts.length; i++) {
-            options.push(<option key={fonts[i].style} value={fonts[i].style}>{fonts[i].name}</option>);
-        }
-        return options
-    }
-    return (<>
-        <div className="main" style={{ backgroundColor: "#ced9d9", paddingTop: "30px" }}>
-            {audioUrl && <audio controls src={audioUrl}></audio>}
-            <p>Font size</p>
-            <select defaultValue={18} onChange={(e) => {
-                setFontsize(e.target.value)
-            }}>
-                {renderTienIchFontSize()}
 
-            </select>
-            <p>Font</p>
-            <select defaultValue={"Arial"} onChange={(e) => {
-                console.log(e.target.value)
-                setFontName(e.target.value)
-            }}>
-                {renderTienIchFont()}
-            </select>
-            <div className="container">
-                <div className="main-content" style={{ "position": "relative", margin: "0 80px", backgroundColor: "#e1e8e8" }}>
-                    {/* <ul className='chapter-manual fs-24'>
->>>>>>> 41ce47954822e76eebcbaad5b12dda37f49d7761
-                        <li className={`chapter-manual__item ${manual === 'list-chap' ? 'active' : ''}`} onClick={(e) => {
-                            e.stopPropagation();
-                            if (manual === 'list-chap')
-                                setChapter("")
-                            else
-                                setManual("list-chap")
-                        }}>
-                            <a><i className="fa-solid fa-bars"></i></a>
-                            <div className="chapter-manual__popup" >
-                                <div className="list-chapter" style={{ width: "700px", "maxHeight": "500px", "overflow": "scroll" }}>
-                                    {/* <ListChapter url={url} col={2} fontsize={15} /> */}
-            {/* </div>
-                            </div>
 
-                        </li>
-                        <li className={`chapter-manual__item ${manual === 'setting' ? 'active' : ''}`} onClick={(e) => {
-                            e.stopPropagation();
-                            if (manual === "setting")
-                                setManual("")
-                            else
-                                setManual("setting")
-                        }}>
-                            <a><i className="fa-solid fa-gear"></i></a>
-                            <div className="chapter-manual__popup">
-                                <h4>Cài đặt</h4>
-                                <div className="chapter-setting">
-                                    <table className='chapter-setting__body fs-18'>
-                                        <tbody>
-                                            <tr>
-                                                <td className='col-4'>
-                                                    <div className='chapter-setting__label'>
-                                                        <i className="fa-solid fa-font"></i>
-                                                        Cỡ chữ
-                                                    </div>
-                                                </td>
-                                                <td className='col-8'>
-                                                    <div className='d-flex chapter-setting__input'>
-                                                        <button onClick={() => { setFontsize(pre => pre - 1) }}><i className="fa-solid fa-minus"></i></button>
-                                                        <div>{`${fontsize}px`}</div>
-                                                        <button onClick={() => { setFontsize(pre => pre + 1) }}><i className="fa-solid fa-plus"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td className='col-4'>
-                                                    <div className='chapter-setting__label'>
-                                                        <i className="fa-solid fa-font"></i>
-                                                        Giãn dòng
-                                                    </div>
-                                                </td>
-                                                <td className='col-8'>
-                                                    <div className='d-flex chapter-setting__input'>
-                                                        <button onClick={() => { setLineHeight(pre => { return Number((pre - 0.1).toFixed(1)) }) }}><i className="fa-solid fa-minus"></i></button>
-                                                        <div>{`${lineHeight}`}</div>
-                                                        <button onClick={() => { setLineHeight(pre => { return Number((pre + 0.1).toFixed(1)) }) }}><i className="fa-solid fa-plus"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                            </div>
-                        </li>
-                        <li className='chapter-manual__item'>
-                            <a
-                            // to={`/truyen/${url}`}
-                            ><i className="fa-solid fa-arrow-left"></i></a>
-                        </li>
-                        <li className='chapter-manual__item'><a><i className="fa-solid fa-comments"></i></a> </li>
-
-                    </ul> */}
             <button onClick={handleSpeak}>Đọc văn bản</button>
             <div
               className="d-lex"
-              style={{ fontSize: `${fontsize}px`, fontFamily: `${fontName}` }}
+              style={{ fontSize: `${fontChu}px`, fontFamily: `${fontStyle}` }}
             >
               {chapter?.stt ? (
                 <h1 className="chapter-name">
@@ -368,7 +252,7 @@ function Chapter(props) {
                     <p>Lỗi xảy ra hãy reset lại web</p>
                   )}
                 </div>
-                
+
               </div>
               <div>Số Like: {chapter?.solike || 0}</div>
             </div>
@@ -390,7 +274,7 @@ function Chapter(props) {
 
               <div style={{ display: "flex" }}>
                 <button
-                  style={{ padding: "5px 10px", border: "1px solid #ff7300" ,margin:'0 5px'}}
+                  style={{ padding: "5px 10px", border: "1px solid #ff7300", margin: '0 5px' }}
                   className="text-yellow-500 hover:text-yellow-600"
                   onClick={() => handleReportClick(maChuong)}
                 >
@@ -398,14 +282,14 @@ function Chapter(props) {
                 </button>
                 {likesChuong ? (
                   <button
-                    style={{ minWidth: "10px", color: "red" ,padding: "5px 10px", border: "1px solid #ff7300" ,margin:'0 5px'}}
+                    style={{ minWidth: "10px", color: "red", padding: "5px 10px", border: "1px solid #ff7300", margin: '0 5px' }}
                     onClick={() => handLike(1)}
                   >
                     <i className="fa fa-heart"></i>
                   </button>
                 ) : (
                   <button
-                    style={{ minWidth: "10px" ,padding: "5px 10px", border: "1px solid #ff7300" ,margin:'0 5px'}}
+                    style={{ minWidth: "10px", padding: "5px 10px", border: "1px solid #ff7300", margin: '0 5px' }}
                     onClick={() => handLike(0)}
                   >
                     <i className="fa fa-heart"></i>

@@ -61,12 +61,7 @@ export default function QuanLyTruyenAllButDanh() {
             key: 'ngayCapNhat',
             render: (th) => <>{th != null ? <p>{dayjs(th).format("DD-MM-YYYY")}</p> : <p>Không có</p>} </>
         },
-        {
-            title: 'Lượt đọc',
-            dataIndex: 'luotdoc',
-            key: 'luotdoc',
-            render: (th) => <>{th != null ? <p>{th}</p> : <p>Không xác định</p>} </>
-        },
+
         {
             title: 'Công bố',
             dataIndex: 'congBo',
@@ -80,43 +75,46 @@ export default function QuanLyTruyenAllButDanh() {
             render: (th) => (th == 1 ? <p> Hiển thị</p> : <p>Không hiển thị</p>)
         },
         {
-            title: 'Có phí',
-            dataIndex: 'coPhi',
-            key: 'coPhi',
-            render: (th) => <>{th ? <i className="fa fa-check bg-green-500 p-2 rounded-2xl" />
-                : <p>Không</p>} </>
+            title: 'Tên bút danh',
+            dataIndex: 'tenButDanh',
+            key: 'tenButDanh',
+
         },
         {
             title: 'Action',
             key: 'action',
             render: (_, record) => (
-                < div >
-                    <Link to={`/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
-                    <Link to={`/QuanLyChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
-                    {_.congBo == 1 ? <Popconfirm
-                        title="Ẩn truyện"
-                        description="Bạn có chắc muốn ẩn truyện ko không?"
-                        onConfirm={() => {
-                            AnTruyen(_.maTruyen)
-                        }}
-                        onCancel={cancel}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button><EyeInvisibleOutlined /></Button>
-                    </Popconfirm> : <Popconfirm
-                        title="Hiện người dùng"
-                        description="Bạn có chắc muốn hiện người dùng không?"
-                        onConfirm={() => {
-                            HienTruyen(_.maTruyen)
-                        }}
-                        onCancel={cancel}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button><EyeOutlined /></Button>
-                    </Popconfirm>}
-                </div >
+                <>
+                    {
+                        _.trangThaiButDanh == 1 ? <p>Bạn đã bị khóa bút danh</p> : < div >
+                            <Link to={`/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
+                            <Link to={`/QuanLyChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
+                            {_.congBo == 1 ? <Popconfirm
+                                title="Ẩn truyện"
+                                description="Bạn có chắc muốn ẩn truyện ko không?"
+                                onConfirm={() => {
+                                    AnTruyen(_.maTruyen)
+                                }}
+                                onCancel={cancel}
+                                okText="Yes"
+                                cancelText="No"
+                            >
+                                <Button><EyeInvisibleOutlined /></Button>
+                            </Popconfirm> : <Popconfirm
+                                title="Hiện truyện"
+                                description="Bạn có chắc muốn hiện truyện không?"
+                                onConfirm={() => {
+                                    HienTruyen(_.maTruyen)
+                                }}
+                                onCancel={cancel}
+                                okText="Yes"
+                                cancelText="No"
+                            >
+                                <Button><EyeOutlined /></Button>
+                            </Popconfirm>}
+                        </div >
+                    }
+                </>
             ),
         }
     ];
@@ -130,18 +128,18 @@ export default function QuanLyTruyenAllButDanh() {
             <button className='btn-primary' style={{ 'margin': '0px 10px' }}
                 onClick={onClickAddChapter}
             >Thêm truyện</button>
-
-            {list?.map((item) => {
+            <Table columns={columns} dataSource={list && list.length > 0 ? list : null} />
+            {/* {list?.map((item) => {
                 return (
                     <div>
                         <h1>Truyện của: {item?.tenButDanh}</h1>
-                        {item.truyen.length > 0 ? <Table columns={columns} dataSource={item.truyen.length > 0 ? item.truyen : null} /> : <p>Chưa có truyện</p>}
+                        {item.truyen.length > 0 ? : <p>Chưa có truyện</p>}
 
                     </div>
                 )
             }
             )
-            }
+            } */}
 
 
         </>

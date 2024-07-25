@@ -26,6 +26,7 @@ import DuyetChuong from "../layout/Admin/DuyetChuong";
 import Searching from "../components/Searching";
 import UserMenuModal from "../components/UserMenuModal";
 import QuanLyTruyenAllButDanh from "../layout/Account/QuanLyTruyenAllButDanh";
+import QuanLyButDanhUser from "../layout/Account/QuanLyButDanhUser";
 
 
 
@@ -242,6 +243,13 @@ const ROUTES = [
         auth: true,
         roles: [],
 
+    },
+    {
+        index: 29,
+        path: "QuanLyBanThao",
+        element: <QuanLyButDanhUser></QuanLyButDanhUser>,
+        auth: true,
+        roles: [],
     },
 ];
 
