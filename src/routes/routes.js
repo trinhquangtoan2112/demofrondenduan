@@ -30,6 +30,7 @@ import QuanLyButDanhUser from "../layout/Account/QuanLyButDanhUser";
 import ThembanThao from "../layout/BanThao/ThembanThao";
 import DanhSachBanThao from "../layout/BanThao/DanhSachBanThao";
 import ListChuongAdmin from "../layout/Chapter/ListChuongAdmin";
+import EditBanThao from "../layout/BanThao/EditBanThao";
 
 
 
@@ -251,27 +252,34 @@ const ROUTES = [
         index: 30,
         path: "QuanLyBanThao",
         element: <QuanLyButDanhUser></QuanLyButDanhUser>,
-        auth: true,
+        auth: false,
         roles: [],
     },
     {
         index: 31,
         path: "ThemBanThao/:id",
         element: <ThembanThao></ThembanThao>,
-        auth: true,
+        auth: false,
         roles: [],
     },
     {
         index: 32,
         path: "DanhSachBanThaoCuaTruyen/:id",
         element: <DanhSachBanThao></DanhSachBanThao>,
-        auth: true,
+        auth: false,
         roles: [],
     },
     {
         index: 33,
         path: "TruyenAdmin/ListChuong/:id",
         element: <ListChuongAdmin></ListChuongAdmin>,
+        auth: false,
+        roles: [],
+    },
+    {
+        index: 34,
+        path: "ChinhSuaBanThao/:idChuong",
+        element: <EditBanThao></EditBanThao>,
         auth: false,
         roles: [],
     },

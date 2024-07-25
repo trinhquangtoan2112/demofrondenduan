@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Button, message, Popconfirm } from 'antd'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { getDanhSachBanThaoTheoTruyenAction } from '../../service/actions/BanThaoAction'
+import { apiKey } from '../../service/http'
 
 export default function DanhSachBanThao() {
     const { id } = useParams()
@@ -40,9 +41,17 @@ export default function DanhSachBanThao() {
     const onClickBackFromAddChap = useCallback(() => {
         setAddChap(false)
     })
-    const confirm = (e) => {
-        console.log(e);
-        message.success('Click on Yes');
+    const confirm = async (e) => {
+        const data = {
+            id: e
+        }
+        try {
+            const result = await apiKey.delete("api/Banthaos", data);
+            console.log(result)
+            getData()
+        } catch (error) {
+            console.log(error)
+        }
     };
     const cancel = (e) => {
         console.log(e);
@@ -68,13 +77,15 @@ export default function DanhSachBanThao() {
                                         <p key={item.maBanThao} name={item.tenBanThao} className='text-overflow-1-lines'>Tên bản thảo: {item.tenBanThao}</p>
                                     </div>
                                     <div className="col-3">
-                                        <Link to={`/ChinhSuaChuong/${item.maBanThao} `}
+                                        <Link to={`/tacgia/ChinhSuaBanThao/${item.maBanThao} `}
                                             // onClick={onClickUpdateChap}
                                             className=''><Button><EditOutlined /></Button> </Link>
                                         <Popconfirm
-                                            title="Bạn có muốn ẩn truyện không"
+                                            title="Bạn có muốn xóa bản thảo không"
                                             description="Bạn có chắc không?"
-                                            onConfirm={confirm}
+                                            onConfirm={() => {
+                                                confirm(item.maBanThao)
+                                            }}
                                             onCancel={cancel}
                                             okText="Có"
                                             cancelText="Không"
