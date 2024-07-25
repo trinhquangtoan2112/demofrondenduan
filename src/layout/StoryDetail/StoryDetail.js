@@ -167,7 +167,7 @@ function StoryDetail() {
     navigator.clipboard
       .writeText(link)
       .then(() => {
-        alert("Lấy link thành công");
+        alert("Lấy đường dẫn chia sẻ thành công: "+ link );
       })
       .catch((err) => {
         console.error("Thất bại", err);
