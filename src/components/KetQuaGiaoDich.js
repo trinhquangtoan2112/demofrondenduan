@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { apiKey } from '../service/http';
 import { CapNhapThongTin } from '../service/actions/UserAction';
 import { useDispatch } from 'react-redux';
+import { message } from 'antd';
 
 export default function KetQuaGiaoDich() {
     const [ketQua, setKetQua] = useState(false);
@@ -17,6 +18,8 @@ export default function KetQuaGiaoDich() {
             getResult(queryString)
             setKetQua(true)
             CapNhapThongTin(dispatch)
+        } else {
+            message.error("Lỗi giao dịch")
         }
 
     }, [])
