@@ -1,4 +1,4 @@
-import { EditOutlined, EyeInvisibleOutlined, EyeOutlined, FormOutlined } from '@ant-design/icons';
+import { EditOutlined, EyeInvisibleOutlined, EyeOutlined, FileAddOutlined, FormOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { Button, message, Popconfirm, Table } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { GetTruyenTheoIDNguoiDung } from '../../service/actions/TruyenAction'
@@ -72,7 +72,6 @@ export default function QuanLyButDanhUser() {
                         _.trangThaiButDanh == 1 ? <p>Bạn đã bị khóa bút danh</p> : < div >
                             <Link to={`../../tacgia/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
                             <Link to={`../../tacgia/QuanLyChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
-
                         </div >
                     }
                 </>

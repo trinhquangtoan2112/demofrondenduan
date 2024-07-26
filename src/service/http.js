@@ -21,8 +21,8 @@ class SetUpAxios {
             params
         })
     }
-    delete = async (url, data, params) => {
-        return this.axiosCreate.delete(url, data)
+    delete = async (url, params) => {
+        return this.axiosCreate.delete(url, { params })
     }
     put = async (url, data, params) => {
         console.log(params)

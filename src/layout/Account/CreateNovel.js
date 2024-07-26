@@ -23,7 +23,8 @@ export default function CreateNovel(props) {
     const [description, setDescription] = useState("");
     const [listTacgia, setListTacGia] = useState(null);
     const [tacgia, setTacgia] = useState();
-    const [theloai, setTheloai] = useState(theLoai[0]);
+    const [theloai, setTheloai] = useState(theLoai[0].maTheLoai);
+
     // const loading = useSelector(state => state.message.loading)
     const [loadingUser, setLoadingUser] = useState(true)
     const dispatch = useDispatch()
@@ -96,6 +97,13 @@ export default function CreateNovel(props) {
     const labelStyle = { 'minWidth': '100px', 'display': 'inline-block' }
     return (
         <>
+            <div className='d-flex mb-1' style={{ 'justifyContent': 'space-between' }}>
+                <a onClick={() => { navigate("/tacgia/QuanLyBanThao") }}
+                //  onClick={onClickBackFromListChap}
+                ><i className="fa-solid fa-angle-left"></i> Danh sách truyện</a>
+                <span className='fs-20 fw-6'>Tạo truyện</span>
+
+            </div>
             {/* {
                 loadingUser ? <LoadingData />
                     : */}

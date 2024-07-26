@@ -14,6 +14,7 @@ import { DeleteOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined, FormOu
 import dayjs from 'dayjs';
 import Modal, { ModalContent } from '../../components/Modal';
 import { useSelector } from 'react-redux';
+import { AnChuong, AnChuongAction, HienChuong, HienChuongAction } from '../../service/actions/ChuongTruyenAction';
 const nav = [
     {
         path: 'reading',
@@ -268,27 +269,7 @@ export const ListChap = (props) => {
     useEffect(() => {
         getData()
     }, [idChuong])
-    // const onClickDeleteChap = (e) => {
-    //   if (e.target.name) {
-    //     apiMain.deleteChapter({ url, chapnumber: e.target.name }, user, dispatch, loginSuccess)
-    //       .then(res => {
-    //         getChapter()
-    //         toast.success(res.message, { hideProgressBar: true, autoClose: 1000, pauseOnHover: false })
-    //       })
-    //       .catch(err => {
-    //         console.log(err)
-    //         toast.error(err.response.details.message, { hideProgressBar: true, autoClose: 1000, pauseOnHover: false })
-    //       })
-    //   }
-    // }
 
-    // const getChapter = useCallback(async () => {
-    //   apiMain.getNameChapters(url, {})
-    //     .then(res => setChapters(res))})
-
-    // useEffect(() => {
-    //     getChapter()
-    // }, [])
     console.log(chapters)
     const onClickAddChapter = (e) => {
         e.preventDefault()
@@ -298,9 +279,19 @@ export const ListChap = (props) => {
     const onClickBackFromAddChap = useCallback(() => {
         setAddChap(false)
     })
-    const confirm = (e) => {
-        console.log(e);
-        message.success('Click on Yes');
+    const anChuong = async (id1) => {
+        const result = await AnChuongAction(id1);
+        if (result) {
+            message.success("Thành công ẩn truyện")
+            getData()
+        }
+    };
+    const hienCHuong = async (id1) => {
+        const result = await HienChuongAction(id1);
+        if (result) {
+            message.success("Thành công hiện truyện")
+            getData()
+        }
     };
     const cancel = (e) => {
         console.log(e);
@@ -335,19 +326,45 @@ export const ListChap = (props) => {
                                             <p key={item.machuongtruyen} name={item.tenChuong} className='text-overflow-1-lines'>Chương {item.stt}: {item.tenChuong}</p>
                                         </div>
                                         <div className="col-3">
-                                            <Link to={`../../tacgia/ChinhSuaChuong/${item.machuongtruyen} `}
-                                                // onClick={onClickUpdateChap}
-                                                className=''><Button><EditOutlined /></Button> </Link>
-                                            <Popconfirm
-                                                title="Bạn có muốn ẩn truyện không"
-                                                description="Bạn có chắc không?"
-                                                onConfirm={confirm}
-                                                onCancel={cancel}
-                                                okText="Có"
-                                                cancelText="Không"
-                                            >
-                                                <Button><DeleteOutlined /></Button>
-                                            </Popconfirm>
+                                            {item.trangThai !== 4 ? (
+                                                <>
+                                                    <Link to={`/ChinhSuaChuong/${item.machuongtruyen}`}>
+                                                        <Button>
+                                                            <EditOutlined />
+                                                        </Button>
+                                                    </Link>
+                                                    {item.hienThi === 1 ? (
+                                                        <Popconfirm
+                                                            title="Bạn có muốn ẩn chương không"
+                                                            description="Bạn có chắc không?"
+                                                            onConfirm={() => anChuong(item.machuongtruyen)}
+                                                            onCancel={cancel}
+                                                            okText="Có"
+                                                            cancelText="Không"
+                                                        >
+                                                            <Button>
+                                                                <EyeInvisibleOutlined />
+                                                            </Button>
+                                                        </Popconfirm>
+                                                    ) : (
+                                                        <Popconfirm
+                                                            title="Bạn có muốn hiện chương không"
+                                                            description="Bạn có chắc không?"
+                                                            onConfirm={() => hienCHuong(item.machuongtruyen)}
+                                                            onCancel={cancel}
+                                                            okText="Có"
+                                                            cancelText="Không"
+                                                        >
+                                                            <Button>
+                                                                <EyeOutlined />
+                                                            </Button>
+                                                        </Popconfirm>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <p>Chương đã bị khóa</p>
+                                            )}
+
 
                                         </div>
                                     </div><hr /></div>
@@ -518,46 +535,47 @@ export const AddChapter = () => {
     }
 
     const labelStyle = { 'minWidth': '100px', 'margin': '5px 0px', 'display': 'inline-block' }
-    return (<>
-        <div>
-            <a onClick={() => { nav(-1) }}
-            //  onClick={onClickBackFromListChap}
-            ><i className="fa-solid fa-angle-left"></i> Danh sách Chương</a>
-        </div>
-        <div className="group-info" style={{ 'marginBottom': '10px' }}>
-            <label htmlFor="" className='fs-16' style={labelStyle}>Tên chương</label>
-            <input onChange={onChangeTenchuong} value={tenchuong || ""} />
-        </div>
-        <label htmlFor="" className='fs-16' style={labelStyle}>Nội dung chương</label>
-        <CKEditor
-            editor={ClassicEditor}
-            data={edit || ''}
-            onReady={editor => {
-                // You can store the "editor" and use when it is needed.
-                console.log('Editor is ready to use!', editor);
-            }}
-            onChange={(event, editor) => {
-                setEdit(editor.getData())
-            }}
-            onBlur={(event, editor) => {
-                console.log('Blur.', editor);
-            }}
-            onFocus={(event, editor) => {
-                console.log('Focus.', editor);
-            }}
-        />
-        <div className='d-flex'>
-            {/* {
+    return (
+        <>
+            <div>
+                <a onClick={() => { nav("/tacgia/QuanLyBanThao") }}
+                //  onClick={onClickBackFromListChap}
+                ><i className="fa-solid fa-angle-left"></i>Quản lý</a>
+            </div>
+            <div className="group-info" style={{ 'marginBottom': '10px' }}>
+                <label htmlFor="" className='fs-16' style={labelStyle}>Tên chương</label>
+                <input onChange={onChangeTenchuong} value={tenchuong || ""} />
+            </div>
+            <label htmlFor="" className='fs-16' style={labelStyle}>Nội dung chương</label>
+            <CKEditor
+                editor={ClassicEditor}
+                data={edit || ''}
+                onReady={editor => {
+                    // You can store the "editor" and use when it is needed.
+                    console.log('Editor is ready to use!', editor);
+                }}
+                onChange={(event, editor) => {
+                    setEdit(editor.getData())
+                }}
+                onBlur={(event, editor) => {
+                    console.log('Blur.', editor);
+                }}
+                onFocus={(event, editor) => {
+                    console.log('Focus.', editor);
+                }}
+            />
+            <div className='d-flex'>
+                {/* {
             edit ?  */}
-            <button className='btn-primary'
-                onClick={CapNhap}
-                style={{ 'margin': '20px auto' }}>Thêm chương</button>
+                <button className='btn-primary'
+                    onClick={CapNhap}
+                    style={{ 'margin': '20px auto' }}>Thêm chương</button>
 
-            {/* : <button className='btn-primary' onClick={onClickAddChapter} style={{ 'margin': '20px auto' }}>Thêm chương</button>} */}
+                {/* : <button className='btn-primary' onClick={onClickAddChapter} style={{ 'margin': '20px auto' }}>Thêm chương</button>} */}
 
 
-        </div>
-    </>)
+            </div>
+        </>)
 }
 export const EditChapter = () => {
     const { idChuong } = useParams();

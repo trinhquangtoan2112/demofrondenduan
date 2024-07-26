@@ -159,7 +159,7 @@ export const GetChuongTruyenTheoIDTruyen = async (id) => {
 
     console.log(data)
     try {
-        let result = await apiKey.get("Chuongtruyens/Danhsachchuong", data)
+        let result = await apiKey.get("Chuongtruyens/DanhsachchuongTacGia", data)
 
         if (result.status === 200) {
             return result.data
