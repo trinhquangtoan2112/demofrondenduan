@@ -115,8 +115,8 @@ export default function TuTruyen(props) {
             key: 'action',
             render: (_, record) => (
                 < div >
-                    <Link to={`/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
-                    <Link to={`/QuanLyChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
+                    <Link to={`../../tacgia/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
+                    <Link to={`../../tacgia/QuanLyChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
                     {_.congBo == 1 ? <Popconfirm
                         title="Ẩn truyện"
                         description="Bạn có chắc muốn ẩn truyện ko không?"
@@ -146,7 +146,7 @@ export default function TuTruyen(props) {
     ];
     const nav = useNavigate();
     const onClickAddChapter = () => {
-        nav(`/DangTruyen/${id}`)
+        nav(`../../tacgia/DangTruyen`)
     }
     return (
         <>
@@ -312,7 +312,7 @@ export const ListChap = (props) => {
                     //  onClick={onClickBackFromListChap}
                     ><i className="fa-solid fa-angle-left"></i> Danh sách truyện</a>
                     <span className='fs-20 fw-6'>Danh sách chương</span>
-                    <Link to={`/ThemTruyen/${idChuong}`}><button className='btn-primary' style={{ 'margin': '0px 10px' }}
+                    <Link to={`../../tacgia/ThemTruyen/${idChuong}`}><button className='btn-primary' style={{ 'margin': '0px 10px' }}
 
                     >Thêm chương</button></Link>
                 </div>
@@ -470,7 +470,7 @@ export const ListButDanh = (props) => {
                     '  to={`/QuanLyTruyen/${item.maButDanh}`}>{item.tenButDanh}</Link>
                                         </div>
                                         <div className="col-3">
-                                            <Link to={`/ChinhSuaChuong/${item.maButDanh} `}
+                                            <Link to={`../../tacgia/ChinhSuaChuong/${item.maButDanh} `}
                                                 // onClick={onClickUpdateChap}
                                                 className=''><Button><EditOutlined /></Button> </Link>
                                             <Popconfirm

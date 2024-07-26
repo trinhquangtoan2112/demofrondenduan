@@ -69,10 +69,9 @@ export default function QuanLyButDanhUser() {
             render: (_, record) => (
                 <>
                     {
-                        _.trangThaiButDanh == 1 ? <p>Khóa</p> : < div >
-                            <Link to={`/tacgia/ThemBanThao/${_.maTruyen}`}><Button><FileAddOutlined /></Button></Link>
-                            <Link to={`/tacgia/DanhSachBanThaoCuaTruyen/${_.maTruyen}`}><Button><UnorderedListOutlined /></Button></Link>
-
+                        _.trangThaiButDanh == 1 ? <p>Bạn đã bị khóa bút danh</p> : < div >
+                            <Link to={`../../tacgia/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
+                            <Link to={`../../tacgia/QuanLyChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
                         </div >
                     }
                 </>

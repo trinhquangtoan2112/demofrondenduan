@@ -3,6 +3,7 @@ import './Home.scss'
 import Layout from './../../components/Layout';
 import ListStory from '../ListStory/ListStory';
 import HeaderFile from '../../components/HeaderFile';
+import Footer from '../../components/Footer';
 import { Outlet } from 'react-router-dom';
 export default function Home() {
 
@@ -17,7 +18,7 @@ export default function Home() {
 
                 </div>
             </div>
-
+<Footer></Footer>
         </>
     )
 }

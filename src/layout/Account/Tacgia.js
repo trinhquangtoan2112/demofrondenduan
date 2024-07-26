@@ -3,6 +3,7 @@ import React, { eEffect, useState } from 'react'
 import StoryDetail from '../StoryDetail/StoryDetail';
 import { Link, Outlet } from 'react-router-dom';
 import HeaderFile from '../../components/HeaderFile';
+import Footer from '../../components/Footer';
 const menu = [
     {
         path: "ButDanh",
@@ -53,6 +54,7 @@ export default function Tacgia() {
 
                 </div>
             </div>
+            <Footer></Footer>
         </>
     )
 }

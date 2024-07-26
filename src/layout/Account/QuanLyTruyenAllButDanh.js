@@ -87,8 +87,8 @@ export default function QuanLyTruyenAllButDanh() {
                 <>
                     {
                         _.trangThaiButDanh == 1 ? <p>Bạn đã bị khóa bút danh</p> : < div >
-                            <Link to={`/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
-                            <Link to={`/QuanLyChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
+                            <Link to={`../../tacgia/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
+                            <Link to={`../../tacgia/QuanLyChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
                             {_.congBo == 1 ? <Popconfirm
                                 title="Ẩn truyện"
                                 description="Bạn có chắc muốn ẩn truyện ko không?"
@@ -120,7 +120,7 @@ export default function QuanLyTruyenAllButDanh() {
     ];
     const nav = useNavigate();
     const onClickAddChapter = () => {
-        nav(`/DangTruyen`)
+        nav(`../../tacgia/DangTruyen`)
     }
     return (
         <>
