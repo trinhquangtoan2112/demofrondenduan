@@ -1,89 +1,86 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Section, { SectionBody, SectionHeading } from '../../components/Section';
-import './ListStory.scss'
 import { GetTruyenMain } from '../../service/actions/TruyenAction';
 import Story from './../Account/Story';
-import Grid from '../../components/Grid';
 import { Link } from 'react-router-dom';
+
 export default function ListStory() {
-    const [hover, setHover] = useState(false);
     const [datas, setData] = useState([]);
-    const [readings, setReadings] = useState([])
-    const [list, setList] = useState([])
-    //   const user = useSelector(state => state.auth.login.user)
-    const dispatch = useDispatch()
+    const [list, setList] = useState([]);
+    const dispatch = useDispatch();
+    const theLoai = useSelector(state => state.TheLoaiReducer.theLoai);
 
     useEffect(() => {
         const getStory = async () => {
             const result = await GetTruyenMain();
-            console.log(result)
-            setData(result.dexuat)
-            setList(result.conlai)
-        }
-        getStory()
-    }, [])
-
+            setData(result.dexuat.slice(0, 3)); // Hiển thị 3 câu chuyện cho "Truyện đề cử"
+            setList(result.conlai.slice(0, 12)); // Hiển thị 12 câu chuyện cho "Danh sách truyện"
+        };
+        getStory();
+    }, [dispatch]);
 
     return (
         <>
-            <div className='d-flex'>
-                <div className='col-8'>
+            <div className="flex flex-col lg:flex-row gap-4">
+                <div className="lg:w-2/3">
                     <Section>
                         <SectionHeading>
-                            <h4 className='section-title'>Truyện đề cử</h4>
-                            <a to='tat-ca'>Xem tất cả</a>
+                            <h4 className="text-xl font-semibold mb-4">Truyện đề cử</h4>
                         </SectionHeading>
                         <SectionBody>
-                            <div className='list-story'>
-                                {datas.map((data, index) => <Story key={data.maTruyen} data={data} />)}
+                            <div className="space-y-4">
+                                {datas.map((data) => (
+                                    <Story key={data.maTruyen} data={data} />
+                                ))}
                             </div>
                         </SectionBody>
                     </Section>
-
                 </div>
-                <div className='col-4'>
+                <div className="lg:w-1/3">
                     <Section>
                         <SectionHeading>
-                            <h4 className='section-title'>Đang đọc</h4>
-                            <a>Xem tất cả</a>
+                            <h4 className="text-xl font-semibold mb-4">Thể loại</h4>
                         </SectionHeading>
                         <SectionBody>
-                            <div className='list-reading'>
-                                {/* {readings.map((item, i) => <Reading key={i} data={{
-                                    tentruyen: item.dautruyenId?.tentruyen,
-                                    hinhanh: item.dautruyenId?.hinhanh,
-                                    dadoc: item.chapNumber,
-                                    total: item.dautruyenId?.sochap,
-                                    url: item.dautruyenId?.url
-                                }} />)} */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {theLoai.map((genre) => (
+                                    <Link
+                                        to={`/AllStories?genre=${encodeURIComponent(genre.tenTheLoai)}`}
+                                        key={genre.maTheLoai}
+                                        className="border border-gray-300 p-2 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
+                                    >
+                                        <h5 className="text-md font-semibold">{genre.tenTheLoai}</h5>
+                                    </Link>
+                                ))}
                             </div>
                         </SectionBody>
                     </Section>
-
                 </div>
             </div>
-            <p>Danh sách truyện</p>
-            <div className='flex flex-row flex-wrap '>
-                {list.map((data, index) => {
-                    return (
-                        <Link to={`truyen/${data.maTruyen}`} key={data.maTruyen} className='w-1/4 m-1' style={{ border: '1px solid #ff7300', width: "32%" }}>
-                            <div className='flex flex-col justify-between items-center' >
-                                <img src={data.anhBia} alt={data.tenTruyen} className='w-3/5 h-3/5'></img>
-                                <p>{data.tenTruyen}</p>
-                                <div className='flex flex-row items-center justify-between w-3/5'>
-                                    <p>{data.tenButDanh}</p>
-                                    <p>{data.tenTheLoai}</p>
-                                </div>
-                                {/* {data.coPhi ? <p className='bg-yellow-300 text-white px-3'>Vip</p> : <p className='bg-gray-300 px-3'>Free</p>} */}
-                            </div>
-                        </Link>
-                    )
-                })}
-
-            </div >
+            <p className="text-lg font-medium mt-8">Danh sách truyện</p>
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {list.map((data) => (
+                    <Link
+                        to={`truyen/${data.maTruyen}`}
+                        key={data.maTruyen}
+                        className="border border-orange-500 rounded-lg p-4 shadow-lg hover:shadow-2xl transition-shadow duration-300"
+                    >
+                        <div className="relative w-full" style={{ paddingTop: '133.33%' }}> {/* Tỷ lệ 3:4 */}
+                            <img src={data.anhBia} alt={data.tenTruyen} className="absolute top-0 left-0 w-full h-full object-cover rounded mb-4" />
+                        </div>
+                        <p className="text-center font-medium mb-2 truncate">{data.tenTruyen}</p> {/* Cắt ngắn tiêu đề */}
+                        <div className="flex justify-between items-center w-full text-sm">
+                            <p className="text-gray-700">{data.tenButDanh}</p>
+                            <p className="text-gray-700">
+                                {data.diemDanhGia ? `${data.diemDanhGia}/5` : '0/5'} 
+                                <i className='fa-solid fa-star text-yellow-500' />
+                            </p>
+                            <p className="text-gray-700">{data.tenTheLoai}</p>
+                        </div>
+                    </Link>
+                ))}
+            </div>
         </>
-
-    )
+    );
 }
-

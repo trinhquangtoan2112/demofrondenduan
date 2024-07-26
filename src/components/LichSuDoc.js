@@ -1,85 +1,83 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { apiKey } from '../service/http';
 import { Button, message, Popconfirm } from 'antd';
 
 export default function LichSuDoc() {
     const [lichSu, setLichSu] = useState();
+
     const getLichSuDoc = async () => {
         try {
             const result = await apiKey.getToken("LichSuDoc/DanhSachLichSuDoc");
-            console.log(result)
-            setLichSu(result.data.data)
+            setLichSu(result.data.data);
         } catch (error) {
-            console.log(error)
-            setLichSu(null)
+            console.log(error);
+            setLichSu(null);
         }
-    }
-    console.log(lichSu)
+    };
+
     useEffect(() => {
-        getLichSuDoc()
-    }, [])
+        getLichSuDoc();
+    }, []);
+
     const removeFromLichSuDoc = async (id) => {
         const data = {
             maChuong: id
-        }
+        };
 
-        console.log(data)
         try {
             const result = await apiKey.deleteToken("LichSuDoc/XoaLichSuDoc", data);
-            if (result.data.status == 204) {
-                message.success("Xóa lịch sử thành công")
-                getLichSuDoc()
+            if (result.data.status === 204) {
+                message.success("Xóa lịch sử thành công");
+                getLichSuDoc();
             }
-
         } catch (error) {
-            console.log(error)
-            message.error("Xóa lịch sử không thành công")
+            console.log(error);
+            message.error("Xóa lịch sử không thành công");
         }
-    }
+    };
+
     const cancel = (e) => {
         console.log(e);
         message.error('Bạn chọn không');
     };
+
     return (
-        <div >
-            <h1>Danh Sách lịch sử đọc truyện</h1>
-            <div className=' bg-yellow-50 w-2/5 mx-auto'>
-                {lichSu ? lichSu?.map((data) => (
-                    <div className='flex flex-row justify-between items-center w-11/12 mx-auto'>
-                        <Link to={`/truyen/${data.tenTruyen}/${data.idMaChuong}`} className="story-card w-3/4 " key={data.idMaChuong}>
-                            <div className='truyen-info flex flex-row justify-center '>
-                                <div className="story-card__img-wrap w-full " >
-                                    <img style={{ width: "100%", height: "100%" }} src={data?.anhBia ? data?.anhBia : "https://docln.net/img/nocover.jpg"} alt={data.tenChuong} />
-
+        <div className="max-w-4xl mx-auto p-4">
+            <h1 className="text-2xl font-semibold mb-4">Danh Sách Lịch Sử Đọc Truyện</h1>
+            <div className="bg-yellow-50 p-4 rounded-lg shadow-lg">
+                {lichSu ? (
+                    lichSu.map((data) => (
+                        <div key={data.idMaChuong} className="flex items-center justify-between mb-4 p-4 border-b border-gray-200 last:border-0">
+                            <Link to={`/truyen/${data.tenTruyen}/${data.idMaChuong}`} className="flex items-center space-x-4 w-3/4">
+                                <div className="w-1/4 flex-shrink-0">
+                                    <div className="relative" style={{ paddingTop: '75%' }}> {/* 3:4 aspect ratio */}
+                                        <img src={data?.anhBia || "https://docln.net/img/nocover.jpg"} alt={data.tenChuong} className="absolute top-0 left-0 w-full h-full object-cover rounded" />
+                                    </div>
                                 </div>
-                                <div className='ml-1'>
-                                    <p>{data.tenTruyen}</p>
-                                    <p>Chương: {data.tenChuong}</p>
+                                <div className="w-3/4">
+                                    <p className="font-semibold truncate">{data.tenTruyen}</p>
+                                    <p className="text-sm text-gray-700">Chương: {data.tenChuong}</p>
                                 </div>
-
-                            </div>
-                        </Link>
-                        <Popconfirm
-                            title="Xóa lịch sử đọc"
-                            description="Bạn có muốn xóa lịch sử đọc của truyện này không?"
-                            onConfirm={() => {
-                                removeFromLichSuDoc(data.idMaChuong)
-                            }}
-                            onCancel={cancel}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button danger><i className="fa fa-trash" /></Button>
-                        </Popconfirm>
-
-                    </div>
-
-                )) : <p>Không có lịch sử đọc</p>}
-
-
+                            </Link>
+                            <Popconfirm
+                                title="Xóa lịch sử đọc"
+                                description="Bạn có muốn xóa lịch sử đọc của truyện này không?"
+                                onConfirm={() => removeFromLichSuDoc(data.idMaChuong)}
+                                onCancel={cancel}
+                                okText="Yes"
+                                cancelText="No"
+                            >
+                                <Button danger>
+                                    <i className="fa fa-trash" />
+                                </Button>
+                            </Popconfirm>
+                        </div>
+                    ))
+                ) : (
+                    <p className="text-center text-gray-700">Không có lịch sử đọc</p>
+                )}
             </div>
-
         </div>
-    )
+    );
 }

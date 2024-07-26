@@ -132,7 +132,7 @@ function StoryDetail() {
         setIsBookmarked(false);
       } catch (error) {
         console.error("Error:", error);
-        message.error("Failed to remove bookmark. Please try again.");
+        message.error("Failed to remove bookmark. Please try again."); 
       }
     }
   };
@@ -212,6 +212,10 @@ function StoryDetail() {
                     <li className={liClass}>
                       Ngày cập nhập:{" "}
                       {dayjs(truyen?.ngayCapNhat).format("DD/MM/YYYY")}
+                    </li>
+                    <li>
+                      Điểm đánh giá: {truyen?.diemDanhGia ? `${truyen?.diemDanhGia}/5` : '0/5'} 
+                                <i className='fa-solid fa-star text-yellow-500' />
                     </li>
                   </ul>
                   <div style={{ display: "flex" }}>

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { message } from "antd";
 
 import {
   hienDangKy1,
@@ -21,17 +22,25 @@ import UserMenuModal from "./UserMenuModal";
 export default function HeaderFile() {
   const { user, auth, userInfo } = useSelector((state) => state.UserReducer);
   const [auth1, setAuth] = useState(false);
-  const [search, setSearch] = useState(null);
+  const [search, setSearch] = useState("");
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const getTheLoai = async () => {
     const result = await layDanhSachTheLoaiAction(dispatch);
   };
+
   const searching = () => {
-    navigate(`/searchlist/${search}`, { state: search });
+    const trimmedSearch = search ? search.trim() : "";
+    if (trimmedSearch) {
+      navigate(`/searchlist/${trimmedSearch}`, { state: trimmedSearch });
+    }else {
+      message.success("Hãy nhập thông tin tìm kiếm");
+    }
   };
+
   useEffect(() => {
     setAuth(auth);
     getTheLoai();
@@ -54,6 +63,11 @@ export default function HeaderFile() {
 
   const toggleUserMenu = () => {
     setUserMenuOpen(!isUserMenuOpen);
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value.replace(/[^a-zA-Z0-9 ]/g, "");
+    setSearch(value);
   };
 
   return (
@@ -90,18 +104,13 @@ export default function HeaderFile() {
                   placeholder="Tìm truyện"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      // Perform the action you want on Enter key press
                       searching();
                     }
                   }}
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                  }}
+                  onChange={handleInputChange}
                 ></input>
                 <button
-                  onClick={() => {
-                    searching();
-                  }}
+                  onClick={searching}
                 >
                   <i className="fa-solid fa-magnifying-glass"></i>
                 </button>
@@ -113,11 +122,12 @@ export default function HeaderFile() {
                 <div className="navbar-nav__profile d-flex items-center">
                   {userInfo?.daXoa ? null : (
                     <div
-                    className="navbar-nav__profile__name cursor-pointer">
+                      className="navbar-nav__profile__name cursor-pointer"
+                    >
                       {userInfo.anhDaiDien !== "string" &&
                       userInfo.anhDaiDien !== null ? (
                         <div
-                        style={{marginRight:'10px'}}
+                          style={{ marginRight: '10px' }}
                           onClick={toggleUserMenu}
                           className="navbar-nav__avatar"
                         >

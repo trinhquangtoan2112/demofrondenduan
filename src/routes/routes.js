@@ -22,6 +22,7 @@ import LichSuDoc from "../components/LichSuDoc";
 import AdminTruyen from "../components/AdminTruyen";
 import KetQuaGiaoDich from "../components/KetQuaGiaoDich";
 import DuyetTruyen from "../layout/Admin/DuyetTruyen";
+import AllStories from "../components/AllStories";
 import DuyetChuong from "../layout/Admin/DuyetChuong";
 import Searching from "../components/Searching";
 import UserMenuModal from "../components/UserMenuModal";
@@ -97,7 +98,7 @@ const ROUTES = [
         index: 9,
         path: "DangTruyen",
         element: <CreateNovel></CreateNovel>,
-        auth: true,
+        auth: false,
         roles: [],
     },
 
@@ -105,7 +106,7 @@ const ROUTES = [
         index: 10,
         path: "CapNhapTruyen/:id",
         element: <EditNovel></EditNovel>,
-        auth: true,
+        auth: false,
         roles: [],
     },
     {
@@ -126,21 +127,21 @@ const ROUTES = [
         index: 13,
         path: "QuanLyChuong/:idChuong",
         element: <ListChap></ListChap>,
-        auth: true,
+        auth: false,
         roles: [],
     },
     {
         index: 14,
         path: "ChinhSuaChuong/:idChuong",
         element: <EditChapter></EditChapter>,
-        auth: true,
+        auth: false,
         roles: [],
     },
     {
         index: 15,
         path: "ThemTruyen/:idChuong",
         element: <AddChapter></AddChapter>,
-        auth: true,
+        auth: false,
         roles: [],
     },
     {
@@ -251,6 +252,13 @@ const ROUTES = [
         auth: false,
         roles: [],
     },
+    {
+        index: 30,
+        path: "AllStories",
+        element: <AllStories></AllStories>,
+        auth: true,
+        roles: [],
+      },
 ];
 
 export default ROUTES;
