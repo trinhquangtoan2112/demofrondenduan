@@ -69,7 +69,6 @@ export default function Profile(props) {
     }
 
     const napTien = async (e) => {
-
         e.preventDefault();
         const data = {
             idUser: userInfo.maNguoiDung
@@ -170,13 +169,26 @@ export default function Profile(props) {
                                     <label htmlFor="" style={labelStyle}>Trạng thái của tài khoản</label>
                                     {userInfo.trangThai == 0 ? <button className='btn bg-red-600' onClick={sendEmailToAuthen}>Xác thực tài khoản</button> : <p className='text-green-600'>Đã xác thực tài khoản</p>}
                                 </div>
-                                <div className="d-flex">
+
+                                <div className="d-flex justify-between">
+                                    <div>
+                                        <p>Nạp 50000 đồng để thêm 500 xu vào tài khoản</p>
+                                        <button onClick={napTien}>Nạp tiền</button>
+                                    </div>
+                                    <div>
+                                        <p>Nâng cấp tài khoản</p>
+                                        <button onClick={napTien}>Nâng cấp</button>
+                                    </div>
+
+                                </div>
+                                <div className="d-flex justify-between">
                                     <button
                                         onClick={handleEdit}
                                     >
                                         Cập nhật</button>
+
                                 </div>
-                                <button onClick={napTien}>Nạp tiền</button>
+
                             </form>
 
                         </div>

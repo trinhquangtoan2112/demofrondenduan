@@ -22,21 +22,21 @@ export const checklike = async (like) => {
       return response.data;
     }
   } catch (error) {
-    message.error(`Kiểm tra thất bại: ${error.response?.data?.message || error.message}`);
+
   }
 };
 
 export const xoalike = async (like) => {
-    try {
-      const response = await apiKey.deleteToken2(`/api/Likes`, like);
-      if (response.status === 200) { // Created
-        message.success("Bỏ thành công");
-        return response.data;
-      }
-    } catch (error) {
-      message.error(`Bỏ thất bại: ${error.response?.data?.message || error.message}`);
+  try {
+    const response = await apiKey.deleteToken2(`/api/Likes`, like);
+    if (response.status === 200) { // Created
+      message.success("Bỏ thành công");
+      return response.data;
     }
-  };
+  } catch (error) {
+    message.error(`Bỏ thất bại: ${error.response?.data?.message || error.message}`);
+  }
+};
 
 // Function to add a pseudonym
 export const dsDanhDau = async (danhdau) => {

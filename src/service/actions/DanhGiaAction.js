@@ -16,24 +16,22 @@ export const themdanhgiatruyen = async (danhgia) => {
 // Function to fetch reviews with login status check
 export const layDSDanhGia = async (maTruyen) => {
   try {
-      const response = await apiKey.getToken(`/api/Danhgias`, maTruyen);
-      if (response.status === 200) {
-        return response.data;
+    const response = await apiKey.getToken(`/api/Danhgias`, maTruyen);
+    if (response.status === 200) {
+      return response.data;
     }
   } catch (error) {
-    message.error(`Failed to fetch reviews: ${error.response?.data?.message || error.message}`);
   }
 };
 
 // Function to fetch reviews with login status check
 export const DsDanhGiaChuaDangNhap = async (maTruyen) => {
   try {
-      const response = await apiKey.getToken(`/api/Danhgias/DsDanhGiaChuaDangNhap`, maTruyen);
-      if (response.status === 200) {
-        return response.data;
+    const response = await apiKey.getToken(`/api/Danhgias/DsDanhGiaChuaDangNhap`, maTruyen);
+    if (response.status === 200) {
+      return response.data;
     }
   } catch (error) {
-    message.error(`Failed to fetch reviews: ${error.response?.data?.message || error.message}`);
   }
 };
 
@@ -71,6 +69,6 @@ export const checkDanhgia = async (danhgia) => {
       return response.data;
     }
   } catch (error) {
-    message.error(`Kiểm tra thất bại: ${error.response?.data?.message || error.message}`);
+
   }
 };

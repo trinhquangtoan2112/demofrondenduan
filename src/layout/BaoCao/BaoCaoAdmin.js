@@ -34,15 +34,11 @@ export default class BaoCaoAdmin extends Component {
           loading: false,
         });
       } else {
-        message.error(`Lấy danh sách thất bại: ${response.message}`);
+
         this.setState({ loading: false });
       }
     } catch (error) {
-      message.error(
-        `Lấy danh sách thất bại: ${
-          error.response?.data?.message || error.message
-        }`
-      );
+
       this.setState({ loading: false });
     }
   };
@@ -80,8 +76,7 @@ export default class BaoCaoAdmin extends Component {
           }
         } catch (error) {
           message.error(
-            `Cập nhật báo cáo thất bại: ${
-              error.response?.data?.message || error.message
+            `Cập nhật báo cáo thất bại: ${error.response?.data?.message || error.message
             }`
           );
         }
@@ -103,8 +98,7 @@ export default class BaoCaoAdmin extends Component {
           }
         } catch (error) {
           message.error(
-            `Xóa báo cáo thất bại: ${
-              error.response?.data?.message || error.message
+            `Xóa báo cáo thất bại: ${error.response?.data?.message || error.message
             }`
           );
         }
@@ -136,9 +130,8 @@ export default class BaoCaoAdmin extends Component {
     // Hàm để định dạng ngày
     const formatDate = (date) => {
       const d = new Date(date);
-      return `${d.getDate()}/${
-        d.getMonth() + 1
-      }/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+      return `${d.getDate()}/${d.getMonth() + 1
+        }/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
     };
 
     const columns = [
@@ -223,11 +216,10 @@ export default class BaoCaoAdmin extends Component {
             <Button
               key={btn.type}
               onClick={() => this.filterByType(btn.type)}
-              className={`mr-2 ${
-                activeType === btn.type
+              className={`mr-2 ${activeType === btn.type
                   ? "bg-blue-500 text-white"
                   : "bg-gray-300"
-              }`}
+                }`}
             >
               {btn.label}
             </Button>

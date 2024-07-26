@@ -34,7 +34,7 @@ const BinhLuanSection = ({ id }) => {
         }
       } catch (error) {
         console.error("Error fetching comments:", error);
-        message.error("Có lỗi xảy ra khi lấy danh sách bình luận.");
+
       }
     };
 
@@ -84,8 +84,8 @@ const BinhLuanSection = ({ id }) => {
   };
 
   return (
-    <div className="container mx-auto my-8"> 
-      <BinhLuanForm onAddBinhLuan={handleAddBinhLuan}/>
+    <div className="container mx-auto my-8">
+      <BinhLuanForm onAddBinhLuan={handleAddBinhLuan} />
       <DanhSachBinhLuan
         binhLuans={binhLuans}
         visibleCount={visibleCount}

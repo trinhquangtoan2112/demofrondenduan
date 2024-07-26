@@ -15,10 +15,15 @@ export default function ThembanThao() {
         const data = {
             tenBanThao: ten,
             noidung: edit,
-            maTruyen: 1
+            maTruyen: id
         }
         const result = await themBanThaoAction(data);
-        console.log(result)
+        if (result === false) {
+
+        }
+        if (result?.status) {
+            nav("/tacgia/QuanLyBanThao")
+        }
     }
     return (
         <><div className='d-flex mb-1' style={{ 'justifyContent': 'space-between' }}>

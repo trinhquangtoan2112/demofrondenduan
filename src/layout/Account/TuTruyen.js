@@ -6,7 +6,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Grid from '../../components/Grid';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { AnTruyen, AnTruyenAction, DangChuongTruyenAction, DangTruyen, GetCHiTietChuongTruyen, GetChuongTruyenTheoIDTruyen, GetThongTinTruyen, GetTruyenTheoButDanh, HienTruyenAction, SuaChuongTruyenAction, SuaTruyen } from '../../service/actions/TruyenAction';
+import { AnTruyen, AnTruyenAction, DangChuongTruyenAction, DangTruyen, GetChiTietChuongAdmin, GetCHiTietChuongTruyen, GetChuongTruyenTheoIDTruyen, GetChuongTruyenTheoIDTruyen1, GetThongTinTruyen, GetTruyenTheoButDanh, HienTruyenAction, SuaChuongTruyenAction, SuaTruyen } from '../../service/actions/TruyenAction';
 import { AddUserByAdmin, deleteUserAdmin, getUserInAdmin, searchUserAction, UpdateUserByAdmin } from '../../service/actions/UserAction';
 import { Button, Table, Tag, DatePicker, Form, Input, InputNumber, Checkbox, Select, message, Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined, FormOutlined, UserOutlined } from '@ant-design/icons';
@@ -101,7 +101,7 @@ export default function TuTruyen(props) {
             title: 'Trạng thái',
             dataIndex: 'trangThai',
             key: 'trangThai',
-            render: (th) => (th == 1 ? <p> Hiển thị</p> : <p>Không hiển thị</p>)
+            render: (th) => (th != 4 ? th != 0 ? <p> Hiển thị</p> : <p>Chưa duyệt</p> : <p>Chương bị khóa</p>)
         },
         {
             title: 'Có phí',
@@ -258,7 +258,7 @@ export const ListChap = (props) => {
         setAddChap(true)
     }
     const getData = async () => {
-        const result = await GetChuongTruyenTheoIDTruyen(idChuong)
+        const result = await GetChuongTruyenTheoIDTruyen1(idChuong)
         console.log(result)
         if (result.status == 200) {
             setChapters(result.data)
@@ -319,16 +319,21 @@ export const ListChap = (props) => {
                 <Grid gap={15} col={2} snCol={1}>
                     {
                         chapters?.map((item, index) => {
+                            console.log(item)
                             return (
                                 <div key={item.machuongtruyen}>
                                     <div className='d-flex'>
-                                        <div className="col-9 d-flex" style={{ 'alignItems': 'center' }}>
+                                        <div className="col-6 d-flex" style={{ 'alignItems': 'center' }}>
                                             <p key={item.machuongtruyen} name={item.tenChuong} className='text-overflow-1-lines'>Chương {item.stt}: {item.tenChuong}</p>
                                         </div>
+                                        <div className="col-3 d-flex" style={{ 'alignItems': 'center' }}>
+                                            {item.trangThai != 4 ? item.trangThai != 0 ? <p> Hiển thị</p> : <p>Chưa duyệt</p> : <p>Truyện bị khóa</p>}
+                                        </div>
+
                                         <div className="col-3">
                                             {item.trangThai !== 4 ? (
                                                 <>
-                                                    <Link to={`/ChinhSuaChuong/${item.machuongtruyen}`}>
+                                                    <Link to={`/tacgia/ChinhSuaChuong/${item.machuongtruyen}`}>
                                                         <Button>
                                                             <EditOutlined />
                                                         </Button>
@@ -523,6 +528,7 @@ export const AddChapter = () => {
     const onChangeTenchuong = (e) => {
         setTenchuong(e.target.value)
     }
+    const navigate = useNavigate();
     const CapNhap = async () => {
         const data = {
             tenchuong,
@@ -531,6 +537,13 @@ export const AddChapter = () => {
         }
 
         const result = await DangChuongTruyenAction(data);
+        if (result === false) {
+            message.success("Thêm chương xảy ra lỗi hãy thử lại")
+        } else {
+            message.success("Thêm chương thành công")
+            navigate("/tacgia/QuanLyTruyenCuaMinh");
+
+        }
         console.log(result)
     }
 
@@ -579,7 +592,7 @@ export const AddChapter = () => {
 }
 export const EditChapter = () => {
     const { idChuong } = useParams();
-    const nav = useNavigate()
+    const navigate = useNavigate()
 
     const [content, setContent] = useState("")
     const [tenchuong, setTenchuong] = useState("")
@@ -594,10 +607,16 @@ export const EditChapter = () => {
         }
 
         const result = await SuaChuongTruyenAction(idChuong, data);
+        if (result) {
+            message.success("Cập nhập chương thành công")
+            navigate("/tacgia/QuanLyTruyenCuaMinh");
+        } else {
+            message.success("Cập nhập xảy ra lỗi hãy thử lại")
+        }
         console.log(result)
     }
     const GetTruyen = async () => {
-        const result = await GetCHiTietChuongTruyen(idChuong);
+        const result = await GetChiTietChuongAdmin(idChuong);
         console.log(result)
         setTenchuong(result.data.tenChuong);
         setEdit(result.data.noiDung);
@@ -665,7 +684,7 @@ export function EditNovel() {
     const [ckValue, setCkValue] = useState(true);
 
     const [trangthai, settrangthai] = useState(true)
-
+    const nav = useNavigate()
     const handleCreate = async (e) => {
         e.preventDefault()
         const form = new FormData();
@@ -675,7 +694,11 @@ export function EditNovel() {
         form.append('TrangThai', trangthai);
         form.append('anhBia', image);
         const result = await SuaTruyen(id, form);
-        if (result) {
+        console.log(result);
+        if (result == false) {
+            message.error("Lỗi xảy ra thử lại")
+        }
+        else {
             setCkValue(" ")
             setTimeout(() => {
                 setCkValue(true)
@@ -683,6 +706,8 @@ export function EditNovel() {
             setName("")
             setDescription("")
             setPreview(avt)
+            message.success("Cập nhập truyện thành công")
+            nav("/tacgia/QuanLyTruyenCuaMinh")
         }
     }
     const onChangeName = (e) => {

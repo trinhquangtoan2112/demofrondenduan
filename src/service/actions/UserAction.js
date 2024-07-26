@@ -16,7 +16,7 @@ export const DangNhap = async (user, dispatch) => {
 
         }
     } catch (error) {
-        message.error("Lỗi xảy ra")
+        message.error("Lỗi xảy ra, hãy kiểm tra lại tài khoản mật khẩu của bạn")
     }
 }
 export const DangKy = async (user) => {
@@ -52,7 +52,7 @@ export const ChinhSuaThongTinDangNhap = async (user, dispatch) => {
         const result = await apiKey.putToken("/Login/CapNhapThongtinNguoiDung", user)
         if (result.status == 200) {
             await CapNhapThongTin(dispatch)
-
+            message.success("Chỉnh sửa thông tin thành công ")
         }
     } catch (error) {
         console.log(error)
@@ -63,7 +63,7 @@ export const sendEmail = async () => {
     try {
         const result = await apiKey.postToken("/Login/changeAuthen")
         console.log(result)
-        message.success("Gửi email thành công")
+        message.success("Gửi email thành công, xin hãy kiểm tra email của bạn")
 
     } catch (error) {
         message.error("Lỗi xảy ra")
@@ -215,19 +215,19 @@ export const deleteUserAdmin = async (id) => {
 }
 
 
-export const NapTienAction = async (id) => {
+// export const NapTienAction = async (id) => {
 
-    const dataUser = {
-        id: id
-    }
-    try {
-        const result = await apiKey.put("/Login/XoaTaikhoan", null, dataUser)
-        console.log(result)
-        if (result.status === 200) {
-            return true
-        }
-        return false;
-    } catch (error) {
-        return false;
-    }
-}
+//     const dataUser = {
+//         id: id
+//     }
+//     try {
+//         const result = await apiKey.put("/Login/XoaTaikhoan", null, dataUser)
+//         console.log(result)
+//         if (result.status === 200) {
+//             return true
+//         }
+//         return false;
+//     } catch (error) {
+//         return false;
+//     }
+// }

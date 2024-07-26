@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DangTruyen } from '../../service/actions/TruyenAction';
 import { useNavigate, useParams } from 'react-router-dom';
 import { layDanhSachButDanh } from '../../service/actions/ButDanhAction';
+import { message } from 'antd';
 
 export default function CreateNovel(props) {
 
@@ -41,23 +42,7 @@ export default function CreateNovel(props) {
         }
     }
     console.log(listTacgia)
-    // const handleCreateNovel = async (data) => {//xử lý gọi tạo truyện mới
-    //     try {
-    //         apiMain.createNovel(data,user, dispatch, loginSuccess )
-    //             .then(res =>{
-    //                 toast.success("Đăng truyện thành công")
-    //                 dispatch(setLoading(false))
-    //             })
-    //             .catch(err=>{
 
-    //                 dispatch(setLoading(false))
-    //                 toast.error(getData(err.response)?.details.message)
-    //             })
-    //     } catch (error) {
-    //         console.log(error)
-    //         toast.error("Lỗi cập nhật thông tin")
-    //     }
-    // }
 
     const handleCreate = async (e) => {//xử lý tạo truyện
         e.preventDefault()
@@ -78,7 +63,10 @@ export default function CreateNovel(props) {
             setName("")
             setDescription("")
             setPreview(avt)
-            navigate(-1);
+            message.success("Đăng truyện thành công")
+            navigate("/tacgia/QuanLyTruyenCuaMinh");
+        } else {
+            message.success("Đăng truyện xảy ra lỗi hãy thử lại")
         }
     }
 

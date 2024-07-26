@@ -3,6 +3,7 @@ import { DuyetChuongAction, GetDanhSachChuongCanDuyet } from '../../service/acti
 import { Button, message, Popconfirm, Table, Tag } from 'antd'
 import { EyeInvisibleOutlined, EyeOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
+import { Link } from 'react-router-dom'
 
 export default function DuyetChuong() {
     const [danhSach, setDanhSach] = useState();
@@ -73,7 +74,7 @@ export default function DuyetChuong() {
             render: (_, record) => (
                 <div>
                     {console.log(_)}
-                    <Button><EyeOutlined /></Button>
+                    <Link to={`DetailChuong/${_.machuongtruyen}`}><Button><EyeOutlined /></Button></Link>
                     <Popconfirm
                         title="Công bố chương"
                         description="Bạn có chắc muốn công bố chương không?"

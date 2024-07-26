@@ -3,6 +3,7 @@ import { DuyetTruyenaction, GetDanhSachTruyenCanDuyet } from '../../service/acti
 import { Button, message, Popconfirm, Table, Tag } from 'antd'
 import { EyeInvisibleOutlined, EyeOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
+import { Link } from 'react-router-dom'
 
 export default function DuyetTruyen() {
     const [danhSach, setDanhSach] = useState();
@@ -77,7 +78,7 @@ export default function DuyetTruyen() {
                     {console.log(_)}
 
 
-                    <Button><EyeOutlined /></Button>
+                    <Link to={`DetailTruyen/${_.maTruyen}`}><Button><EyeOutlined /></Button></Link>
                     <Popconfirm
                         title="Công bố truyện"
                         description="Bạn có chắc muốn Công bố truyện không?"

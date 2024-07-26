@@ -22,7 +22,7 @@ export const checkDanhDau = async (danhdau) => {
       return response.data;
     }
   } catch (error) {
-    message.error(`Kiểm tra thất bại: ${error.response?.data?.message || error.message}`);
+
   }
 };
 
@@ -48,6 +48,6 @@ export const dsDanhDau = async (danhdau) => {
     }
   } catch (error) {
     message.success(`Không có truyện đánh dấu`);
-    // message.error(`Kiểm tra thất bại: ${error.response?.data?.message || error.message}`);
+
   }
 };

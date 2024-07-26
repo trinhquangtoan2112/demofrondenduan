@@ -17,7 +17,7 @@ export default function KetQuaGiaoDich() {
         if (vnp_ResponseCode == "00") {
             getResult(queryString)
             setKetQua(true)
-            CapNhapThongTin(dispatch)
+
         } else {
             message.error("Lỗi giao dịch")
         }
@@ -26,7 +26,8 @@ export default function KetQuaGiaoDich() {
 
     const getResult = async (queryString) => {
         try {
-            const result = await apiKey.get(`VNPay/ketQua${queryString}`)
+            const result = await apiKey.get(`VNPay/ketQua${queryString}`);
+            CapNhapThongTin(dispatch)
         } catch (error) {
 
         }

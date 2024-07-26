@@ -82,8 +82,8 @@ export default function AdminTruyen() {
 
     };
     const cancel = (e) => {
-        console.log(e);
-        message.error('Click on No');
+
+        message.error('Bạn chọn không');
     };
     const columns = [
         {
@@ -119,7 +119,7 @@ export default function AdminTruyen() {
             title: 'Trạng thái',
             dataIndex: 'trangThai',
             key: 'trangThai',
-            render: (th) => <Tag color={th != 4 && th != 0 ? "green" : "volcano"}>{th != 4 && th != 0 ? "Không khóa" : "Khóa"}</Tag>
+            render: (th) => (th != 4 ? th != 0 ? <p> Hiển thị</p> : <p>Chưa duyệt</p> : <p>Truyện bị khóa</p>)
         },
         {
             title: 'Hiển thị',

@@ -48,13 +48,15 @@ export default function DanhSachBanThao() {
         try {
             const result = await apiKey.delete("api/Banthaos", data);
             console.log(result)
+            message.success("Thành công")
             getData()
         } catch (error) {
             console.log(error)
+            message.success("Không thành công")
         }
     };
     const cancel = (e) => {
-        console.log(e);
+
         message.error('Click on No');
     };
 
@@ -63,11 +65,11 @@ export default function DanhSachBanThao() {
             <div className='d-flex mb-1' style={{ 'justifyContent': 'space-between' }}>
                 <a onClick={() => { nav("/tacgia/QuanLyBanThao") }}
                 //  onClick={onClickBackFromListChap}
-                ><i className="fa-solid fa-angle-left"></i> Danh sách truyện</a>
+                ><i className="fa-solid fa-angle-left"></i> Danh sách bản thảo</a>
                 <span className='fs-20 fw-6'>Danh sách bản thảo </span>
 
             </div>
-            <Grid gap={15} col={2} snCol={1}>
+            {chapters != null && chapters.length > 0 ? <Grid gap={15} col={2} snCol={1}>
                 {
                     chapters?.map((item, index) => {
                         return (
@@ -98,7 +100,7 @@ export default function DanhSachBanThao() {
                         )
                     })
                 }
-            </Grid>
+            </Grid> : <p>Danh sách chương không tồn tại</p>}
         </div>
     )
 }

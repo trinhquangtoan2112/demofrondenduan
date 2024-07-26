@@ -5,6 +5,7 @@ export const themBanThaoAction = async (data) => {
     console.log(data);
     try {
         const response = await apiKey.post(`api/Banthaos`, data);
+        console.log(response);
         if (response.status === 200) {
             message.success("Thành công");
             return response.data;
@@ -51,7 +52,7 @@ export const getDanhSachBanThaoTheoTruyenAction = async (id) => {
         const response = await apiKey.get(`api/Banthaos/DanhSachBanThaoTheoTruyen`, params);
         console.log(response.data);
         if (response.status === 200) {
-            message.success("Thành công");
+
             return response.data;
         }
     } catch (error) {

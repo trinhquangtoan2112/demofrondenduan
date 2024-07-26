@@ -55,7 +55,7 @@ export default function QuanLyButDanhUser() {
             title: 'Trạng thái',
             dataIndex: 'trangThai',
             key: 'trangThai',
-            render: (th) => (th == 1 ? <p> Hiển thị</p> : <p>Không hiển thị</p>)
+            render: (th) => (th != 4 ? th != 0 ? <p> Hiển thị</p> : <p>Chưa duyệt</p> : <p>Truyện bị khóa</p>)
         },
         {
             title: 'Tên bút danh',
@@ -69,10 +69,10 @@ export default function QuanLyButDanhUser() {
             render: (_, record) => (
                 <>
                     {
-                        _.trangThaiButDanh == 1 ? <p>Bạn đã bị khóa bút danh</p> : < div >
-                            <Link to={`../../tacgia/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
-                            <Link to={`../../tacgia/QuanLyChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
-                        </div >
+                        _.trangThaiButDanh == 1 ? <p>Bạn đã bị khóa bút danh</p> : _.trangThai != 4 ? < div >
+                            <Link to={`/tacgia/ThemBanThao/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
+                            <Link to={`/tacgia/DanhSachBanThaoCuaTruyen/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
+                        </div > : <p>Truyện bị khóa</p>
                     }
                 </>
             ),

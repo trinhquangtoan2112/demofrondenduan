@@ -9,7 +9,7 @@ import { Link, useParams } from 'react-router-dom';
 import Modal, { ModalContent } from './../../components/Modal';
 import { GetDanhSachTruyenAdmin, TimKiemTruyenAcion } from '../../service/actions/TruyenAction';
 import { apiKey } from '../../service/http';
-import { GetDanhSachChuongAdmin } from '../../service/actions/ChuongTruyenAction';
+import { DuyetChuongAction, GetDanhSachChuongAdmin } from '../../service/actions/ChuongTruyenAction';
 
 export default function ListChuongAdmin() {
     const [modalVisible, setModalVisible] = useState(false);
@@ -54,7 +54,15 @@ export default function ListChuongAdmin() {
 
 
     };
-
+    const confirm = async (e) => {
+        const result = await DuyetChuongAction(e);
+        if (result == false) {
+            message.error('Không thành công');
+        } else {
+            getDs()
+            message.success('Thành công');
+        }
+    };
     const cancel = (e) => {
         console.log(e);
         message.error('Click on No');
@@ -82,7 +90,7 @@ export default function ListChuongAdmin() {
             title: 'Trạng thái',
             dataIndex: 'trangThai',
             key: 'trangThai',
-            render: (th) => <Tag color={th != 4 && th != 0 ? "green" : "volcano"}>{th != 4 && th != 0 ? "Không khóa" : "Khóa"}</Tag>
+            render: (th) => (th != 4 ? th != 0 ? <p> Hiển thị</p> : <p>Chưa duyệt</p> : <p>Truyện bị khóa</p>)
         },
         {
             title: 'Hiển thị',
@@ -107,7 +115,7 @@ export default function ListChuongAdmin() {
                         cancelText="Không"
                     >
                         <Button><UnlockOutlined /></Button>
-                    </Popconfirm> : <Popconfirm
+                    </Popconfirm> : _.trangThai != 0 ? <Popconfirm
                         title="Khóa chương"
                         description="Bạn có chắc muốn khóa chương không?"
                         onConfirm={() => {
@@ -119,7 +127,18 @@ export default function ListChuongAdmin() {
                     >
                         <Button><LockOutlined /></Button>
                     </Popconfirm>
-
+                        : <Popconfirm
+                            title="Duyệt chương"
+                            description="Bạn có chắc muốn duyệt chương không?"
+                            onConfirm={() => {
+                                confirm(_.machuongtruyen)
+                            }}
+                            onCancel={cancel}
+                            okText="Có"
+                            cancelText="Không"
+                        >
+                            <Button><LockOutlined /></Button>
+                        </Popconfirm>
                     }
                 </div >
             ),

@@ -27,11 +27,11 @@ const DanhGiaPage = () => {
       setDanhSachDanhGia(response.data);
     } catch (error) {
       console.error("Error fetching reviews:", error);
-      message.error(`Failed to fetch reviews: ${error.message}`);
+
     } finally {
       setLoading(false);
     }
-  }; 
+  };
 
   useEffect(() => {
     if (id) {

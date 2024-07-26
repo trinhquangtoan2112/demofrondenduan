@@ -72,7 +72,7 @@ export default function QuanLyTruyenAllButDanh() {
             title: 'Trạng thái',
             dataIndex: 'trangThai',
             key: 'trangThai',
-            render: (th) => (th == 1 ? <p> Hiển thị</p> : <p>Không hiển thị</p>)
+            render: (th) => (th != 4 ? th != 0 ? <p> Hiển thị</p> : <p>Chưa duyệt</p> : <p>Truyện bị khóa</p>)
         },
         {
             title: 'Tên bút danh',
@@ -86,7 +86,7 @@ export default function QuanLyTruyenAllButDanh() {
             render: (_, record) => (
                 <>
                     {
-                        _.trangThaiButDanh == 1 ? <p>Bạn đã bị khóa bút danh</p> : < div >
+                        _.trangThaiButDanh == 1 ? <p>Bạn đã bị khóa bút danh</p> : _.trangThai != 4 ? < div >
                             <Link to={`../../tacgia/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
                             <Link to={`../../tacgia/QuanLyChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
                             {_.congBo == 1 ? <Popconfirm
@@ -112,7 +112,7 @@ export default function QuanLyTruyenAllButDanh() {
                             >
                                 <Button><EyeOutlined /></Button>
                             </Popconfirm>}
-                        </div >
+                        </div > : <p>Truyện bị khóa</p>
                     }
                 </>
             ),

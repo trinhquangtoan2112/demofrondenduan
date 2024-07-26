@@ -39,6 +39,8 @@ import ThembanThao from "../layout/BanThao/ThembanThao";
 import DanhSachBanThao from "../layout/BanThao/DanhSachBanThao";
 import ListChuongAdmin from "../layout/Chapter/ListChuongAdmin";
 import EditBanThao from "../layout/BanThao/EditBanThao";
+import DetailTruyen from "../components/DetailTruyen";
+import DetailChuong from "../components/DetailChuong";
 
 const ROUTES = [
   {
@@ -217,6 +219,7 @@ const ROUTES = [
     auth: false,
     roles: [],
   },
+
   {
     index: 26,
     path: "DuyetChuong",
@@ -285,6 +288,20 @@ const ROUTES = [
     path: "AllStories",
     element: <AllStories></AllStories>,
     auth: true,
+    roles: [],
+  },
+  {
+    index: 36,
+    path: "DuyetTruyen/DetailTruyen/:id",
+    element: <DetailTruyen></DetailTruyen>,
+    auth: false,
+    roles: [],
+  },
+  {
+    index: 38,
+    path: "DuyetChuong/DetailChuong/:id",
+    element: <DetailChuong></DetailChuong>,
+    auth: false,
     roles: [],
   },
 ];

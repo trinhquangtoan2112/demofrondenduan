@@ -74,13 +74,14 @@ export const SuaTruyen = async (id, data) => {
 
 
         let result = await apiKey.put("api/Truyens/SuaTruyen", data, data1)
-        console.log(result)
-        if (result.status === 201)
-            return true;
+
+
+        return result;
 
     } catch (error) {
         console.log(error)
         message.error("Lỗi xảy ra")
+        return false;
     }
 }
 export const GetChiTietChuongTruyen = async (id) => {
@@ -171,6 +172,25 @@ export const GetChuongTruyenTheoIDTruyen = async (id) => {
 
     }
 }
+export const GetChuongTruyenTheoIDTruyen1 = async (id) => {
+    const data = {
+        id: id
+    }
+
+    console.log(data)
+    try {
+        let result = await apiKey.get("Chuongtruyens/DanhsachchuongID", data)
+
+        if (result.status === 200) {
+            return result.data
+        }
+    } catch (error) {
+        console.log(error)
+
+        return error.response
+
+    }
+}
 export const GetCHiTietChuongTruyen = async (id) => {
     const data = {
         maChuong: id
@@ -179,6 +199,25 @@ export const GetCHiTietChuongTruyen = async (id) => {
     console.log(data)
     try {
         let result = await apiKey.get("Chuongtruyens/GetChiTietChuong", data)
+
+        if (result.status === 200) {
+            return result.data
+        }
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+        return error.response
+
+    }
+}
+export const GetChiTietChuongAdmin = async (id) => {
+    const data = {
+        maChuong: id
+    }
+
+    console.log(data)
+    try {
+        let result = await apiKey.get("Chuongtruyens/GetChiTietChuongAdmin", data)
 
         if (result.status === 200) {
             return result.data
@@ -199,7 +238,7 @@ export const SuaChuongTruyenAction = async (id, data) => {
 
         let result = await apiKey.put("Chuongtruyens/CapNhapChuongTruyen", data, data1)
         console.log(result)
-        if (result.status === 201)
+        if (result.status === 200)
             return true;
 
     } catch (error) {
@@ -216,11 +255,12 @@ export const DangChuongTruyenAction = async (data) => {
         let result = await apiKey.post("Chuongtruyens", data)
         console.log(result)
         if (result.status === 201)
-            return true;
+            return result;
 
     } catch (error) {
         console.log(error)
         message.error("Lỗi xảy ra")
+        return false
     }
 }
 

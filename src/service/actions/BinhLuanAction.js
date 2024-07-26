@@ -26,24 +26,22 @@ export const themPhanHoiBinhLuan = async (Phanhoibinhluans) => {
 // Function to fetch reviews with login status check
 export const layDSBinhLuanChuaDangNhap = async (maTruyen) => {
   try {
-      const response = await apiKey.get(`/api/Binhluans`, maTruyen);
-      if (response.status === 200) {
-        return response.data;
+    const response = await apiKey.get(`/api/Binhluans`, maTruyen);
+    if (response.status === 200) {
+      return response.data;
     }
   } catch (error) {
-    message.error(`Failed to fetch reviews: ${error.response?.data?.message || error.message}`);
   }
 };
 
 // Function to fetch reviews with login status check
 export const layDSBinhLuanDaDangNhap = async (maTruyen) => {
   try {
-      const response = await apiKey.getToken(`/api/Binhluans/GetBinhluansNguoiDung`, maTruyen);
-      if (response.status === 200) {
-        return response.data;
+    const response = await apiKey.getToken(`/api/Binhluans/GetBinhluansNguoiDung`, maTruyen);
+    if (response.status === 200) {
+      return response.data;
     }
   } catch (error) {
-    message.error(`Failed to fetch reviews: ${error.response?.data?.message || error.message}`);
   }
 };
 
