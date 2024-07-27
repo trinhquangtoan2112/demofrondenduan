@@ -9,24 +9,27 @@ export const DangNhap = async (user, dispatch) => {
         const result = await apiKey.post("Login/Login", user)
         if (result.status == 200) {
             dispatch(setUserInformation(result.data))
-            message.success("Successfully")
+            message.success("Đăng nhập thành công")
 
             localStorage.setItem("USER_LOGIN", JSON.stringify(result.data.data));
             localStorage.setItem("TOKEN", result.data.token);
 
         }
     } catch (error) {
-        message.error("Lỗi xảy ra, hãy kiểm tra lại tài khoản mật khẩu của bạn")
+        return false;
+
     }
 }
 export const DangKy = async (user) => {
     try {
         const result = await apiKey.post("Login/SignUp", user)
         if (result.data.status == 200) {
-            message.success("Successfully")
+
         }
+        return true;
     } catch (error) {
-        message.error("Lỗi xảy ra")
+
+        return false;
     }
 }
 export const CapNhapThongTin = async (dispatch) => {

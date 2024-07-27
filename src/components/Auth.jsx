@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { DangKy, DangNhap, sendEmailPassword } from '../service/actions/UserAction';
 import toast, { Toaster } from 'react-hot-toast';
 import Loading from './Loading';
+import { message } from 'antd';
+import { hienDangNhap } from '../store/reducer/UserReducer';
 export default function Auth(props) {
     const [login, setLogin] = useState(props.choose)
     const notify = () => toast('Here is your toast.');
@@ -69,6 +71,8 @@ const Login = props => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [usernameError, setusernameError] = useState(false);
+    const [passwordError, setpasswordError] = useState(false);
     // const msgLogin = useSelector(state => state.message.login?.msg)
     const [check, setCheck] = useState(false);
     useEffect(() => {
@@ -83,7 +87,21 @@ const Login = props => {
             email: user.username,
             matKhau: user.password
         }
-        DangNhap(data, props.dispatch)
+        const checkEmail = /^(?=.{6,30}$)([^\s@]+@[^\s@]+\.[^\s@]+)$/;
+        const checkPassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@]).{6,30}$/;
+        if (!checkEmail.test(username)) {
+            setusernameError(true);
+
+        } else if (!checkPassword.test(password)) {
+            setpasswordError(true);
+
+        } else {
+            const result = await DangNhap(data, props.dispatch);
+            if (result == false) {
+                message.error("Đăng nhập thất bại kiểm tra lại email và mật khẩu")
+            }
+        }
+
     }
     return (
         <div className="form-wrap">
@@ -99,9 +117,11 @@ const Login = props => {
                             placeholder="Email" required name="username" type="text"
                             onChange={(e) => {
                                 setUsername(e.target.value)
+                                setusernameError(false)
                             }}
                             value={username}
                         />
+                        {usernameError ? <p style={{ color: "red" }}>Hãy nhập lại email</p> : null}
                     </div>
                 </div>
                 <div className="form-group d-flex">
@@ -114,8 +134,12 @@ const Login = props => {
                             value={password}
                             onChange={e => {
                                 setPassword(e.target.value)
+                                setpasswordError(false)
                             }}
                         />
+
+                        {passwordError ? <p style={{ color: "red" }}>Hãy nhập lại đúng định dạng mật khẩu</p> : null}
+
                     </div>
                 </div>
                 {/* <div className="d-flex">
@@ -236,83 +260,67 @@ const Register = props => {
     const [passwordCfRegister, setPasswordCfRegister] = useState("");
 
     const [valid, setValid] = useState([false, false, true, true])
-    const [msgUsername, setMsgUsername] = useState("")
-    const [msgEmail, setMsgEmail] = useState("")
-    const [msgPassword, setMsgPassword] = useState("")
-    const [msgCfPassword, setMsgCfPassword] = useState("")
+    const [msgUsername, setMsgUsername] = useState(false)
+    const [msgEmail, setMsgEmail] = useState("Nhập email đúng định dạng")
+    const [msgPassword, setMsgPassword] = useState(false)
+    const [msgCfPassword, setMsgCfPassword] = useState(false)
     // const msgRegister = useSelector(state => state.message.register?.msg)
-
+    const dispatch = useDispatch();
     const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ ///regex validate email
-
-    const onRegister = async (e) => {//Xử lý gọi API Sign up
+    const checkEmail = /^(?=.{6,30}$)([^\s@]+@[^\s@]+\.[^\s@]+)$/;
+    const checkPassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@]).{6,30}$/;
+    const onRegister = async (e) => {
         e.preventDefault();
+        const checkEmail = /^(?=.{6,30}$)([^\s@]+@[^\s@]+\.[^\s@]+)$/;
+        const checkPassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@]).{6,30}$/;
+        if (!checkEmail.test(emailRegister)) {
+            setMsgUsername(true);
 
-        const user = {
-            matKhau: passwordRegister,
-            email: emailRegister
-        };
-        toast.success("Đăng ký thành công. Vui lòng vào email để mở liên kết xác thực tài khoản", { autoClose: 3000, pauseOnHover: false });//hiển thị toast thông báo
+        } else if (!checkPassword.test(passwordRegister)) {
+            setMsgPassword(true);
 
-        DangKy(user);
+        } else if (passwordRegister !== passwordCfRegister) {
+            setMsgCfPassword(true)
+        } else {
+            const user = {
+                matKhau: passwordRegister,
+                email: emailRegister
+            };
+
+
+            const result = await DangKy(user);
+            if (result === false) {
+                setMsgUsername(true);
+                setMsgEmail("Email đã tồn tại")
+            } else {
+
+                message.success("Đăng ký thành công bấm vào đăng nhập để đăng nhập")
+            }
+        }
+
+
     }
 
-    const onChangeEmail = (e) => {//validate email
+    const onChangeEmail = (e) => {
         let email = e.target.value
         setEmailRegister(e.target.value)
-        if (regex.test(email)) {
-
-        }
-        else {
-            let newValid = [...valid]
-            newValid[0] = false
-            setValid(newValid)
-            setMsgEmail('Email không hợp lệ')
-        }
+        setMsgUsername(false);
+        setMsgEmail("Nhập email đúng định dạng")
     }
 
 
 
-    const onChangePassword = (e) => {//validate password
+    const onChangePassword = (e) => {
         let password = e.target.value
         setPasswordRegister(e.target.value)
-        let newValid = [...valid]
-        if (password.length > 8) {
-            setMsgPassword("Mật khẩu hợp lệ")
-            newValid[2] = true
-            if (password === passwordCfRegister) {
-                newValid[3] = true
-                setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
-            } else {
-                newValid[3] = false
-                setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
-            }
-        } else {
-            setMsgPassword("Mật khẩu không hợp lệ")
-            newValid[2] = false
-            if (password === passwordCfRegister) {
-                newValid[3] = true
-                setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
-            } else {
-                newValid[3] = false
-                setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
-            }
-        }
-        setValid(newValid)
+        setMsgPassword(false);
+        console.log(passwordRegister)
     }
 
-    const onChangePasswordCf = (e) => {//validate password confirm
+    const onChangePasswordCf = (e) => {
         let password = e.target.value
         setPasswordCfRegister(e.target.value)
-        let newValid = [...valid]
-        if (password === passwordCfRegister) {
-            newValid[3] = true
-            setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
-        } else {
-            newValid[3] = false
-            setMsgCfPassword("Mật khẩu xác nhận trùng khớp")
-        }
-
-        setValid(newValid)
+        setMsgCfPassword(false)
     }
     const notify = () => {
         toast('Here is your toast.')
@@ -328,7 +336,7 @@ const Register = props => {
                             onChange={onChangeEmail}
                         />
                     </div>
-                    <span className={`${valid[0] ? 'success' : 'error'}`}>{msgEmail}</span>
+                    {msgUsername ? <span className={`error`}>{msgEmail}</span> : null}
 
                 </div>
 
@@ -339,7 +347,8 @@ const Register = props => {
                             onChange={onChangePassword}
                         />
                     </div>
-                    <span className={`${valid[2] ? 'success' : 'error'}`}>{msgPassword}</span>
+                    {msgPassword ? <span className={`error`}>Nhập mật khẩu đúng định dạng</span> : null}
+
 
                 </div>
                 <div className="form-group d-flex">
@@ -349,7 +358,8 @@ const Register = props => {
                             onChange={onChangePasswordCf}
                         />
                     </div>
-                    <span className={`${valid[3] ? 'success' : 'error'}`}>{msgCfPassword}</span>
+                    {msgCfPassword ? <span className={`error`}>Nhập lại mật khẩu phải trùng với mật khẩu</span> : null}
+
                 </div>
                 {/* <span>{msgRegister}</span> */}
                 <button
