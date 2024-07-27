@@ -142,7 +142,19 @@ export const napTienAction = async (data) => {
 
 
 }
+export const nangCapAction = async (data, dispatch) => {
+    try {
+        const result = await apiKey.put("Login/NangcaptaiKhoanVip", null, data);
+        console.log(result)
+        await CapNhapThongTin(dispatch)
+        return result
+    } catch (error) {
+        console.log(error)
+        return false;
+    }
 
+
+}
 export const AddUserByAdmin = async (data) => {
     try {
         const result = await apiKey.post("/Login/AddUserByAdmin", data)
@@ -206,6 +218,7 @@ export const deleteUserAdmin = async (id) => {
         const result = await apiKey.put("/Login/XoaTaikhoan", null, dataUser)
         console.log(result)
         if (result.status === 200) {
+
             return true
         }
         return false;

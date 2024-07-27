@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import avt from '../../assets/img/avt.png'
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
-import { CapNhapThongTin, ChinhSuaThongTinDangNhap, napTienAction, sendEmail } from '../../service/actions/UserAction';
+import { CapNhapThongTin, ChinhSuaThongTinDangNhap, nangCapAction, napTienAction, sendEmail } from '../../service/actions/UserAction';
 import { message } from 'antd';
 export default function Profile(props) {
     const { userInfo } = useSelector(state => state.UserReducer);
@@ -82,6 +82,20 @@ export default function Profile(props) {
         }
         console.log(result)
     }
+    const NangCap = async (e) => {
+        e.preventDefault();
+        const data = {
+            id: userInfo.maNguoiDung
+        }
+        const result = await nangCapAction(data, dispatch);
+        if (result == false) {
+            message.error("Lỗi xảy ra, xin hãy kiểm tra lại")
+        }
+        else {
+            message.success("nâng cấp tài khoản thành công");
+        }
+        console.log(result)
+    }
     const sendEmailToAuthen = (e) => {
         e.preventDefault();
         sendEmail()
@@ -138,7 +152,7 @@ export default function Profile(props) {
                                 </div>
                                 <div className="group-info">
                                     <p>{userInfo.vip != null ? "Vip" : "Chưa kích hoạt vip"}</p>
-                                    <p>{userInfo.vip != null ? userInfo.ngayHetHanVip : "Kích hoạt vip để tận hưởng các chức năng của trang web"}</p>
+                                    <p>{userInfo.vip != null ? `Ngày hết hạn vip: ${dayjs(userInfo.ngayHetHanVip).format("DD/MM/YYYY")} ` : "Kích hoạt vip để tận hưởng các chức năng của trang web"}</p>
                                 </div>
                                 <div className="group-info">
                                     <label htmlFor="" style={labelStyle}>Tiền tệ</label>
@@ -177,7 +191,7 @@ export default function Profile(props) {
                                     </div>
                                     <div>
                                         <p>Nâng cấp tài khoản</p>
-                                        <button onClick={napTien}>Nâng cấp</button>
+                                        <button onClick={NangCap}>Nâng cấp</button>
                                     </div>
 
                                 </div>
