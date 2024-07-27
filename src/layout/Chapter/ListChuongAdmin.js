@@ -174,18 +174,7 @@ export default function ListChuongAdmin() {
         <>
             <div className='flex flex-row justify-between items-center mb-1'>
                 <h1>Danh sách chương của truyện: {tenTruyen}</h1>
-                <input
-                    className='w-3/4'
-                    placeholder='Tìm kiếm'
-                    onChange={
-                        (e) => setSearch(e.target.value)
-                    }
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            handleSearchUsers();
-                        }
-                    }}
-                />
+
                 {/* <Button onClick={handleClickAddUser} type="primary">Thêm tài khoản</Button> */}
             </div>
             <Table columns={columns} dataSource={isSearching ? searchUser : listUser ? listUser : null} />

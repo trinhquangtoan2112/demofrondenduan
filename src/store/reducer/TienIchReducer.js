@@ -1,5 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
+let fontSize = 18;
+let fontStyle = "Arial";
+if (localStorage.getItem("Fontsize")) {
+    fontSize = localStorage.getItem("Fontsize");
 
+}
+if (localStorage.getItem("FontStyle")) {
+
+    fontStyle = localStorage.getItem("FontStyle")
+
+}
 const initialState = {
     allFontKieuChu: [
         { name: "Arial", style: 'Arial' },
@@ -8,8 +18,8 @@ const initialState = {
         { name: "Times New Roman", style: 'Times New Roman' },
         { name: "Verdana", style: 'Verdana' }
     ],
-    fontChu: 18,
-    fontStyle: "Arial"
+    fontChu: fontSize,
+    fontStyle: fontStyle
 }
 
 const TienIchReducer = createSlice({
@@ -19,12 +29,12 @@ const TienIchReducer = createSlice({
         setFormChu: (state, action) => {
 
             state.fontChu = action.payload
-
+            localStorage.setItem("Fontsize", action.payload)
         },
         setFontStyle: (state, action) => {
 
             state.fontStyle = action.payload
-
+            localStorage.setItem("FontStyle", action.payload)
         },
     }
 });

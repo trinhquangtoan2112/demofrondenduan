@@ -18,24 +18,24 @@ import {
 import { setFontStyle, setFormChu } from "../../store/reducer/TienIchReducer.js";
 
 function Chapter(props) {
-  console.log(111);
+  const [setting, setSetting] = useState(true);
   const { maChuong, name } = useParams();
   const [chapter, setChapter] = useState({});
   const [manual, setManual] = useState("");
   const [content, setContnet] = useState("Khong co gi");
-
   const [lineHeight, setLineHeight] = useState(1.5);
-  const [fontName, setFontName] = useState("Arial");
   const dispatch = useDispatch();
   const contentRef = useRef(null);
   const userInfo = useSelector((state) => state.UserReducer.userInfo);
+  console.log(userInfo);
   const [maChuongTruyenBaoCao, setReportingChuongtruyen] = useState(null);
   const [reportModalVisible, setReportModalVisible] = useState(false);
   const [likesChuong, setLikesChuong] = useState({});
   const allFontKieuChu = useSelector((state) => state.TienIchReducer.allFontKieuChu);
-  const fontChu = useSelector((state) => state.TienIchReducer.fontChu);
-  const fontStyle = useSelector((state) => state.TienIchReducer.fontStyle);
-  console.log(allFontKieuChu)
+  const { fontChu, fontStyle } = useSelector((state) => state.TienIchReducer);
+
+  console.log(fontChu)
+  console.log(fontStyle)
   useEffect(() => {
     const handleSetReading = async () => {
       const data = {
@@ -206,20 +206,75 @@ function Chapter(props) {
         className="main"
         style={{ backgroundColor: "#ced9d9", paddingTop: "30px" }}
       >
+        <div className="chapter-manual__popup w-6/12 mx-auto" >
+          <div>  <a onClick={() => {
+            setSetting(!setting)
+          }} className="flex flex-row items-center"><h4>Cài đặt</h4><i className="fa-solid fa-gear ml-1"></i></a></div>
+          {setting ? <li className={`chapter-manual__item active`} onClick={(e) => {
 
-        {audioUrl && <audio controls src={audioUrl}></audio>}
-        <p>Font size</p>
-        <select defaultValue={fontChu} onChange={(e) => {
-          dispatch(setFormChu(e.target.value))
-        }}>
-          {renderTienIchFontSize()}
-        </select>
-        <p>Font</p>
-        <select defaultValue={fontStyle} onChange={(e) => {
-          dispatch(setFontStyle(e.target.value))
-        }}>
-          {renderTienIchFont()}
-        </select>
+            console.log("24124214")
+          }}>
+
+            <div className="chapter-manual__popup">
+
+              <div className="chapter-setting">
+                <table className='chapter-setting__body fs-18'>
+                  <tbody>
+                    <tr className="mb-2">
+                      <td className='col-4'>
+                        <p>Font size</p>
+                      </td>
+                      <td className='col-8'>
+                        <div className='d-flex chapter-setting__input'>
+
+                          <select defaultValue={fontChu} onChange={(e) => {
+                            dispatch(setFormChu(e.target.value))
+                          }}>
+                            {renderTienIchFontSize()}
+                          </select>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr className="mb-2">
+                      <td className='col-4'>
+                        <p>Font</p>
+                      </td>
+                      <td className='col-8'>
+                        <div className='d-flex chapter-setting__input'>
+
+                          <select defaultValue={fontStyle} onChange={(e) => {
+                            dispatch(setFontStyle(e.target.value))
+                          }}>
+                            {renderTienIchFont()}
+                          </select>
+                        </div>
+                      </td>
+                    </tr>
+                    {userInfo.vip ?
+                      <tr className="mb-2">
+                        <td className='col-4'>
+                          <button onClick={handleSpeak}>Đọc văn bản</button>
+                        </td>
+                        <td className='col-8'>
+                          <div className='d-flex chapter-setting__input'>
+
+                            <div>   {audioUrl && <audio controls src={audioUrl}></audio>}
+                            </div>
+
+                          </div>
+                        </td>
+                      </tr> : null}
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </li>
+            : null}
+
+        </div>
+
+
 
 
         <div className="container">
@@ -233,7 +288,6 @@ function Chapter(props) {
           >
 
 
-            <button onClick={handleSpeak}>Đọc văn bản</button>
             <div
               className="d-lex"
               style={{ fontSize: `${fontChu}px`, fontFamily: `${fontStyle}` }}

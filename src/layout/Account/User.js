@@ -146,11 +146,17 @@ export default function User() {
 
     const handleSearchUsers = async () => {
         const data = { search };
-        const result = await searchUserAction(data);
-        if (result.success === 200) {
-            setSearchUser(result.data);
-            setIsSearching(true);
+        if (search != "" && search != null) {
+            const result = await searchUserAction(data);
+            if (result.success === 200) {
+                setSearchUser(result.data);
+                setIsSearching(true);
+            }
+        } else {
+            setIsSearching(false);
+            getListNguoiDung()
         }
+
     };
 
     const onRoleUpdate = (updatedRole) => {
@@ -168,7 +174,7 @@ export default function User() {
                 <input
                     className='w-3/4'
                     placeholder='Tìm kiếm'
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => setSearch(e.target.value.trim())}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                             handleSearchUsers();

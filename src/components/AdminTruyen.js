@@ -225,7 +225,7 @@ export default function AdminTruyen() {
                     className='w-3/4'
                     placeholder='Tìm kiếm'
                     onChange={
-                        (e) => setSearch(e.target.value)
+                        (e) => setSearch(e.target.value.trim())
                     }
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
