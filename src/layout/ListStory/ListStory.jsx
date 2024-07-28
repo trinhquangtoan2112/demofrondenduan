@@ -14,8 +14,9 @@ export default function ListStory() {
     useEffect(() => {
         const getStory = async () => {
             const result = await GetTruyenMain();
-            setData(result.dexuat.slice(0, 3)); // Hiển thị 3 câu chuyện cho "Truyện đề cử"
-            setList(result.conlai.slice(0, 12)); // Hiển thị 12 câu chuyện cho "Danh sách truyện"
+            console.log(result);
+            setData(result?.dexuat.slice(0, 3)); // Hiển thị 3 câu chuyện cho "Truyện đề cử"
+            setList(result?.conlai.slice(0, 12)); // Hiển thị 12 câu chuyện cho "Danh sách truyện"
         };
         getStory();
     }, [dispatch]);
@@ -29,11 +30,11 @@ export default function ListStory() {
                             <h4 className="text-xl font-semibold mb-4">Truyện đề cử</h4>
                         </SectionHeading>
                         <SectionBody>
-                            <div className="space-y-4">
+                            {datas ? <div className="space-y-4">
                                 {datas.map((data) => (
                                     <Story key={data.maTruyen} data={data} />
                                 ))}
-                            </div>
+                            </div> : <p>Không có kết nối</p>}
                         </SectionBody>
                     </Section>
                 </div>
@@ -44,7 +45,7 @@ export default function ListStory() {
                         </SectionHeading>
                         <SectionBody>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {theLoai.map((genre) => (
+                                {theLoai ? theLoai.map((genre) => (
                                     <Link
                                         to={`/AllStories?genre=${encodeURIComponent(genre.tenTheLoai)}`}
                                         key={genre.maTheLoai}
@@ -52,7 +53,7 @@ export default function ListStory() {
                                     >
                                         <h5 className="text-md font-semibold">{genre.tenTheLoai}</h5>
                                     </Link>
-                                ))}
+                                )) : null}
                             </div>
                         </SectionBody>
                     </Section>
@@ -60,7 +61,7 @@ export default function ListStory() {
             </div>
             <p className="text-lg font-medium mt-8">Danh sách truyện</p>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {list.map((data) => (
+                {list ? list.map((data) => (
                     <Link
                         to={`truyen/${data.maTruyen}`}
                         key={data.maTruyen}
@@ -73,13 +74,13 @@ export default function ListStory() {
                         <div className="flex justify-between items-center w-full text-sm">
                             <p className="text-gray-700">{data.tenButDanh}</p>
                             <p className="text-gray-700">
-                                {data.diemDanhGia ? `${data.diemDanhGia}/5` : '0/5'} 
+                                {data.diemDanhGia ? `${data.diemDanhGia}/5` : '0/5'}
                                 <i className='fa-solid fa-star text-yellow-500' />
                             </p>
                             <p className="text-gray-700">{data.tenTheLoai}</p>
                         </div>
                     </Link>
-                ))}
+                )) : null}
             </div>
         </>
     );

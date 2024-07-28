@@ -33,15 +33,14 @@ export const DangKy = async (user) => {
     }
 }
 export const CapNhapThongTin = async (dispatch) => {
-    console.log("user")
+
     try {
         const result = await apiKey.getToken("/Login/updateInfo")
 
         if (result.status == 200) {
             console.log("Successfully")
-            dispatch(setUserInformation(result.data))
+            await dispatch(setUserInformation(result.data))
             localStorage.setItem("USER_LOGIN", JSON.stringify(result.data.data));
-
         }
     } catch (error) {
         console.log(error)

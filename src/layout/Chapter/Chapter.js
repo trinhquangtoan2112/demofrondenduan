@@ -79,7 +79,17 @@ function Chapter(props) {
       );
       console.log(result);
     };
+    const themLuotDoc = async () => {
+      const data = {
+        id: maChuong,
+      };
+      try {
+        const result = await apiKey.post("Chuongtruyens/Themluotdoc", null, data);
+      } catch (error) {
 
+      }
+
+    }
     const checkLike = async () => {
       try {
         const maid = {
@@ -93,7 +103,7 @@ function Chapter(props) {
         console.error("Error checking like:", error);
       }
     };
-
+    themLuotDoc()
     checkLike();
 
     handleSetReading();
@@ -258,7 +268,11 @@ function Chapter(props) {
                         <td className='col-8'>
                           <div className='d-flex chapter-setting__input'>
 
-                            <div>   {audioUrl && <audio controls src={audioUrl}></audio>}
+                            <div>   {audioUrl && <audio controls src={audioUrl}
+                            //  onEnded={() => {
+                            //   window.alert("Keets thuc")
+                            // }}
+                            ></audio>}
                             </div>
 
                           </div>
