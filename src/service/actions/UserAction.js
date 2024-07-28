@@ -44,7 +44,9 @@ export const CapNhapThongTin = async (dispatch) => {
         }
     } catch (error) {
         console.log(error)
-        window.location.reload()
+        setTimeout(() => {
+            CapNhapThongTin(dispatch)
+        }, 10000)
         message.error("Lỗi xảy ra")
     }
 }
