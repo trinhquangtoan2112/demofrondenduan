@@ -203,11 +203,11 @@ function StoryDetail() {
               <div className="img-wrap">
                 <img src={truyen?.anhBia} className="h-full" alt="" />
               </div>
-              <div className="col-3">
+              <div className="col-4">
                 <div className="heroSide__main">
                   <h2 className="mb-1 bold">{truyen?.tenTruyen}</h2>
                   <ul className="flex flex-col w-full">
-                    <li className={liClass}>Tác giả: {truyen?.tenButDanh}</li>
+                    <li className={liClass}>Tác giả: {truyen?.tacGia}</li>
                     <li className={liClass}>Thể loại: {truyen?.tenTheLoai}</li>
                     <li className={liClass}>
                       Ngày cập nhập:{" "}

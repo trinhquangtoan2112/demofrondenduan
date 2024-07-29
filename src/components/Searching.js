@@ -48,7 +48,7 @@ export default function Searching() {
                         </div>
                         <p className="text-center font-medium mb-2 truncate">{data.tenTruyen}</p>
                         <div className='flex justify-between items-center w-full text-sm'>
-                            <p className="text-gray-700">{data.tenButDanh}</p>
+                            <p className="text-gray-700">{data.tacGia}</p>
                             <p className="text-gray-700">
                                 {data.diemDanhGia ? `${data.diemDanhGia}/5` : '0/5'} 
                                 <i className='fa-solid fa-star text-yellow-500' />

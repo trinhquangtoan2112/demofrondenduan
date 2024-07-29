@@ -19,6 +19,7 @@ export default function DetailTruyen() {
     const [image, setImage] = useState("");
     const [preview, setPreview] = useState()
     const [name, setName] = useState("");
+    const [Nguoiviettruyen, setNguoiVietTruyen] = useState("");
     const [description, setDescription] = useState("");
     const [tacgia, setTacgia] = useState("");
     const [theloai, setTheloai] = useState("");
@@ -48,6 +49,7 @@ export default function DetailTruyen() {
         setImage(null);
         setPreview(result.anhBia)
         setName(result.tenTruyen);
+        setNguoiVietTruyen(result.tacGia);
         setTheloai(result.tenTheLoai)
         setDescription(result.moTa)
         settrangthai(result.trangThai)
@@ -89,6 +91,11 @@ export default function DetailTruyen() {
                         <div className="group-info col-3">
                             <label for="types">Thể loại</label>
                             <p>{theloai}</p>
+
+                        </div>
+                        <div className="group-info col-3">
+                            <label for="types">Tác giả</label>
+                            <p>{Nguoiviettruyen}</p>
 
                         </div>
                         <div className="group-info col-12">

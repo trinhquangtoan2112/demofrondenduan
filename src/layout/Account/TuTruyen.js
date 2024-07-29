@@ -677,6 +677,7 @@ export function EditNovel() {
     const [image, setImage] = useState("");
     const [preview, setPreview] = useState(avt)
     const [name, setName] = useState("");
+    const [Nguoiviettruyen, setNguoiVietTruyen] = useState("");
     const [description, setDescription] = useState("");
     const [tacgia, setTacgia] = useState("");
     const [theloai, setTheloai] = useState("");
@@ -689,6 +690,7 @@ export function EditNovel() {
         e.preventDefault()
         const form = new FormData();
         form.append('tenTruyen', name);
+        form.append('tacGia', Nguoiviettruyen);
         form.append('moTa', description);
         form.append('MaTheLoai', theloai);
         form.append('TrangThai', trangthai);
@@ -704,6 +706,7 @@ export function EditNovel() {
                 setCkValue(true)
             }, [1])
             setName("")
+            setNguoiVietTruyen("")
             setDescription("")
             setPreview(avt)
             message.success("Cập nhập truyện thành công")
@@ -713,6 +716,11 @@ export function EditNovel() {
     const onChangeName = (e) => {
         setName(e.target.value)
     }
+
+    const onChangeNguoiVietTruyen = (e) => {
+        setNguoiVietTruyen(e.target.value)
+    }
+
     const onChangeImage = (e) => {
         if (e.target.files.lenght !== 0) {
             setImage(e.target.files[0]);
@@ -725,6 +733,7 @@ export function EditNovel() {
             setImage(null);
             setPreview(result.anhBia)
             setName(result.tenTruyen);
+            setNguoiVietTruyen(result.tacGia);
             setTheloai(result.maTheLoai)
             setDescription(result.moTa)
             settrangthai(result.trangThai)
@@ -747,6 +756,13 @@ export function EditNovel() {
                             <input
                                 onChange={onChangeName}
                                 value={name || ""} />
+                        </div>
+
+                        <div className="group-info col-3">
+                            <label htmlFor="" style={labelStyle}>Tác giả</label>
+                            <input
+                                onChange={onChangeNguoiVietTruyen}
+                                value={Nguoiviettruyen || ""} />
                         </div>
 
                         {/* <div className="group-info col-3">

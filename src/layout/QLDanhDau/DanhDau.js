@@ -84,7 +84,7 @@ const DanhDau = () => {
               </div>
             </Link>
             <div className="flex items-center justify-between space-x-2">
-              <span className="text-sm text-gray-700">Tác giả: {data.tenButDanh}</span>
+              <span className="text-sm text-gray-700">Tác giả: {data.tacGia}</span>
               <span className="text-sm text-gray-700">Ngày đánh dấu: {formatDate(data.ngaytao)}</span>
               <span className="border border-primary text-primary px-2 py-1 text-sm rounded">{data.tenTheLoai}</span>
               <Button

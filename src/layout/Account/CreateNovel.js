@@ -21,6 +21,7 @@ export default function CreateNovel(props) {
     const [image, setImage] = useState("");
     const [preview, setPreview] = useState(avt)
     const [name, setName] = useState("");
+    const [Nguoiviettruyen, setNguoiVietTruyen] = useState("");
     const [description, setDescription] = useState("");
     const [listTacgia, setListTacGia] = useState(null);
     const [tacgia, setTacgia] = useState();
@@ -50,9 +51,11 @@ export default function CreateNovel(props) {
 
         const form = new FormData();
         form.append('tenTruyen', name);
+        form.append('tacGia', Nguoiviettruyen);
         form.append('moTa', description);
         form.append('MaTheLoai', theloai);
         form.append('maButDanh', tacgia);
+
         form.append('anhBia', image);
         const result = await DangTruyen(form);
         if (result) {
@@ -61,6 +64,7 @@ export default function CreateNovel(props) {
                 setCkValue(true)
             }, [1])
             setName("")
+            setNguoiVietTruyen("")
             setDescription("")
             setPreview(avt)
             message.success("Đăng truyện thành công")
@@ -73,6 +77,10 @@ export default function CreateNovel(props) {
     ///OnChange event
     const onChangeName = (e) => {
         setName(e.target.value)
+    }
+
+    const onChangeNguoiVietTruyen = (e) => {
+        setNguoiVietTruyen(e.target.value)
     }
 
     const onChangeImage = (e) => {
@@ -105,6 +113,13 @@ export default function CreateNovel(props) {
                                 <input
                                     onChange={onChangeName}
                                     value={name || ""} />
+                            </div>
+
+                            <div className="group-info col-3">
+                                <label htmlFor="" style={labelStyle}>Tác giả</label>
+                                <input
+                                    onChange={onChangeNguoiVietTruyen}
+                                    value={Nguoiviettruyen || ""} />
                             </div>
 
                             {/* <div className="group-info col-3">

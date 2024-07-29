@@ -15,7 +15,7 @@ function Story(props) {
                 <h2 className="text-lg font-semibold mb-2 truncate">{data.tenTruyen}</h2> {/* Truncate title */}
                 <div className="text-gray-700 mb-2 line-clamp-2">{data?.moTa ? parse(data.moTa) : null}</div>
                 <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">{data.tenButDanh}</span>
+                    <span className="text-gray-600">{data.tacGia}</span>
                     <p className="text-gray-700">
                                 {data.diemDanhGia ? `${data.diemDanhGia}/5` : '0/5'} 
                                 <i className='fa-solid fa-star text-yellow-500' />
