@@ -212,11 +212,13 @@ function Chapter(props) {
   }
   return (
     <>
+
+
       <div
         className="main"
         style={{ backgroundColor: "#ced9d9", paddingTop: "30px" }}
       >
-        <div className="chapter-manual__popup w-6/12 mx-auto" >
+        <div className="chapter-manual__popup w-3/12 mr-auto sticky top-0 left-0 " style={{ zIndex: 999, marginTop: "40px" }} >
           <div>  <a onClick={() => {
             setSetting(!setting)
           }} className="flex flex-row items-center"><h4>Cài đặt</h4><i className="fa-solid fa-gear ml-1"></i></a></div>
@@ -225,7 +227,7 @@ function Chapter(props) {
             console.log("24124214")
           }}>
 
-            <div className="chapter-manual__popup">
+            <div className="chapter-manual__popup " >
 
               <div className="chapter-setting">
                 <table className='chapter-setting__body fs-18'>
@@ -287,7 +289,6 @@ function Chapter(props) {
             : null}
 
         </div>
-
 
 
 
