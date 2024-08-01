@@ -68,10 +68,10 @@
             transform: translate(-50%, -50%) rotate(45deg);
         }
     }
-    input:checked~.checkmark {
+    input:checked ~ .checkmark {
         background: $main-color;
     }
-    input:checked~.checkmark::after {
+    input:checked ~ .checkmark::after {
         display: block;
     }
 }
@@ -107,11 +107,21 @@
         border-radius: 1rem;
         height: 42px;
         padding: 4px 12px;
-        transition: border-color .2s ease-in-out;
+        transition: border-color 0.2s ease-in-out;
         font-size: 15px;
         width: 100%;
         &:focus {
-            border-color: rgba($main-color, .6);
+            border-color: rgba($main-color, 0.6);
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .auth-wrap {
+        ul {
+            li {
+                text-wrap: nowrap;
+            }
         }
     }
 }

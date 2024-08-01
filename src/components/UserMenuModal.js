@@ -20,7 +20,7 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
       ></div>
 
       {/* Modal Content */}
-      <div className="bg-white w-80 h-full border border-gray-300 rounded-lg shadow-lg p-6 relative z-20 flex flex-col ">
+      <div className="bg-white w-full sm:w-80 h-full border border-gray-300 rounded-lg shadow-lg p-6 relative z-20 flex flex-col ">
         <button
           className="absolute top-4 right-4 text-xl"
           onClick={onClose}
@@ -82,11 +82,12 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
               Truyện đã lưu
             </Link>
           </li>
-          <li>
+          <li className="mb-4">
             <Link to="/Feedback" onClick={onClose}>
               Phản hồi
             </Link>
           </li>
+
         </ul>
       </div>
     </div>
