@@ -1,7 +1,7 @@
 .form-wrap {
     display: flex;
     flex-direction: column;
-    width: 400px;
+    max-width: 400px;
     padding: 30px;
     border-radius: 25px;
     margin: auto;
@@ -68,10 +68,10 @@
             transform: translate(-50%, -50%) rotate(45deg);
         }
     }
-    input:checked~.checkmark {
+    input:checked ~ .checkmark {
         background: $main-color;
     }
-    input:checked~.checkmark::after {
+    input:checked ~ .checkmark::after {
         display: block;
     }
 }
@@ -90,5 +90,90 @@
         color: $main-color;
         cursor: pointer;
         opacity: 0.65;
+    }
+}
+
+@media (max-width: 640px) {
+    .form-wrap {
+        padding: 0px;
+        max-width: 250px;
+        label {
+            font-size: 20px;
+        }
+        form {
+            position: relative;
+            font-size: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            button {
+                height: 3rem;
+                max-width: 250px;
+                padding: 0;
+            }
+            button:hover {
+                background-color: $main-color-hover;
+            }
+        }
+    }
+
+    .remember-label {
+        display: flex;
+        position: relative;
+        padding-left: 40px;
+        input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        .checkmark {
+            position: absolute;
+            top: 2px;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            border: 1px solid $main-color;
+            background: #eee;
+            border-radius: 2px;
+            &::after {
+                content: "";
+                position: absolute;
+                display: none;
+                top: 45%;
+                left: 50%;
+                width: 5px;
+                height: 10px;
+                border: solid white;
+                border-width: 0 3px 3px 0;
+                transform: translate(-50%, -50%) rotate(45deg);
+            }
+        }
+        input:checked ~ .checkmark {
+            background: $main-color;
+        }
+        input:checked ~ .checkmark::after {
+            display: block;
+        }
+    }
+
+    .register-choose {
+        margin: 20px auto;
+        label {
+            display: inline-block;
+            width: 100%;
+        }
+        a {
+            font-size: 20px;
+        }
+    }
+
+    .label-group {
+        justify-content: space-between;
+        a {
+            font-size: 20px;
+        }
     }
 }

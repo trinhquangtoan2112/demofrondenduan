@@ -36,7 +36,7 @@ export default function HeaderFile() {
     const trimmedSearch = search ? search.trim() : "";
     if (trimmedSearch) {
       navigate(`/searchlist/${trimmedSearch}`, { state: trimmedSearch });
-    }else {
+    } else {
       message.success("Hãy nhập thông tin tìm kiếm");
     }
   };
@@ -54,6 +54,7 @@ export default function HeaderFile() {
   };
 
   const hienDangNha = () => {
+    console.log(124421)
     dispatch(hienDangNhap());
   };
 
@@ -72,7 +73,117 @@ export default function HeaderFile() {
 
   return (
     <>
-      <nav className="header">
+      <nav className="header block sm:hidden ">
+        <div className="header__wrap">
+          <div className="logo w-1/12">
+            <Link className="" to="/">
+              <img src={logo} alt="" />
+            </Link>
+          </div>
+
+          <div className="navbar-nav ">
+
+            <div className="navbar-nav__list__search">
+              <div className="form-group">
+                <input
+                  placeholder="Tìm truyện"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      searching();
+                    }
+                  }}
+                  onChange={handleInputChange}
+                ></input>
+                <button
+                  onClick={searching}
+                >
+                  <i className="fa-solid fa-magnifying-glass"></i>
+                </button>
+              </div>
+            </div>
+
+
+          </div>
+          <div className="w-1/12 text-right flex flex-row justify-between">
+            <button className='navbar-nav__collapse fs-14 ' onClick={toggleUserMenu}><i className="fa-solid fa-bars"></i></button>
+            {user ?
+              <button className='navbar-nav__collapse fs-14 ' onClick={onClickLogout}>
+                <i className="fa fa-sign-in-alt"></i>
+              </button>
+              : <button className='navbar-nav__collapse fs-14 ' onClick={hienDangNha}><i className="fa fa-user" />
+              </button>
+            }
+            {/* <ul className="navbar-nav__list navbar-nav__list--right">
+              {user ? (
+                <div className="navbar-nav__profile d-flex items-center">
+                  {userInfo?.daXoa ? null : (
+                    <div
+                      className="navbar-nav__profile__name cursor-pointer"
+                    >
+                      {userInfo.anhDaiDien !== "string" &&
+                        userInfo.anhDaiDien !== null ? (
+                        <div
+                          style={{ marginRight: '10px' }}
+                          onClick={toggleUserMenu}
+                          className="navbar-nav__avatar"
+                        >
+                          <img
+                            src={userInfo.anhDaiDien}
+                            alt={`${userInfo.email} picture`}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = anhDaiDienmacdinh;
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div onClick={toggleUserMenu}>
+                          <i
+                            style={{ marginRight: "4px" }}
+                            className="fa-solid fa-user"
+                          ></i>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <a onClick={onClickLogout}>Đăng xuất</a>
+                </div>
+              ) : (
+                <>
+                  <a onClick={hienDangNha}>
+                    <li>Đăng nhập</li>
+                  </a>
+                  <a onClick={hienDangKy}>
+                    <li>Đăng ký</li>
+                  </a>
+                </>
+              )}
+            </ul> */}
+            <UserMenuModal
+              isOpen={isUserMenuOpen}
+              userInfo={userInfo}
+              onClose={toggleUserMenu}
+            />
+          </div>
+
+        </div>
+        {auth1.active && !user ? (
+          <Modal active={auth1.active}>
+            <ModalContent>
+              <Auth choose={auth1.login} user={user}></Auth>
+            </ModalContent>
+          </Modal>
+        ) : (
+          <></>
+        )}
+        <UserMenuModal
+          isOpen={isUserMenuOpen}
+          userInfo={userInfo}
+          onClose={toggleUserMenu}
+        />
+      </nav>
+      <nav className="header hidden sm:block">
         <div className="header__wrap">
           <div className="collapse">
             <button className="navbar-nav__collapse">
@@ -125,7 +236,7 @@ export default function HeaderFile() {
                       className="navbar-nav__profile__name cursor-pointer"
                     >
                       {userInfo.anhDaiDien !== "string" &&
-                      userInfo.anhDaiDien !== null ? (
+                        userInfo.anhDaiDien !== null ? (
                         <div
                           style={{ marginRight: '10px' }}
                           onClick={toggleUserMenu}
