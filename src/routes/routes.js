@@ -204,7 +204,7 @@ const ROUTES = [
     element: <BaoCaoAdmin></BaoCaoAdmin>,
     auth: false,
     roles: [],
-  },
+  }, 
   {
     index: 24,
     path: "KetQuaGiaoDich",
