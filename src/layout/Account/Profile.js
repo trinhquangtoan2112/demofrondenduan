@@ -3,7 +3,7 @@ import avt from '../../assets/img/avt.png'
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import { CapNhapThongTin, ChinhSuaThongTinDangNhap, nangCapAction, napTienAction, sendEmail } from '../../service/actions/UserAction';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 export default function Profile(props) {
     const { userInfo } = useSelector(state => state.UserReducer);
 
@@ -82,20 +82,35 @@ export default function Profile(props) {
         }
         console.log(result)
     }
+
+
     const NangCap = async (e) => {
         e.preventDefault();
-        const data = {
-            id: userInfo.maNguoiDung
+    
+        if (userInfo.soXu < 500) {
+            message.error("Bạn không đủ 500 xu để nâng cấp.");
+            return;
         }
-        const result = await nangCapAction(data, dispatch);
-        if (result == false) {
-            message.error("Lỗi xảy ra, xin hãy kiểm tra lại")
-        }
-        else {
-            message.success("nâng cấp tài khoản thành công");
-        }
-        console.log(result)
-    }
+    
+        Modal.confirm({
+            title: 'Xác nhận nâng cấp tài khoản',
+            content: userInfo.vip 
+                ? 'Bạn có muốn dùng 500 xu để gia hạn VIP thêm 30 ngày không?'
+                : 'Bạn có muốn dùng 500 xu để nâng cấp tài khoản của mình lên VIP trong 30 ngày không?',
+            onOk: async () => {
+                const data = { id: userInfo.maNguoiDung };
+                const result = await nangCapAction(data, dispatch);
+                if (result === false) {
+                    message.error("Lỗi xảy ra, xin hãy kiểm tra lại");
+                } else {
+                    message.success("Nâng cấp tài khoản thành công");
+                }
+            },
+        });
+    };
+    
+
+
     const sendEmailToAuthen = (e) => {
         e.preventDefault();
         sendEmail()
@@ -151,8 +166,8 @@ export default function Profile(props) {
 
                                 </div>
                                 <div className="group-info">
-                                    <p>{userInfo.vip != null ? "Vip" : "Chưa kích hoạt vip"}</p>
-                                    <p>{userInfo.vip != null ? `Ngày hết hạn vip: ${dayjs(userInfo.ngayHetHanVip).format("DD/MM/YYYY")} ` : "Kích hoạt vip để tận hưởng các chức năng của trang web"}</p>
+                                    <p>{userInfo.vip ? "Vip" : "Chưa kích hoạt vip"}</p>
+                                    <p>{userInfo.vip ? `Ngày hết hạn vip: ${dayjs(userInfo.ngayHetHanVip).format("DD/MM/YYYY")} ` : "Kích hoạt vip để tận hưởng các chức năng của trang web"}</p>
                                 </div>
                                 <div className="group-info">
                                     <label htmlFor="" style={labelStyle}>Tiền tệ</label>
@@ -210,7 +225,6 @@ export default function Profile(props) {
                 }
 
             </div >
-            {/* } */}
         </>
 
     )
