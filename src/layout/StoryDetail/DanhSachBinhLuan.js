@@ -41,7 +41,7 @@ const formatTimeAgo = (date) => {
   }
 };
 
-const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded,setBinhLuans }) => {
+const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded, setBinhLuans }) => {
   const [openReplies, setOpenReplies] = useState({});
   const [replyContent, setReplyContent] = useState({});
   const [sortCriteria, setSortCriteria] = useState("latest");
@@ -348,8 +348,8 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded,setBinhLuans }
               className="w-12 h-12 rounded-full mr-3 shadow-md"
             />
             <div className="flex-1">
-              <p className="font-bold text-lg">{binhLuan.tenNguoiDung}</p>
-              <p className="text-gray-500 text-sm">
+              <p className="font-bold text-lg fs-18">{binhLuan.tenNguoiDung.length > 10 ? binhLuan.tenNguoiDung.substring(0, 10) + "..." : binhLuan.tenNguoiDung}</p>
+              <p className="text-gray-500 text-sm fs-16">
                 {formatTimeAgo(binhLuan.ngayCapNhap)}
               </p>
             </div>
@@ -386,10 +386,10 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded,setBinhLuans }
               </div>
             </div>
           </div>
-          <p className="mb-4">{binhLuan.noidung}</p>
+          <p className="mb-4 fs-20">{binhLuan.noidung}</p>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-            <div>{binhLuan.solike || 0}</div>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <div>{binhLuan.solike || 0}</div>
               {likesBinhLuan[binhLuan.maBinhLuan] ? (
                 <button
                   style={{ minWidth: "10px", color: "red" }}
@@ -409,7 +409,7 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded,setBinhLuans }
 
             <button
               onClick={() => toggleReplies(binhLuan.maBinhLuan)}
-              className="text-[#ff7300] hover:text-[#ff4800] text-sm font-semibold"
+              className="text-[#ff7300] hover:text-[#ff4800] text-sm font-semibold fs-16"
             >
               {openReplies[binhLuan.maBinhLuan]
                 ? "Ẩn phản hồi"
@@ -425,11 +425,11 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded,setBinhLuans }
                   value={replyContent[binhLuan.maBinhLuan] || ""}
                   onChange={(e) => handleReplyChange(e, binhLuan.maBinhLuan)}
                   placeholder="Nhập phản hồi của bạn"
-                  className="block w-full rounded-md border-[#ff7300] shadow-sm focus:ring focus:ring-[#ff7300] focus:ring-opacity-50 border-2"
+                  className=" fs-16 block w-full rounded-md border-[#ff7300] shadow-sm focus:ring focus:ring-[#ff7300] focus:ring-opacity-50 border-2"
                 />
                 <button
                   onClick={() => handleAddReply(binhLuan.maBinhLuan)}
-                  className="mt-2 py-2 px-4 bg-[#ff7300] hover:bg-[#ff4800] text-white font-semibold rounded-lg shadow-md"
+                  className="mt-2 fs-16 py-2 px-4 bg-[#ff7300] hover:bg-[#ff4800] text-white font-semibold rounded-lg shadow-md"
                 >
                   Thêm phản hồi
                 </button>
@@ -446,11 +446,12 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded,setBinhLuans }
                       className="w-10 h-10 rounded-full mr-3 shadow-md"
                     />
                     <div className="flex-1">
-                      <p className="font-bold">{phanHoi.tenNguoiDung}</p>
-                      <p className="text-gray-500 text-sm">
+                      <p className="font-bold fs-14">{phanHoi.tenNguoiDung.length > 10 ? phanHoi.tenNguoiDung.substring(0, 10) + "..." : phanHoi.tenNguoiDung}
+                      </p>
+                      <p className="text-gray-500 text-sm fs-12">
                         {formatTimeAgo(phanHoi.ngayCapNhap)}
                       </p>
-                      <p className="mt-2">{phanHoi.noidung}</p>
+                      <p className="mt-2 fs-14">{phanHoi.noidung}</p>
                       <div
                         style={{
                           display: "flex",
@@ -482,33 +483,33 @@ const DanhSachBinhLuan = ({ binhLuans, visibleCount, onReplyAdded,setBinhLuans }
                       <div className="flex space-x-2">
                         {(userInfo?.maQuyen === 1 ||
                           phanHoi.checkCuaToi === true) && (
-                          <div className="flex space-x-2">
-                            <button
-                              className="text-blue-500 hover:text-blue-600"
-                              onClick={() =>
-                                handleEditClick(
-                                  phanHoi.maPhanHoiBinhLuan,
-                                  "phanHoi",
-                                  phanHoi.noidung
-                                )
-                              }
-                            >
-                              <i className="fa-solid fa-edit"></i>
-                            </button>
+                            <div className="flex space-x-2">
+                              <button
+                                className="text-blue-500 hover:text-blue-600"
+                                onClick={() =>
+                                  handleEditClick(
+                                    phanHoi.maPhanHoiBinhLuan,
+                                    "phanHoi",
+                                    phanHoi.noidung
+                                  )
+                                }
+                              >
+                                <i className="fa-solid fa-edit"></i>
+                              </button>
 
-                            <button
-                              className="text-red-500 hover:text-red-600"
-                              onClick={() =>
-                                handleDeleteBinhLuan(
-                                  phanHoi.maPhanHoiBinhLuan,
-                                  2
-                                )
-                              }
-                            >
-                              <i className="fa-solid fa-trash"></i>
-                            </button>
-                          </div>
-                        )}
+                              <button
+                                className="text-red-500 hover:text-red-600"
+                                onClick={() =>
+                                  handleDeleteBinhLuan(
+                                    phanHoi.maPhanHoiBinhLuan,
+                                    2
+                                  )
+                                }
+                              >
+                                <i className="fa-solid fa-trash"></i>
+                              </button>
+                            </div>
+                          )}
                         <button
                           className="text-yellow-500 hover:text-yellow-600"
                           onClick={() =>

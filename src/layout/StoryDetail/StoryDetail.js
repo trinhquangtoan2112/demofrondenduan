@@ -132,7 +132,7 @@ function StoryDetail() {
         setIsBookmarked(false);
       } catch (error) {
         console.error("Error:", error);
-        message.error("Failed to remove bookmark. Please try again."); 
+        message.error("Failed to remove bookmark. Please try again.");
       }
     }
   };
@@ -167,7 +167,7 @@ function StoryDetail() {
     navigator.clipboard
       .writeText(link)
       .then(() => {
-        alert("Lấy đường dẫn chia sẻ thành công: "+ link );
+        alert("Lấy đường dẫn chia sẻ thành công: " + link);
       })
       .catch((err) => {
         console.error("Thất bại", err);
@@ -203,7 +203,7 @@ function StoryDetail() {
               <div className="img-wrap">
                 <img src={truyen?.anhBia} className="h-full" alt="" />
               </div>
-              <div className="col-4">
+              <div className="sm:col-4">
                 <div className="heroSide__main">
                   <h2 className="mb-1 bold">{truyen?.tenTruyen}</h2>
                   <ul className="flex flex-col w-full">
@@ -214,8 +214,8 @@ function StoryDetail() {
                       {dayjs(truyen?.ngayCapNhat).format("DD/MM/YYYY")}
                     </li>
                     <li>
-                      Điểm đánh giá: {truyen?.diemDanhGia ? `${truyen?.diemDanhGia}/5` : '0/5'} 
-                                <i className='fa-solid fa-star text-yellow-500' />
+                      Điểm đánh giá: {truyen?.diemDanhGia ? `${truyen?.diemDanhGia}/5` : '0/5'}
+                      <i className='fa-solid fa-star text-yellow-500' />
                     </li>
                   </ul>
                   <div style={{ display: "flex" }}>
@@ -299,19 +299,19 @@ function StoryDetail() {
                   )}
                 </div>
               </div>
-              <div className="col-9" style={{ overflowY: "scroll" }}>
+              <div className="col-9 content123" style={{ overflowY: "scroll" }}>
                 <div className="flex justify-between items-center">
                   <div className="row bold">Giới Thiệu</div>
                   <div>
                     <button
-                    style={{border:'1px solid gray', padding:'5px 10px', borderRadius:'50%'}}
+                      style={{ border: '1px solid gray', padding: '5px 10px', borderRadius: '50%' }}
                       className="text-yellow-500 hover:text-yellow-600"
                       onClick={() => handleReportClick(truyen.maTruyen)}
                     >
                       <i className="fa-solid fa-flag"></i>
                     </button>
                     <button
-                    style={{border:'1px solid gray', padding:'5px 10px', borderRadius:'50%', marginLeft:'10px'}}
+                      style={{ border: '1px solid gray', padding: '5px 10px', borderRadius: '50%', marginLeft: '10px' }}
                       className="text-yellow-500 hover:text-yellow-600"
                       onClick={copyToClipboard}
                     >
@@ -328,9 +328,8 @@ function StoryDetail() {
               <div className="navigate">
                 {nav.map((item, index) => (
                   <a
-                    className={`navigate__tab fs-20 bold ${
-                      active === index ? "tab_active" : ""
-                    }`}
+                    className={`navigate__tab fs-20 bold ${active === index ? "tab_active" : ""
+                      }`}
                     key={index}
                     name={item.path}
                     onClick={handleTabChange}
