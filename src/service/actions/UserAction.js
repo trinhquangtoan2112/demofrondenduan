@@ -149,7 +149,6 @@ export const napTienAction = async (data) => {
 export const nangCapAction = async (data, dispatch) => {
     try {
         const result = await apiKey.put("Login/NangcaptaiKhoanVip", null, data);
-        console.log(result)
         await CapNhapThongTin(dispatch)
         return result
     } catch (error) {
