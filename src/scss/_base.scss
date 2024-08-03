@@ -56,10 +56,10 @@
     margin: auto;
     position: relative;
     @include tablet {
-        padding: 0 20px;
+        padding: 0 10px;
     }
     @include mobile {
-        padding: 0 10px;
+        padding: 0 0px;
     }
 }
 

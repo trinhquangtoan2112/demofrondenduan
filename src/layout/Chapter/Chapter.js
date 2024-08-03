@@ -16,7 +16,8 @@ import {
   checklike,
 } from "../../service/actions/LikeAction.js";
 import { setFontStyle, setFormChu } from "../../store/reducer/TienIchReducer.js";
-
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 function Chapter(props) {
   const [setting, setSetting] = useState(true);
   const { maChuong, name } = useParams();
@@ -33,7 +34,7 @@ function Chapter(props) {
   const [likesChuong, setLikesChuong] = useState({});
   const allFontKieuChu = useSelector((state) => state.TienIchReducer.allFontKieuChu);
   const { fontChu, fontStyle } = useSelector((state) => state.TienIchReducer);
-
+  const [showModal, setShowModal] = useState(false);
   console.log(fontChu)
   console.log(fontStyle)
   useEffect(() => {
@@ -218,77 +219,117 @@ function Chapter(props) {
         className="main"
         style={{ backgroundColor: "#ced9d9", paddingTop: "30px" }}
       >
-        <div className="chapter-manual__popup w-3/12 mr-auto sticky top-0 left-0 " style={{ zIndex: 999, marginTop: "40px" }} >
-          <div>  <a onClick={() => {
-            setSetting(!setting)
-          }} className="flex flex-row items-center"><h4>Cài đặt</h4><i className="fa-solid fa-gear ml-1"></i></a></div>
-          {setting ? <li className={`chapter-manual__item active`} onClick={(e) => {
+        <div>
+          {/* {audioUrl && <audio controls src={audioUrl}></audio>} */}
+          {audioUrl && <AudioPlayer
+            autoPlay
+            src={audioUrl}
+            onPlay={e => console.log("onPlay")}
+            className="fixed bottom-0 z-50 left-0"
+          />}
+          <>
+            {showModal ? (
+              <>
+                <div
+                  className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+                >
+                  <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                    {/*content*/}
+                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                      {/*header*/}
+                      <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                        <h3 className="text-3xl font-semibold">
+                          Modal Title
+                        </h3>
+                        <button
+                          className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                          onClick={() => setShowModal(false)}
+                        >
+                          <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                            ×
+                          </span>
+                        </button>
+                      </div>
+                      {/*body*/}
+                      <div className="relative p-6 flex-auto">
+                        <div className="chapter-manual__popup " >
 
-            console.log("24124214")
-          }}>
+                          <div className="chapter-setting">
+                            <table className='chapter-setting__body fs-18'>
+                              <tbody>
+                                <tr className="mb-2">
+                                  <td className='col-4'>
+                                    <p>Cỡ chữ</p>
+                                  </td>
+                                  <td className='col-8'>
+                                    <div className='d-flex chapter-setting__input'>
 
-            <div className="chapter-manual__popup " >
+                                      <select defaultValue={fontChu} onChange={(e) => {
+                                        dispatch(setFormChu(e.target.value))
+                                      }}>
+                                        {renderTienIchFontSize()}
+                                      </select>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr className="mb-2">
+                                  <td className='col-4'>
+                                    <p>Kiểu chữ</p>
+                                  </td>
+                                  <td className='col-8'>
+                                    <div className='d-flex chapter-setting__input'>
 
-              <div className="chapter-setting">
-                <table className='chapter-setting__body fs-18'>
-                  <tbody>
-                    <tr className="mb-2">
-                      <td className='col-4'>
-                        <p>Font size</p>
-                      </td>
-                      <td className='col-8'>
-                        <div className='d-flex chapter-setting__input'>
+                                      <select defaultValue={fontStyle} onChange={(e) => {
+                                        dispatch(setFontStyle(e.target.value))
+                                      }}>
+                                        {renderTienIchFont()}
+                                      </select>
+                                    </div>
+                                  </td>
+                                </tr>
 
-                          <select defaultValue={fontChu} onChange={(e) => {
-                            dispatch(setFormChu(e.target.value))
-                          }}>
-                            {renderTienIchFontSize()}
-                          </select>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr className="mb-2">
-                      <td className='col-4'>
-                        <p>Font</p>
-                      </td>
-                      <td className='col-8'>
-                        <div className='d-flex chapter-setting__input'>
-
-                          <select defaultValue={fontStyle} onChange={(e) => {
-                            dispatch(setFontStyle(e.target.value))
-                          }}>
-                            {renderTienIchFont()}
-                          </select>
-                        </div>
-                      </td>
-                    </tr>
-                    {userInfo.vip ?
-                      <tr className="mb-2">
-                        <td className='col-4'>
-                          <button onClick={handleSpeak}>Đọc văn bản</button>
-                        </td>
-                        <td className='col-8'>
-                          <div className='d-flex chapter-setting__input'>
-
-                            <div>   {audioUrl && <audio controls src={audioUrl}
-                            //  onEnded={() => {
-                            //   window.alert("Keets thuc")
-                            // }}
-                            ></audio>}
-                            </div>
-
+                              </tbody>
+                            </table>
                           </div>
-                        </td>
-                      </tr> : null}
-                  </tbody>
-                </table>
-              </div>
 
-            </div>
-          </li>
-            : null}
+                        </div>
+                      </div>
+                      {/*footer*/}
+                      <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+
+                        <button
+                          className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          type="button"
+                          onClick={() => setShowModal(false)}
+                        >
+                          Save Changes
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+              </>
+            ) : null}
+          </>
+          <div className="flex flex-row justify-center">
+            <button
+              className="bg-transparent  outline-black  hover:outline-orange-300 hover:text-orange-300 text-black  font-bold uppercase text-sm px-6 py-3 rounded  outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button"
+              onClick={() => setShowModal(true)}
+            >
+              <i className="fa-solid fa-gear ml-1"></i>
+            </button>
+            {userInfo.vip ?
+
+              <button onClick={handleSpeak} className="bg-transparent  outline-black text-black hover:outline-orange-300 hover:text-orange-300 font-bold uppercase text-sm px-6 py-3 rounded  outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"><i className="fa fa-microphone" />
+              </button>
+              : null}
+          </div>
 
         </div>
+
+
 
 
 
@@ -296,9 +337,7 @@ function Chapter(props) {
           <div
             className="main-content"
             style={{
-              position: "relative",
-              margin: "0 80px",
-              backgroundColor: "#e1e8e8",
+
             }}
           >
 
