@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import { Link } from "react-router-dom";
 import { message, Modal } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { setTheme } from "../store/reducer/TienIchReducer";
 
 const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
+  const { nenToi } = useSelector(state => state.TienIchReducer);
+  const dispatch = useDispatch()
+  console.log(nenToi)
   const handleDangTruyenClick = () => {
     if (userInfo.trangThai !== 1) {
       message.warning("Hãy xác thực tài khoản để có thể đăng truyện");
     }
   };
-
+  const handleChangeTheme = () => {
+    dispatch(setTheme())
+  }
   if (!isOpen) return null;
 
   return (
@@ -20,7 +27,7 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
       ></div>
 
       {/* Modal Content */}
-      <div className="bg-white w-full sm:w-80 h-full border border-gray-300 rounded-lg shadow-lg p-6 relative z-20 flex flex-col ">
+      <div className="bg-white w-full sm:w-80 h-full border border-gray-300 rounded-lg shadow-lg p-6 relative z-20 flex flex-col  user-name">
         <button
           className="absolute top-4 right-4 text-xl"
           onClick={onClose}
@@ -39,7 +46,7 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
             src={userInfo?.anhDaiDien || "/path/to/default/avatar.png"}
             className="w-10 h-10 rounded-full mr-5"
           />
-          <p className="text-lg font-semibold">{userInfo?.tenNguoiDung}</p>
+          <p className="text-lg font-semibold ">{userInfo?.tenNguoiDung}</p>
         </div>
 
         {/* Navigation Links */}
@@ -87,6 +94,24 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
               Phản hồi
             </Link>
           </li>
+          <div className="flex flex-row items-center w-4/12 justify-between">
+            <label className="switch d-flex flex-row ">
+
+              <input type="checkbox" onClick={handleChangeTheme}
+                checked={nenToi} />
+              <span className="slider round" />
+
+
+
+            </label>
+            {nenToi ? <i className="fa fa-moon" /> : <i className="fa fa-sun" />}
+            {/*  */}
+
+
+
+
+          </div>
+
 
         </ul>
       </div>

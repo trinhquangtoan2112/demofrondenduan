@@ -76,3 +76,41 @@
         }
     }
 }
+
+.darktheme {
+    .modal {
+        .modal__content {
+            background-color: #000000;
+            .auth-wrap {
+                color: white;
+                background-color: #000000;
+
+                .form-group {
+                    background-color: white !important;
+                    color: black;
+
+                    input {
+                        margin: 0;
+                    }
+                }
+                .auth-header {
+                    color: white;
+                }
+                .auth-body {
+                    .field-wrap {
+                        input {
+                            background-color: white !important;
+                            color: black;
+                            border: 1px solid black !important;
+                        }
+                    }
+                }
+            }
+        }
+        .modal__content__close {
+            i {
+                color: white;
+            }
+        }
+    }
+}

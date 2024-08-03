@@ -33,3 +33,34 @@
         margin: 0 10px;
     }
 }
+
+.darktheme {
+    .imgHero {
+        background-image: url(https://static.cdnno.com/storage/topbox/2fd5f4c7fa245d68c88d480a22c74a31.webp);
+    }
+
+    .main-content {
+        background-color: black;
+        .section {
+            color: white;
+            .section__body {
+                a {
+                    h2 {
+                        color: white;
+                    }
+                    div {
+                        color: white;
+                        p {
+                            color: white;
+                        }
+                    }
+                }
+            }
+        }
+        div {
+            p {
+                color: white;
+            }
+        }
+    }
+}

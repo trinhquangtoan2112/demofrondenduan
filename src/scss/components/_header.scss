@@ -179,7 +179,38 @@
         margin-right: 20px;
     }
 }
-
+.darktheme {
+    .header__wrap {
+        background-color: #000000;
+    }
+    .form-group {
+        background-color: black !important;
+        color: white;
+        border: 1px solid white;
+        button {
+            background-color: black !important;
+        }
+        input {
+            border-top: 1px solid white;
+            border-left: none !important;
+            border-right: none !important;
+            height: 40px;
+            border-radius: 0;
+            border-bottom: 1px solid white;
+        }
+    }
+    .user-name {
+        color: white;
+    }
+    .navbar-nav__list {
+        color: white;
+    }
+    .navbar-nav__collapse {
+        i {
+            color: white;
+        }
+    }
+}
 @media (max-width: 640px) {
     .logo {
         font-size: 2.5rem;

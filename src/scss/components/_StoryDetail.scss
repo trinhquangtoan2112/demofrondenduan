@@ -69,6 +69,39 @@
 
 .story-detail {
 }
+.darktheme {
+    .heroSide {
+        .img-wrap {
+            img {
+            }
+        }
+        & > div {
+        }
+
+        &__main {
+            h2 {
+            }
+            ul {
+                li {
+                }
+            }
+            div {
+            }
+        }
+        .content123 {
+        }
+        .checked {
+        }
+    }
+
+    .navigate {
+    }
+
+    .story-detail__tab__main {
+        h3 {
+        }
+    }
+}
 
 @media (max-width: 720px) {
     .heroSide {
