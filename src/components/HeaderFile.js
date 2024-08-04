@@ -104,8 +104,11 @@ export default function HeaderFile() {
 
 
           </div>
-          <div className="w-1/12 text-right flex flex-row justify-between">
-            <button className='navbar-nav__collapse fs-14 ' onClick={toggleUserMenu}><i className="fa-solid fa-bars"></i></button>
+          <div className="w-2/12 text-right flex flex-row justify-between">
+            {user ?
+              <button className='navbar-nav__collapse fs-14 ' onClick={toggleUserMenu}><i className="fa-solid fa-bars"></i></button>
+              : null
+            }
             {user ?
               <button className='navbar-nav__collapse fs-14 ' onClick={onClickLogout}>
                 <i className="fa fa-sign-in-alt"></i>

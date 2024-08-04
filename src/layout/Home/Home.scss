@@ -16,4 +16,51 @@
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 5px 20px 0 #777;
+    position: relative;
+    margin: 0 80xp;
+    background-color: #e1e8e8;
+}
+@media only screen and (max-width: 1024px) {
+    .main-content {
+        padding: 10px;
+        margin: 0 20px;
+        border-radius: 0;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .main-content {
+        padding: 5px;
+        margin: 0 10px;
+    }
+}
+
+.darktheme {
+    .imgHero {
+        background-image: url(https://static.cdnno.com/storage/topbox/2fd5f4c7fa245d68c88d480a22c74a31.webp);
+    }
+
+    .main-content {
+        background-color: black;
+        .section {
+            color: white;
+            .section__body {
+                a {
+                    h2 {
+                        color: white;
+                    }
+                    div {
+                        color: white;
+                        p {
+                            color: white;
+                        }
+                    }
+                }
+            }
+        }
+        div {
+            p {
+                color: white;
+            }
+        }
+    }
 }

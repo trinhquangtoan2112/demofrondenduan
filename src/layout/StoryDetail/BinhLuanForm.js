@@ -25,7 +25,7 @@ const BinhLuanForm = ({ onAddBinhLuan }) => {
           onChange={(e) => setNoiDung(e.target.value)}
           required
           rows="4"
-          className="mt-1 block w-full rounded-md bg-transparent border-[#ff7300] shadow-sm focus:ring focus:ring-[#ff7300] focus:ring-opacity-50 border-2 text-gray-900 placeholder-gray-600"
+          className="mt-1 fs-18 block w-full rounded-md bg-transparent border-[#ff7300] shadow-sm focus:ring focus:ring-[#ff7300] focus:ring-opacity-50 border-2 text-gray-900 placeholder-gray-600 "
           placeholder="Nhập nội dung bình luận..."
         ></textarea>
       </label>

@@ -1,52 +1,20 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import { Link } from "react-router-dom";
 import { message, Modal } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { setTheme } from "../store/reducer/TienIchReducer";
 import { themGiaodich } from "../service/actions/GiaoDichAction";
 
 const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
+  const { nenToi } = useSelector(state => state.TienIchReducer);
+  const dispatch = useDispatch()
+  console.log(nenToi)
   const [loading, setLoading] = useState(false);
 
   const handleDangTruyenClick = () => {
     if (userInfo.trangThai !== 1) {
       message.warning("Hãy xác thực tài khoản để có thể đăng truyện");
     }
-  };
-
-  const handleDiemDanhClick = () => {
-    Modal.confirm({
-      title: "Xác nhận điểm danh",
-      content: "Điểm danh để nhận được những phần quà hấp dẫn",
-      okText: "Điểm danh",
-      cancelText: "Hủy",
-      onOk: async () => {
-        setLoading(true);
-        try {
-          const response = await themGiaodich({
-            maChuongTruyen: 22, // hoặc giá trị tương ứng
-            loaiGiaoDich: 6, // Hoặc giá trị tương ứng
-            loaiTien: userInfo.vip == true ? 5 : 6, // tai khoản vip thì loại tiền = 5, còn lại thì = 6
-            soTien: 0, // Hoặc giá trị tương ứng
-          });
-
-          if (response.status == 201) {
-            if(userInfo.vip == true) {
-               message.success("Bạn nhận được 1 chìa khóa và 2 phiều đề cử");
-            }else{
-              message.success("Bạn nhận được 1 chìa khóa và 1 phiều đề cử");
-
-            }
-          } else {
-            message.error(
-              response.data.message
-            );
-          }
-        } catch (error) {
-          console.log(error)
-        } finally {
-          setLoading(false);
-        }
-      },
-    });
   };
 
   if (!isOpen) return null;
@@ -60,7 +28,7 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
       ></div>
 
       {/* Modal Content */}
-      <div className="bg-white w-full sm:w-80 h-full border border-gray-300 rounded-lg shadow-lg p-6 relative z-20 flex flex-col ">
+      <div className="bg-white w-full sm:w-80 h-full border border-gray-300 rounded-lg shadow-lg p-6 relative z-20 flex flex-col  user-name">
         <button
           className="absolute top-4 right-4 text-xl"
           onClick={onClose}
@@ -79,7 +47,7 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
             src={userInfo?.anhDaiDien || "/path/to/default/avatar.png"}
             className="w-10 h-10 rounded-full mr-5"
           />
-          <p className="text-lg font-semibold">{userInfo?.tenNguoiDung}</p>
+          <p className="text-lg font-semibold ">{userInfo?.tenNguoiDung}</p>
         </div>
 
         {/* Navigation Links */}
@@ -140,6 +108,7 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
               Phản hồi
             </Link>
           </li>
+
         </ul>
       </div>
     </div>

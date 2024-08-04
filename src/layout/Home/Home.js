@@ -5,10 +5,12 @@ import ListStory from '../ListStory/ListStory';
 import HeaderFile from '../../components/HeaderFile';
 import Footer from '../../components/Footer';
 import { Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 export default function Home() {
-
+    const { nenToi } = useSelector(state => state.TienIchReducer);
+    console.log(nenToi)
     return (
-        <>
+        <div className={nenToi ? "darktheme" : null}>
 
             <HeaderFile></HeaderFile>
             <div className="main">
@@ -18,7 +20,7 @@ export default function Home() {
 
                 </div>
             </div>
-<Footer></Footer>
-        </>
+            <Footer></Footer>
+        </div>
     )
 }

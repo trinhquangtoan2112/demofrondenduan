@@ -56,10 +56,10 @@
     margin: auto;
     position: relative;
     @include tablet {
-        padding: 0 20px;
+        padding: 0 10px;
     }
     @include mobile {
-        padding: 0 10px;
+        padding: 0 0px;
     }
 }
 
@@ -147,7 +147,6 @@ select {
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
 }
 
@@ -169,4 +168,66 @@ select {
 
 .ma {
     margin: auto;
+}
+.darktheme {
+    .container {
+        background-color: black;
+        color: white;
+        .main {
+            background-color: black !important;
+            color: white;
+            button {
+                outline-color: white !important;
+                color: white !important;
+            }
+        }
+        .text-gray-700 {
+            color: white;
+        }
+    }
+    .p-4 {
+        background-color: black;
+        color: white;
+        border: 1px solid white;
+    }
+    .mb-4 {
+        textarea {
+            background-color: black;
+            color: white;
+        }
+    }
+    .bg-white {
+        background-color: black;
+    }
+
+    .main {
+        background-color: black;
+        color: white;
+    }
+    form {
+        button {
+            color: #fff;
+            border: 0.5px solid rgba(248, 170, 106, 0.514);
+        }
+        button:hover {
+            background-color: $main-color-hover;
+        }
+    }
+    .btn-primary {
+        color: #fff;
+        border: 0.5px solid rgba(248, 170, 106, 0.514);
+    }
+    .btn-outline {
+        color: white;
+        border: 0.5px solid white;
+    }
+    input,
+    select {
+        background-color: black;
+        color: white;
+        border: 1px solid white !important;
+    }
+    .text-secondary {
+        color: white;
+    }
 }

@@ -89,11 +89,10 @@ const EditReviewForm = ({ visible, onCancel, onEdit, initialValues }) => {
                   className="hidden"
                 />
                 <i
-                  className={`fa-solid fa-star text-3xl cursor-pointer transition transform duration-200 ${
-                    ratingValue <= (hover || diemDanhGia)
-                      ? "text-yellow-400 scale-125"
-                      : "text-gray-300"
-                  }`}
+                  className={`fa-solid fa-star text-3xl cursor-pointer transition transform duration-200 ${ratingValue <= (hover || diemDanhGia)
+                    ? "text-yellow-400 scale-125"
+                    : "text-gray-300"
+                    }`}
                   onMouseEnter={() => setHover(ratingValue)}
                   onMouseLeave={() => setHover(null)}
                   onClick={() => setDiemDanhGia(ratingValue)}
@@ -117,7 +116,7 @@ const EditReviewForm = ({ visible, onCancel, onEdit, initialValues }) => {
   );
 };
 
-const DSDanhGia = ({ danhSachDanhGia, loading, fetchData,setDanhSachDanhGia }) => {
+const DSDanhGia = ({ danhSachDanhGia, loading, fetchData, setDanhSachDanhGia }) => {
   const userInfo = useSelector((state) => state.UserReducer.userInfo);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
@@ -215,12 +214,12 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData,setDanhSachDanhGia }) =
       message.success("Hãy đăng nhập để like truyện");
       return;
     }
-  
+
     const maid = {
       loaiThucTheLike: 2,
       maThucThe: maDanhGia,
     };
-  
+
     try {
       if (number === 0) {
         // Add like
@@ -258,8 +257,8 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData,setDanhSachDanhGia }) =
       message.error("Failed to update like status.");
     }
   };
-  
-  
+
+
 
   const sortedDanhSachDanhGia = () => {
     const sortedData = [...danhSachDanhGia];
@@ -282,7 +281,7 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData,setDanhSachDanhGia }) =
   const paginatedReviews = sortedDanhSachDanhGia().slice(
     0,
     currentDisplayCount
-  ); 
+  );
   return (
     <div>
       <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-300">
@@ -322,8 +321,8 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData,setDanhSachDanhGia }) =
                       className="w-12 h-12 rounded-full mr-3 shadow-md"
                     />
                     <div className="flex-1">
-                      <p className="font-bold text-lg">{review.tenNguoiDung}</p>
-                      <p className="text-gray-500 text-sm">
+                      <p className="font-bold text-lg fs-20">{review.tenNguoiDung.length > 12 ? review.tenNguoiDung.substring(0, 12) + "..." : review.tenNguoiDung}</p>
+                      <p className="text-gray-500 fs-16">
                         {formatTimeAgo(review.ngaycapnhat)}
                       </p>
                     </div>
@@ -358,15 +357,14 @@ const DSDanhGia = ({ danhSachDanhGia, loading, fetchData,setDanhSachDanhGia }) =
                     {[...Array(5)].map((_, index) => (
                       <i
                         key={index}
-                        className={`fa-solid fa-star ${
-                          index < review.diemDanhGia
-                            ? "text-yellow-400"
-                            : "text-gray-300"
-                        }`}
+                        className={`fa-solid fa-star ${index < review.diemDanhGia
+                          ? "text-yellow-400"
+                          : "text-gray-300"
+                          }`}
                       ></i>
                     ))}
                   </div>
-                  <p>{review.noidung}</p>
+                  <p className="fs-18">{review.noidung}</p>
 
                   <div
                     key={review.maDanhGia}

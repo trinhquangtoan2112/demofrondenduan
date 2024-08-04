@@ -158,3 +158,42 @@ iframe {
 .success {
     color: rgb(0, 190, 0);
 }
+
+.darktheme {
+    .story-detail__tab__main {
+        border: 1px solid white;
+        background-color: black;
+        color: white;
+        div {
+            h3 {
+                background-color: black;
+                color: white;
+            }
+            span {
+                color: white;
+            }
+            textarea {
+                background-color: black;
+                color: white;
+            }
+            select {
+                background-color: black;
+                color: white;
+            }
+            div {
+                background-color: black;
+                color: white;
+            }
+        }
+    }
+    .list-none {
+        li {
+            a {
+                color: white;
+            }
+        }
+        i {
+            color: white;
+        }
+    }
+}

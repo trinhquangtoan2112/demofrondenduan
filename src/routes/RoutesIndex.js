@@ -14,7 +14,7 @@ const AppRoutes = () => {
     const dispatch = useDispatch();
     console.log(userInfo)
     const getThongTin = async () => {
-        if (localStorage.getItem("TOKEN")) {
+        if (userInfo) {
             CapNhapThongTin(dispatch)
         }
 

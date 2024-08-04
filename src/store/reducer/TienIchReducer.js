@@ -19,7 +19,8 @@ const initialState = {
         { name: "Verdana", style: 'Verdana' }
     ],
     fontChu: fontSize,
-    fontStyle: fontStyle
+    fontStyle: fontStyle,
+    nenToi: false
 }
 
 const TienIchReducer = createSlice({
@@ -36,9 +37,12 @@ const TienIchReducer = createSlice({
             state.fontStyle = action.payload
             localStorage.setItem("FontStyle", action.payload)
         },
+        setTheme: (state, action) => {
+            state.nenToi = !state.nenToi
+        }
     }
 });
 
-export const { setFormChu, setFontStyle } = TienIchReducer.actions
+export const { setFormChu, setFontStyle, setTheme } = TienIchReducer.actions
 
 export default TienIchReducer.reducer

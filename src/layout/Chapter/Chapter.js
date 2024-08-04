@@ -24,6 +24,9 @@ import {
 const { confirm } = Modal;
 const { Option } = Select;
 
+import { setFontStyle, setFormChu } from "../../store/reducer/TienIchReducer.js";
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 function Chapter(props) {
   const [setting, setSetting] = useState(true);
   const { maChuong, name } = useParams();
@@ -44,7 +47,16 @@ function Chapter(props) {
 
   const [giftModalVisible, setGiftModalVisible] = useState(false);
   const [selectedGiftAmount, setSelectedGiftAmount] = useState(10);
-
+  const [showModal, setShowModal] = useState(false);
+  console.log(fontChu)
+  console.log(fontStyle)
+  useEffect(() => {
+    const handleSetReading = async () => {
+      const data = {
+        maChuong: maChuong,
+      };
+      const result = await GetChiTietChuongTruyenAction(data);
+    }},[])
   useEffect(() => {
     const LuuLichSu = async () => {
       const data = {
@@ -346,98 +358,129 @@ function Chapter(props) {
         className="main"
         style={{ backgroundColor: "#ced9d9", paddingTop: "30px" }}
       >
-        <div className="chapter-manual__popup flex items-center justify-center w-full  z-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg">
-            <a
-              onClick={() => {
-                setSetting(!setting);
-              }}
-              className="flex flex-row items-center cursor-pointer text-gray-700 hover:text-gray-900"
-            >
-              <h4 className="text-lg font-semibold">Cài đặt</h4>
-              <i className="fa-solid fa-gear ml-2 text-xl"></i>
-            </a>
-          </div>
-          {!setting && (
-            <ul
-              className="chapter-manual__item active bg-white p-4 rounded-lg shadow-lg mt-4"
-              onClick={(e) => {
-                console.log("24124214");
-              }}
-            >
-              <div className="chapter-manual__popup">
-                <div className="chapter-setting">
-                  <table className="chapter-setting__body text-lg">
-                    <tbody>
-                      <tr className="mb-2">
-                        <td className="w-1/3">
-                          <p>Font size</p>
-                        </td>
-                        <td className="w-2/3">
-                          <div className="flex chapter-setting__input">
-                            <select
-                              defaultValue={fontChu}
-                              onChange={(e) => {
-                                dispatch(setFormChu(e.target.value));
-                              }}
-                              className="border border-gray-300 rounded-md p-2"
-                            >
-                              {renderTienIchFontSize()}
-                            </select>
+        <div>
+          {/* {audioUrl && <audio controls src={audioUrl}></audio>} */}
+          {audioUrl && <AudioPlayer
+            autoPlay
+            src={audioUrl}
+            onPlay={e => console.log("onPlay")}
+            className="fixed bottom-0 z-50 left-0"
+          />}
+          <>
+            {showModal ? (
+              <>
+                <div
+                  className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+                >
+                  <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                    {/*content*/}
+                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                      {/*header*/}
+                      <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                        <h3 className="text-3xl font-semibold">
+                          Modal Title
+                        </h3>
+                        <button
+                          className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                          onClick={() => setShowModal(false)}
+                        >
+                          <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                            ×
+                          </span>
+                        </button>
+                      </div>
+                      {/*body*/}
+                      <div className="relative p-6 flex-auto">
+                        <div className="chapter-manual__popup " >
+
+                          <div className="chapter-setting">
+                            <table className='chapter-setting__body fs-18'>
+                              <tbody>
+                                <tr className="mb-2">
+                                  <td className='col-4'>
+                                    <p>Cỡ chữ</p>
+                                  </td>
+                                  <td className='col-8'>
+                                    <div className='d-flex chapter-setting__input'>
+
+                                      <select defaultValue={fontChu} onChange={(e) => {
+                                        dispatch(setFormChu(e.target.value))
+                                      }}>
+                                        {renderTienIchFontSize()}
+                                      </select>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr className="mb-2">
+                                  <td className='col-4'>
+                                    <p>Kiểu chữ</p>
+                                  </td>
+                                  <td className='col-8'>
+                                    <div className='d-flex chapter-setting__input'>
+
+                                      <select defaultValue={fontStyle} onChange={(e) => {
+                                        dispatch(setFontStyle(e.target.value))
+                                      }}>
+                                        {renderTienIchFont()}
+                                      </select>
+                                    </div>
+                                  </td>
+                                </tr>
+
+                              </tbody>
+                            </table>
                           </div>
-                        </td>
-                      </tr>
-                      <tr className="mb-2">
-                        <td className="w-1/3">
-                          <p>Font</p>
-                        </td>
-                        <td className="w-2/3">
-                          <div className="flex chapter-setting__input">
-                            <select
-                              defaultValue={fontStyle}
-                              onChange={(e) => {
-                                dispatch(setFontStyle(e.target.value));
-                              }}
-                              className="border border-gray-300 rounded-md p-2"
-                            >
-                              {renderTienIchFont()}
-                            </select>
-                          </div>
-                        </td>
-                      </tr>
-                      {userInfo.vip && (
-                        <tr className="mb-2">
-                          <td className="w-1/3">
-                            <button
-                              onClick={handleSpeak}
-                              className=" rounded-md px-4 py-2 hover:bg-[#e66700] bg-[#ff7300]"
-                            >
-                              Đọc văn bản
-                            </button>
-                          </td>
-                          <td className="w-2/3">
-                            <div className="flex chapter-setting__input">
-                              {audioUrl && (
-                                <audio
-                                  controls
-                                  src={audioUrl}
-                                  className="w-full"
-                                ></audio>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
+
+                        </div>
+                      </div>
+                      {/*footer*/}
+                      <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+
+                        <button
+                          className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          type="button"
+                          onClick={() => setShowModal(false)}
+                        >
+                          Save Changes
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </ul>
-          )}
+                <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+              </>
+            ) : null}
+          </>
+          <div className="flex flex-row justify-center">
+            <button
+              className="bg-transparent  outline-black  hover:outline-orange-300 hover:text-orange-300 text-black  font-bold uppercase text-sm px-6 py-3 rounded  outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button"
+              onClick={() => setShowModal(true)}
+            >
+              <i className="fa-solid fa-gear ml-1"></i>
+            </button>
+            {userInfo.vip ?
+
+              <button onClick={handleSpeak} className="bg-transparent  outline-black text-black hover:outline-orange-300 hover:text-orange-300 font-bold uppercase text-sm px-6 py-3 rounded  outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"><i className="fa fa-microphone" />
+              </button>
+              : null}
+          </div>
+
         </div>
 
-        <div className="container mx-auto p-4">
-          <div className="main-content relative mx-8 bg-gray-200 p-4">
+
+
+
+
+        <div className="container">
+          <div
+            className="main-content"
+            style={{
+
+            }}
+          >
+
+
             <div
               className="d-lex text-lg"
               style={{ fontSize: `${fontChu}px`, fontFamily: `${fontStyle}` }}
@@ -589,5 +632,6 @@ function Chapter(props) {
     </>
   );
 }
+  
 
 export default Chapter;
