@@ -239,7 +239,7 @@ function Chapter(props) {
                       {/*header*/}
                       <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                         <h3 className="text-3xl font-semibold">
-                          Modal Title
+                          Chỉnh sửa
                         </h3>
                         <button
                           className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
