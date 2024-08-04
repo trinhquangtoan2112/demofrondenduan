@@ -1,222 +1,309 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import Readdding from './../../components/Readdding';
-import LoadingData from './../../components/LoadingData';
-import avt from '../../assets/img/avt.png'
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import Grid from '../../components/Grid';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { AnTruyen, AnTruyenAction, DangChuongTruyenAction, DangTruyen, GetChiTietChuongAdmin, GetCHiTietChuongTruyen, GetChuongTruyenTheoIDTruyen, GetChuongTruyenTheoIDTruyen1, GetThongTinTruyen, GetTruyenTheoButDanh, HienTruyenAction, SuaChuongTruyenAction, SuaTruyen } from '../../service/actions/TruyenAction';
-import { AddUserByAdmin, deleteUserAdmin, getUserInAdmin, searchUserAction, UpdateUserByAdmin } from '../../service/actions/UserAction';
-import { Button, Table, Tag, DatePicker, Form, Input, InputNumber, Checkbox, Select, message, Popconfirm } from 'antd';
-import { DeleteOutlined, EditOutlined, EyeInvisibleOutlined, EyeOutlined, FormOutlined, UserOutlined } from '@ant-design/icons';
+import React, { useCallback, useEffect, useState } from "react";
+import Readdding from "./../../components/Readdding";
+import LoadingData from "./../../components/LoadingData";
+import avt from "../../assets/img/avt.png";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import Grid from "../../components/Grid";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  AnTruyen,
+  AnTruyenAction,
+  DangChuongTruyenAction,
+  DangTruyen,
+  GetChiTietChuongAdmin,
+  GetCHiTietChuongTruyen,
+  GetChuongTruyenTheoIDTruyen,
+  GetChuongTruyenTheoIDTruyen1,
+  GetThongTinTruyen,
+  GetTruyenTheoButDanh,
+  HienTruyenAction,
+  SuaChuongTruyenAction,
+  SuaTruyen,
+} from "../../service/actions/TruyenAction";
+import {
+  AddUserByAdmin,
+  deleteUserAdmin,
+  getUserInAdmin,
+  searchUserAction,
+  UpdateUserByAdmin,
+} from "../../service/actions/UserAction";
+import {
+  Button,
+  Table,
+  Tag,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Checkbox,
+  Select,
+  message,
+  Popconfirm,
+} from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  FormOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
-import dayjs from 'dayjs';
-import Modal, { ModalContent } from '../../components/Modal';
-import { useSelector } from 'react-redux';
-import { AnChuong, AnChuongAction, HienChuong, HienChuongAction } from '../../service/actions/ChuongTruyenAction';
+import dayjs from "dayjs";
+import Modal, { ModalContent } from "../../components/Modal";
+import { useSelector } from "react-redux";
+import {
+  AnChuong,
+  AnChuongAction,
+  HienChuong,
+  HienChuongAction,
+} from "../../service/actions/ChuongTruyenAction";
 const nav = [
-    {
-        path: 'reading',
-        display: 'Đang đọc'
-    },
-    {
-        path: 'saved',
-        display: 'Đánh dấu'
-    },
-    {
-        path: 'created',
-        display: 'Đã đăng'
-    },
-]
+  {
+    path: "reading",
+    display: "Đang đọc",
+  },
+  {
+    path: "saved",
+    display: "Đánh dấu",
+  },
+  {
+    path: "created",
+    display: "Đã đăng",
+  },
+];
 
 export default function TuTruyen(props) {
-    const { id } = useParams();
-    const [list, setList] = useState()
-    console.log(list)
-    const getBang = async () => {
-        const result = await GetTruyenTheoButDanh(id);
-        console.log(result)
-        if (result.status === 200) {
-            setList(result.data)
-        }
+  const { id } = useParams();
+  const [list, setList] = useState();
+  console.log(list);
+  const getBang = async () => {
+    const result = await GetTruyenTheoButDanh(id);
+    console.log(result);
+    if (result.status === 200) {
+      setList(result.data);
     }
-    useEffect(() => {
-        getBang()
-    }, [])
-    const cancel = (e) => {
-        message.error('Bạn đã hủy');
-    };
-    const AnTruyen = async (id1) => {
-        const result = await AnTruyenAction(id1);
-        if (result) {
-            message.success("Thành công ẩn truyện")
-            getBang()
-        }
-    };
-    const HienTruyen = async (id1) => {
-        const result = await HienTruyenAction(id1);
-        if (result) {
-            message.success("Thành công hiện truyện")
-            getBang()
-        }
-    };
-    const columns = [
-        {
-            title: 'STT',
-            dataIndex: 'id',
-            key: 'id',
-            render: (_, record, index) => (<a>{index + 1}</a>)
-        },
-        {
-            title: 'Tên truyện',
-            dataIndex: 'tenTruyen',
-            key: 'tenTruyen',
-            render: (th) => <>{th != null ? <p>{th}</p> : <p>Không có</p>} </>
-        },
-        {
-            title: 'Tên thể loại',
-            dataIndex: 'tenTheLoai',
-            key: 'tenTheLoai',
-        },
-        {
-            title: 'Ngày Cập nhập',
-            dataIndex: 'ngayCapNhat',
-            key: 'ngayCapNhat',
-            render: (th) => <>{th != null ? <p>{dayjs(th).format("DD-MM-YYYY")}</p> : <p>Không có</p>} </>
-        },
-        {
-            title: 'Lượt đọc',
-            dataIndex: 'luotdoc',
-            key: 'luotdoc',
-            render: (th) => <>{th != null ? <p>{th}</p> : <p>Không xác định</p>} </>
-        },
-        {
-            title: 'Công bố',
-            dataIndex: 'congBo',
-            key: 'congBo',
-            render: (th) => (th == 1 ? <p> Hiển thị</p> : <p>Không hiển thị</p>)
-        },
-        {
-            title: 'Trạng thái',
-            dataIndex: 'trangThai',
-            key: 'trangThai',
-            render: (th) => (th != 4 ? th != 0 ? <p> Hiển thị</p> : <p>Chưa duyệt</p> : <p>Chương bị khóa</p>)
-        },
-        {
-            title: 'Có phí',
-            dataIndex: 'coPhi',
-            key: 'coPhi',
-            render: (th) => <>{th ? <i className="fa fa-check bg-green-500 p-2 rounded-2xl" />
-                : <p>Không</p>} </>
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            render: (_, record) => (
-                < div >
-                    <Link to={`../../tacgia/CapNhapTruyen/${_.maTruyen}`}><Button><EditOutlined /></Button></Link>
-                    <Link to={`../../tacgia/QuanLyChuong/${_.maTruyen}`}><Button><FormOutlined /></Button></Link>
-                    {_.congBo == 1 ? <Popconfirm
-                        title="Ẩn truyện"
-                        description="Bạn có chắc muốn ẩn truyện ko không?"
-                        onConfirm={() => {
-                            AnTruyen(_.maTruyen)
-                        }}
-                        onCancel={cancel}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button><EyeInvisibleOutlined /></Button>
-                    </Popconfirm> : <Popconfirm
-                        title="Hiện người dùng"
-                        description="Bạn có chắc muốn hiện người dùng không?"
-                        onConfirm={() => {
-                            HienTruyen(_.maTruyen)
-                        }}
-                        onCancel={cancel}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button><EyeOutlined /></Button>
-                    </Popconfirm>}
-                </div >
-            ),
-        }
-    ];
-    const nav = useNavigate();
-    const onClickAddChapter = () => {
-        nav(`../../tacgia/DangTruyen`)
+  };
+  useEffect(() => {
+    getBang();
+  }, []);
+  const cancel = (e) => {
+    message.error("Bạn đã hủy");
+  };
+  const AnTruyen = async (id1) => {
+    const result = await AnTruyenAction(id1);
+    if (result) {
+      message.success("Thành công ẩn truyện");
+      getBang();
     }
-    return (
+  };
+  const HienTruyen = async (id1) => {
+    const result = await HienTruyenAction(id1);
+    if (result) {
+      message.success("Thành công hiện truyện");
+      getBang();
+    }
+  };
+  const columns = [
+    {
+      title: "STT",
+      dataIndex: "id",
+      key: "id",
+      render: (_, record, index) => <a>{index + 1}</a>,
+    },
+    {
+      title: "Tên truyện",
+      dataIndex: "tenTruyen",
+      key: "tenTruyen",
+      render: (th) => <>{th != null ? <p>{th}</p> : <p>Không có</p>} </>,
+    },
+    {
+      title: "Tên thể loại",
+      dataIndex: "tenTheLoai",
+      key: "tenTheLoai",
+    },
+    {
+      title: "Ngày Cập nhập",
+      dataIndex: "ngayCapNhat",
+      key: "ngayCapNhat",
+      render: (th) => (
         <>
-
-            <button className='btn-primary' style={{ 'margin': '0px 10px' }}
-                onClick={onClickAddChapter}
-            >Thêm truyện</button>
-            {list ? <h1>Truyện của: {list[0]?.tenButDanh}</h1> : null}
-            <Table columns={columns} dataSource={list ? list : null} />
-
-
+          {th != null ? (
+            <p>{dayjs(th).format("DD-MM-YYYY")}</p>
+          ) : (
+            <p>Không có</p>
+          )}{" "}
         </>
-    )
+      ),
+    },
+    {
+      title: "Lượt đọc",
+      dataIndex: "luotdoc",
+      key: "luotdoc",
+      render: (th) => <>{th != null ? <p>{th}</p> : <p>Không xác định</p>} </>,
+    },
+    {
+      title: "Công bố",
+      dataIndex: "congBo",
+      key: "congBo",
+      render: (th) => (th == 1 ? <p> Hiển thị</p> : <p>Không hiển thị</p>),
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "trangThai",
+      key: "trangThai",
+      render: (th) =>
+        th != 4 ? (
+          th != 0 ? (
+            <p> Hiển thị</p>
+          ) : (
+            <p>Chưa duyệt</p>
+          )
+        ) : (
+          <p>Chương bị khóa</p>
+        ),
+    },
+    {
+      title: "Có phí",
+      dataIndex: "coPhi",
+      key: "coPhi",
+      render: (th) => (
+        <>
+          {th ? (
+            <i className="fa fa-check bg-green-500 p-2 rounded-2xl" />
+          ) : (
+            <p>Không</p>
+          )}{" "}
+        </>
+      ),
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <div>
+          <Link to={`../../tacgia/CapNhapTruyen/${_.maTruyen}`}>
+            <Button>
+              <EditOutlined />
+            </Button>
+          </Link>
+          <Link to={`../../tacgia/QuanLyChuong/${_.maTruyen}`}>
+            <Button>
+              <FormOutlined />
+            </Button>
+          </Link>
+          {_.congBo == 1 ? (
+            <Popconfirm
+              title="Ẩn truyện"
+              description="Bạn có chắc muốn ẩn truyện ko không?"
+              onConfirm={() => {
+                AnTruyen(_.maTruyen);
+              }}
+              onCancel={cancel}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button>
+                <EyeInvisibleOutlined />
+              </Button>
+            </Popconfirm>
+          ) : (
+            <Popconfirm
+              title="Hiện người dùng"
+              description="Bạn có chắc muốn hiện người dùng không?"
+              onConfirm={() => {
+                HienTruyen(_.maTruyen);
+              }}
+              onCancel={cancel}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button>
+                <EyeOutlined />
+              </Button>
+            </Popconfirm>
+          )}
+        </div>
+      ),
+    },
+  ];
+  const nav = useNavigate();
+  const onClickAddChapter = () => {
+    nav(`../../tacgia/DangTruyen`);
+  };
+  return (
+    <>
+      <button
+        className="btn-primary"
+        style={{ margin: "0px 10px" }}
+        onClick={onClickAddChapter}
+      >
+        Thêm truyện
+      </button>
+      {list ? <h1>Truyện của: {list[0]?.tenButDanh}</h1> : null}
+      <Table columns={columns} dataSource={list ? list : null} />
+    </>
+  );
 }
-
 
 export const Readings = (props) => {
-    const { dispatch, user } = props
-    const [readings, setReadings] = useState([])
-    useEffect(async () => {
+  const { dispatch, user } = props;
+  const [readings, setReadings] = useState([]);
+  useEffect(async () => {}, []);
 
-    }, [])
-
-    return (
-        <div>
-            {
-                readings.map((item, i) => <div key={item._id} >
-                    <Readdding data={{
-                        tentruyen: item.dautruyenId.tentruyen,
-                        hinhanh: item.dautruyenId.hinhanh,
-                        dadoc: item.chapNumber,
-                        total: item.dautruyenId?.sochap,
-                        url: item.dautruyenId.url
-                    }} />
-                    <hr /></div>)
-
-            }</div>)
-}
+  return (
+    <div>
+      {readings.map((item, i) => (
+        <div key={item._id}>
+          <Readdding
+            data={{
+              tentruyen: item.dautruyenId.tentruyen,
+              hinhanh: item.dautruyenId.hinhanh,
+              dadoc: item.chapNumber,
+              total: item.dautruyenId?.sochap,
+              url: item.dautruyenId.url,
+            }}
+          />
+          <hr />
+        </div>
+      ))}
+    </div>
+  );
+};
 export const StoryCreate = (props) => {
-    // const { userInfo } = props;
-    const [storys, setStorys] = useState([])
-    const [listChap, setListChap] = useState(false)
-    const [editNovel, setEditNovel] = useState(false)
-    // const user = useSelector(state => state.auth.login.user)
-    // const dispatch = useDispatch()
-    const [url, setUrl] = useState('')
+  // const { userInfo } = props;
+  const [storys, setStorys] = useState([]);
+  const [listChap, setListChap] = useState(false);
+  const [editNovel, setEditNovel] = useState(false);
+  // const user = useSelector(state => state.auth.login.user)
+  // const dispatch = useDispatch()
+  const [url, setUrl] = useState("");
 
+  const onClickUpdateStory = (e) => {
+    setEditNovel(true);
+    setUrl(e.target.name);
+  };
+  const onClickBackFromListChap = useCallback(() => {
+    setListChap(false);
+    setEditNovel(false);
+  });
 
-    const onClickUpdateStory = (e) => {
-        setEditNovel(true)
-        setUrl(e.target.name)
-    }
-    const onClickBackFromListChap = useCallback(() => {
-        setListChap(false)
-        setEditNovel(false)
-    })
-
-    const onClickTruyen = (e) => {
-        setUrl(e.target.name)
-        setListChap(true)
-    }
-    const onClickBackFromEditNovel = useCallback(() => {
-        setEditNovel(false)
-    })
-    return (<>
-        {/* {listChap ? */}
-        <ListChap onClickBackFromListChap={onClickBackFromListChap}
-        // url={url} user={user} 
-        />
-        {/* :
+  const onClickTruyen = (e) => {
+    setUrl(e.target.name);
+    setListChap(true);
+  };
+  const onClickBackFromEditNovel = useCallback(() => {
+    setEditNovel(false);
+  });
+  return (
+    <>
+      {/* {listChap ? */}
+      <ListChap
+        onClickBackFromListChap={onClickBackFromListChap}
+        // url={url} user={user}
+      />
+      {/* :
             editNovel 
             ? 
             <EditNovel url={url} user={user} dispatch={dispatch} onClickBackFromEditNovel={onClickBackFromEditNovel} /> :
@@ -242,583 +329,720 @@ export const StoryCreate = (props) => {
                 }) 
          } */}
     </>
-    )
-}
+  );
+};
 
 export const ListChap = (props) => {
-    const { idChuong } = useParams()
-    console.log(idChuong)
-    const [chapters, setChapters] = useState([])
-    // const location = useLocation()
-    const [addChap, setAddChap] = useState(false)
-    const [chapnumber, setChapnumber] = useState(null)
-    const nav = useNavigate()
-    const onClickUpdateChap = (e) => {
-        setChapnumber(e.target.name)
-        setAddChap(true)
+  const { idChuong } = useParams();
+  console.log(idChuong);
+  const [chapters, setChapters] = useState([]);
+  // const location = useLocation()
+  const [addChap, setAddChap] = useState(false);
+  const [chapnumber, setChapnumber] = useState(null);
+  const nav = useNavigate();
+  const onClickUpdateChap = (e) => {
+    setChapnumber(e.target.name);
+    setAddChap(true);
+  };
+  const getData = async () => {
+    const result = await GetChuongTruyenTheoIDTruyen1(idChuong);
+    console.log(result);
+    if (result.status == 200) {
+      setChapters(result.data);
+    } else {
+      setChapters(null);
     }
-    const getData = async () => {
-        const result = await GetChuongTruyenTheoIDTruyen1(idChuong)
-        console.log(result)
-        if (result.status == 200) {
-            setChapters(result.data)
-        } else {
-            setChapters(null)
-        }
-    }
-    useEffect(() => {
-        getData()
-    }, [idChuong])
+  };
+  useEffect(() => {
+    getData();
+  }, [idChuong]);
 
-    console.log(chapters)
-    const onClickAddChapter = (e) => {
-        e.preventDefault()
-        setAddChap(true)
-        setChapnumber(null)
+  console.log(chapters);
+  const onClickAddChapter = (e) => {
+    e.preventDefault();
+    setAddChap(true);
+    setChapnumber(null);
+  };
+  const onClickBackFromAddChap = useCallback(() => {
+    setAddChap(false);
+  });
+  const anChuong = async (id1) => {
+    const result = await AnChuongAction(id1);
+    if (result) {
+      message.success("Thành công ẩn truyện");
+      getData();
     }
-    const onClickBackFromAddChap = useCallback(() => {
-        setAddChap(false)
-    })
-    const anChuong = async (id1) => {
-        const result = await AnChuongAction(id1);
-        if (result) {
-            message.success("Thành công ẩn truyện")
-            getData()
-        }
-    };
-    const hienCHuong = async (id1) => {
-        const result = await HienChuongAction(id1);
-        if (result) {
-            message.success("Thành công hiện truyện")
-            getData()
-        }
-    };
-    const cancel = (e) => {
-        console.log(e);
-        message.error('Click on No');
-    };
+  };
+  const hienCHuong = async (id1) => {
+    const result = await HienChuongAction(id1);
+    if (result) {
+      message.success("Thành công hiện truyện");
+      getData();
+    }
+  };
+  const cancel = (e) => {
+    console.log(e);
+    message.error("Click on No");
+  };
 
-    return (
-        <>
-            {/* {
+  return (
+    <>
+      {/* {
             addChap ? <AddChapter url={url} chapnumber={chapnumber} user={user} dispatch={dispatch}
                 onClickBackFromAddChap={onClickBackFromAddChap}
                 getChapters={getChapter} /> : */}
 
-            <div>
-                <div className='d-flex mb-1' style={{ 'justifyContent': 'space-between' }}>
+      <div>
+        <div
+          className="d-flex mb-1"
+          style={{ justifyContent: "space-between" }}
+        >
+          <a
+            onClick={() => {
+              nav(-1);
+            }}
+            //  onClick={onClickBackFromListChap}
+          >
+            <i className="fa-solid fa-angle-left"></i> Danh sách truyện
+          </a>
+          <span className="fs-20 fw-6">Danh sách chương</span>
+          <Link to={`../../tacgia/ThemTruyen/${idChuong}`}>
+            <button className="btn-primary" style={{ margin: "0px 10px" }}>
+              Thêm chương
+            </button>
+          </Link>
+        </div>
+        <Grid gap={15} col={2} snCol={1}>
+          {chapters?.map((item, index) => {
+            console.log(item);
+            return (
+              <div key={item.machuongtruyen}>
+                <div className="d-flex">
+                  <div
+                    className="col-6 d-flex"
+                    style={{ alignItems: "center" }}
+                  >
+                    <p
+                      key={item.machuongtruyen}
+                      name={item.tenChuong}
+                      className="text-overflow-1-lines"
+                    >
+                      Chương {item.stt}: {item.tenChuong}
+                    </p>
+                  </div>
+                  <div
+                    className="col-3 d-flex"
+                    style={{ alignItems: "center" }}
+                  >
+                    {item.trangThai != 4 ? (
+                      item.trangThai != 0 ? (
+                        <p> Hiển thị</p>
+                      ) : (
+                        <p>Chưa duyệt</p>
+                      )
+                    ) : (
+                      <p>Truyện bị khóa</p>
+                    )}
+                  </div>
 
-                    <a onClick={() => { nav(-1) }}
-                    //  onClick={onClickBackFromListChap}
-                    ><i className="fa-solid fa-angle-left"></i> Danh sách truyện</a>
-                    <span className='fs-20 fw-6'>Danh sách chương</span>
-                    <Link to={`../../tacgia/ThemTruyen/${idChuong}`}><button className='btn-primary' style={{ 'margin': '0px 10px' }}
-
-                    >Thêm chương</button></Link>
+                  <div className="col-3">
+                    {item.trangThai !== 4 ? (
+                      <>
+                        <Link
+                          to={`/tacgia/ChinhSuaChuong/${item.machuongtruyen}`}
+                        >
+                          <Button>
+                            <EditOutlined />
+                          </Button>
+                        </Link>
+                        {item.hienThi === 1 ? (
+                          <Popconfirm
+                            title="Bạn có muốn ẩn chương không"
+                            description="Bạn có chắc không?"
+                            onConfirm={() => anChuong(item.machuongtruyen)}
+                            onCancel={cancel}
+                            okText="Có"
+                            cancelText="Không"
+                          >
+                            <Button>
+                              <EyeInvisibleOutlined />
+                            </Button>
+                          </Popconfirm>
+                        ) : (
+                          <Popconfirm
+                            title="Bạn có muốn hiện chương không"
+                            description="Bạn có chắc không?"
+                            onConfirm={() => hienCHuong(item.machuongtruyen)}
+                            onCancel={cancel}
+                            okText="Có"
+                            cancelText="Không"
+                          >
+                            <Button>
+                              <EyeOutlined />
+                            </Button>
+                          </Popconfirm>
+                        )}
+                      </>
+                    ) : (
+                      <p>Chương đã bị khóa</p>
+                    )}
+                  </div>
                 </div>
-                <Grid gap={15} col={2} snCol={1}>
-                    {
-                        chapters?.map((item, index) => {
-                            console.log(item)
-                            return (
-                                <div key={item.machuongtruyen}>
-                                    <div className='d-flex'>
-                                        <div className="col-6 d-flex" style={{ 'alignItems': 'center' }}>
-                                            <p key={item.machuongtruyen} name={item.tenChuong} className='text-overflow-1-lines'>Chương {item.stt}: {item.tenChuong}</p>
-                                        </div>
-                                        <div className="col-3 d-flex" style={{ 'alignItems': 'center' }}>
-                                            {item.trangThai != 4 ? item.trangThai != 0 ? <p> Hiển thị</p> : <p>Chưa duyệt</p> : <p>Truyện bị khóa</p>}
-                                        </div>
-
-                                        <div className="col-3">
-                                            {item.trangThai !== 4 ? (
-                                                <>
-                                                    <Link to={`/tacgia/ChinhSuaChuong/${item.machuongtruyen}`}>
-                                                        <Button>
-                                                            <EditOutlined />
-                                                        </Button>
-                                                    </Link>
-                                                    {item.hienThi === 1 ? (
-                                                        <Popconfirm
-                                                            title="Bạn có muốn ẩn chương không"
-                                                            description="Bạn có chắc không?"
-                                                            onConfirm={() => anChuong(item.machuongtruyen)}
-                                                            onCancel={cancel}
-                                                            okText="Có"
-                                                            cancelText="Không"
-                                                        >
-                                                            <Button>
-                                                                <EyeInvisibleOutlined />
-                                                            </Button>
-                                                        </Popconfirm>
-                                                    ) : (
-                                                        <Popconfirm
-                                                            title="Bạn có muốn hiện chương không"
-                                                            description="Bạn có chắc không?"
-                                                            onConfirm={() => hienCHuong(item.machuongtruyen)}
-                                                            onCancel={cancel}
-                                                            okText="Có"
-                                                            cancelText="Không"
-                                                        >
-                                                            <Button>
-                                                                <EyeOutlined />
-                                                            </Button>
-                                                        </Popconfirm>
-                                                    )}
-                                                </>
-                                            ) : (
-                                                <p>Chương đã bị khóa</p>
-                                            )}
-
-
-                                        </div>
-                                    </div><hr /></div>
-                            )
-                        })
-                    }
-                </Grid>
-            </div>
-            {/* } */}
-        </>
-    )
-}
+                <hr />
+              </div>
+            );
+          })}
+        </Grid>
+      </div>
+      {/* } */}
+    </>
+  );
+};
 export const ListButDanh = (props) => {
-    const { idNguoiDung } = useParams()
-    console.log(idNguoiDung)
-    const [chapters, setChapters] = useState([])
-    // const location = useLocation()
-    const [tenButDanh, setTenButDanh] = useState()
-    const [chapnumber, setChapnumber] = useState(null)
-    const [modalVisible, setModalVisible] = useState(false);
+  const { idNguoiDung } = useParams();
+  console.log(idNguoiDung);
+  const [chapters, setChapters] = useState([]);
+  // const location = useLocation()
+  const [tenButDanh, setTenButDanh] = useState();
+  const [chapnumber, setChapnumber] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
-    const nav = useNavigate()
-    const onClickUpdateChap = (e) => {
-        setChapnumber(e.target.name)
+  const nav = useNavigate();
+  const onClickUpdateChap = (e) => {
+    setChapnumber(e.target.name);
+  };
 
-    }
+  useEffect(() => {}, [idNguoiDung]);
+  // const onClickDeleteChap = (e) => {
+  //   if (e.target.name) {
+  //     apiMain.deleteChapter({ url, chapnumber: e.target.name }, user, dispatch, loginSuccess)
+  //       .then(res => {
+  //         getChapter()
+  //         toast.success(res.message, { hideProgressBar: true, autoClose: 1000, pauseOnHover: false })
+  //       })
+  //       .catch(err => {
+  //         console.log(err)
+  //         toast.error(err.response.details.message, { hideProgressBar: true, autoClose: 1000, pauseOnHover: false })
+  //       })
+  //   }
+  // }
 
-    useEffect(() => {
+  // const getChapter = useCallback(async () => {
+  //   apiMain.getNameChapters(url, {})
+  //     .then(res => setChapters(res))})
 
-    }, [idNguoiDung])
-    // const onClickDeleteChap = (e) => {
-    //   if (e.target.name) {
-    //     apiMain.deleteChapter({ url, chapnumber: e.target.name }, user, dispatch, loginSuccess)
-    //       .then(res => {
-    //         getChapter()
-    //         toast.success(res.message, { hideProgressBar: true, autoClose: 1000, pauseOnHover: false })
-    //       })
-    //       .catch(err => {
-    //         console.log(err)
-    //         toast.error(err.response.details.message, { hideProgressBar: true, autoClose: 1000, pauseOnHover: false })
-    //       })
-    //   }
-    // }
+  // useEffect(() => {
+  //     getChapter()
+  // }, [])
+  console.log(chapters);
+  const onClickAddChapter = (e) => {
+    e.preventDefault();
 
-    // const getChapter = useCallback(async () => {
-    //   apiMain.getNameChapters(url, {})
-    //     .then(res => setChapters(res))})
+    setChapnumber(null);
+  };
+  const onClickBackFromAddChap = useCallback(() => {});
+  const confirm = (e) => {
+    console.log(e);
+    message.success("Click on Yes");
+  };
+  const cancel = (e) => {
+    console.log(e);
+    message.error("Click on No");
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+  const onFinish = (values) => {
+    console.log("Success:", values);
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
 
-    // useEffect(() => {
-    //     getChapter()
-    // }, [])
-    console.log(chapters)
-    const onClickAddChapter = (e) => {
-        e.preventDefault()
-
-        setChapnumber(null)
-    }
-    const onClickBackFromAddChap = useCallback(() => {
-
-    })
-    const confirm = (e) => {
-        console.log(e);
-        message.success('Click on Yes');
-    };
-    const cancel = (e) => {
-        console.log(e);
-        message.error('Click on No');
-    };
-    const closeModal = () => {
-        setModalVisible(false)
-    }
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
-    return (
-        <>
-            {/* {
+  return (
+    <>
+      {/* {
             addChap ? <AddChapter url={url} chapnumber={chapnumber} user={user} dispatch={dispatch}
                 onClickBackFromAddChap={onClickBackFromAddChap}
                 getChapters={getChapter} /> : */}
 
-            <div className='mt-2'>
-                <div className='d-flex mb-1' style={{ 'justifyContent': 'space-between' }}>
-
-                    <a onClick={() => { nav(-1) }}
-                    //  onClick={onClickBackFromListChap}
-                    ><i className="fa-solid fa-angle-left"></i> Danh sách truyện</a>
-                    <span className='fs-20 fw-6'>Danh sách chương</span>
-                    <button className='btn-primary' style={{ 'margin': '0px 10px' }} onClick={() => { setModalVisible(true) }}> Thêm bút danh</button>
+      <div className="mt-2">
+        <div
+          className="d-flex mb-1"
+          style={{ justifyContent: "space-between" }}
+        >
+          <a
+            onClick={() => {
+              nav(-1);
+            }}
+            //  onClick={onClickBackFromListChap}
+          >
+            <i className="fa-solid fa-angle-left"></i> Danh sách truyện
+          </a>
+          <span className="fs-20 fw-6">Danh sách chương</span>
+          <button
+            className="btn-primary"
+            style={{ margin: "0px 10px" }}
+            onClick={() => {
+              setModalVisible(true);
+            }}
+          >
+            {" "}
+            Thêm bút danh
+          </button>
+        </div>
+        <Grid gap={15} col={2} snCol={1}>
+          {chapters.map((item, index) => {
+            return (
+              <div key={item.maButDanh}>
+                <div className="d-flex">
+                  <div
+                    className="col-9 d-flex"
+                    style={{ alignItems: "center" }}
+                  >
+                    <Link
+                      className="cursor-pointer
+                    "
+                      to={`/QuanLyTruyen/${item.maButDanh}`}
+                    >
+                      {item.tenButDanh}
+                    </Link>
+                  </div>
+                  <div className="col-3">
+                    <Link
+                      to={`../../tacgia/ChinhSuaChuong/${item.maButDanh} `}
+                      // onClick={onClickUpdateChap}
+                      className=""
+                    >
+                      <Button>
+                        <EditOutlined />
+                      </Button>{" "}
+                    </Link>
+                    <Popconfirm
+                      title="Bạn có muốn khóa bút danh không"
+                      description="Bạn có chắc không?"
+                      onConfirm={confirm}
+                      onCancel={cancel}
+                      okText="Có"
+                      cancelText="Không"
+                    >
+                      <Button>
+                        <DeleteOutlined />
+                      </Button>
+                    </Popconfirm>
+                  </div>
                 </div>
-                <Grid gap={15} col={2} snCol={1}>
-                    {
-                        chapters.map((item, index) => {
-                            return (
-                                <div key={item.maButDanh}>
-                                    <div className='d-flex'>
-                                        <div className="col-9 d-flex" style={{ 'alignItems': 'center' }}>
-                                            <Link className='cursor-pointer
-                    '  to={`/QuanLyTruyen/${item.maButDanh}`}>{item.tenButDanh}</Link>
-                                        </div>
-                                        <div className="col-3">
-                                            <Link to={`../../tacgia/ChinhSuaChuong/${item.maButDanh} `}
-                                                // onClick={onClickUpdateChap}
-                                                className=''><Button><EditOutlined /></Button> </Link>
-                                            <Popconfirm
-                                                title="Bạn có muốn khóa bút danh không"
-                                                description="Bạn có chắc không?"
-                                                onConfirm={confirm}
-                                                onCancel={cancel}
-                                                okText="Có"
-                                                cancelText="Không"
-                                            >
-                                                <Button><DeleteOutlined /></Button>
-                                            </Popconfirm>
+                <hr />
+              </div>
+            );
+          })}
+        </Grid>
 
-                                        </div>
-                                    </div><hr /></div>
-                            )
-                        })
-                    }
-                </Grid>
+        <Modal active={modalVisible}>
+          <ModalContent onClose={closeModal}>
+            <form className="max-w-sm mx-auto">
+              <div className="mb-5 flex flex-col items-center">
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-lg font-medium text-gray-900 "
+                >
+                  Nhập vào tên bút danh
+                </label>
 
-                <Modal active={modalVisible}>
-                    <ModalContent onClose={closeModal}>
-
-                        <form className="max-w-sm mx-auto" >
-                            <div className="mb-5 flex flex-col items-center">
-                                <label htmlFor="email" className="block mb-2 text-lg font-medium text-gray-900 ">Nhập vào tên bút danh</label>
-
-                                <input onChange={(e) => {
-                                    setTenButDanh(e.target.value)
-                                }} className="bg-gray-50 border  text-gray-900 text-sm rounded-lg ring-blue-500 border-blue-500 block w-full p-2.5 " placeholder="Tên bút danh" required />
-                                <button type="submit" className="mt-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-
-                            </div>
-                        </form>
-
-
-                    </ModalContent>
-                </Modal>
-            </div >
-            {/* } */}
-        </>
-    )
-}
+                <input
+                  onChange={(e) => {
+                    setTenButDanh(e.target.value);
+                  }}
+                  className="bg-gray-50 border  text-gray-900 text-sm rounded-lg ring-blue-500 border-blue-500 block w-full p-2.5 "
+                  placeholder="Tên bút danh"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="mt-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </ModalContent>
+        </Modal>
+      </div>
+      {/* } */}
+    </>
+  );
+};
 export const AddChapter = () => {
-    const { idChuong } = useParams()
-    const nav = useNavigate()
-    const [content, setContent] = useState("")
-    const [tenchuong, setTenchuong] = useState("")
-    const [edit, setEdit] = useState(false)
-    const onChangeTenchuong = (e) => {
-        setTenchuong(e.target.value)
+  const { idChuong } = useParams();
+  const nav = useNavigate();
+  const [content, setContent] = useState("");
+  const [tenchuong, setTenchuong] = useState("");
+  const [giachuong, setGiachuong] = useState("");
+  const [edit, setEdit] = useState(false);
+  const onChangeTenchuong = (e) => {
+    setTenchuong(e.target.value);
+  };
+  const onChangeGiaChuong = (e) => {
+    setGiachuong(e.target.value);
+  };
+  const navigate = useNavigate();
+  const CapNhap = async () => {
+    const data = {
+      tenchuong,
+      noiDung: edit,
+      maTruyen: idChuong,
+      giaChuong: giachuong || 0,
+    };
+
+    const result = await DangChuongTruyenAction(data);
+    if (result === false) {
+      message.success("Thêm chương xảy ra lỗi hãy thử lại");
+    } else {
+      message.success("Thêm chương thành công");
+      navigate(`/tacgia/QuanLyChuong/${idChuong}`);
     }
-    const navigate = useNavigate();
-    const CapNhap = async () => {
-        const data = {
-            tenchuong,
-            noiDung: edit,
-            maTruyen: idChuong
-        }
+    console.log(result);
+  };
 
-        const result = await DangChuongTruyenAction(data);
-        if (result === false) {
-            message.success("Thêm chương xảy ra lỗi hãy thử lại")
-        } else {
-            message.success("Thêm chương thành công")
-            navigate("/tacgia/QuanLyTruyenCuaMinh");
-
-        }
-        console.log(result)
-    }
-
-    const labelStyle = { 'minWidth': '100px', 'margin': '5px 0px', 'display': 'inline-block' }
-    return (
-        <>
-            <div>
-                <a onClick={() => { nav("/tacgia/QuanLyBanThao") }}
-                //  onClick={onClickBackFromListChap}
-                ><i className="fa-solid fa-angle-left"></i>Quản lý</a>
-            </div>
-            <div className="group-info" style={{ 'marginBottom': '10px' }}>
-                <label htmlFor="" className='fs-16' style={labelStyle}>Tên chương</label>
-                <input onChange={onChangeTenchuong} value={tenchuong || ""} />
-            </div>
-            <label htmlFor="" className='fs-16' style={labelStyle}>Nội dung chương</label>
-            <CKEditor
-                editor={ClassicEditor}
-                data={edit || ''}
-                onReady={editor => {
-                    // You can store the "editor" and use when it is needed.
-                    console.log('Editor is ready to use!', editor);
-                }}
-                onChange={(event, editor) => {
-                    setEdit(editor.getData())
-                }}
-                onBlur={(event, editor) => {
-                    console.log('Blur.', editor);
-                }}
-                onFocus={(event, editor) => {
-                    console.log('Focus.', editor);
-                }}
-            />
-            <div className='d-flex'>
-                {/* {
+  const labelStyle = {
+    minWidth: "100px",
+    margin: "5px 0px",
+    display: "inline-block",
+  };
+  return (
+    <>
+      <div>
+        <a
+          onClick={() => {
+            nav("/tacgia/QuanLyBanThao");
+          }}
+          //  onClick={onClickBackFromListChap}
+        >
+          <i className="fa-solid fa-angle-left"></i>Quản lý
+        </a>
+      </div>
+      <div className="group-info" style={{ marginBottom: "10px" }}>
+        <label htmlFor="" className="fs-16" style={labelStyle}>
+          Tên chương
+        </label>
+        <input onChange={onChangeTenchuong} value={tenchuong || ""} />
+      </div>
+      <div className="group-info" style={{ marginBottom: "10px" }}>
+        <label htmlFor="" className="fs-16" style={labelStyle}>
+          Giá chương
+        </label>
+        <select onChange={onChangeGiaChuong} value={giachuong}>
+          {[...Array(11).keys()].map((value) => (
+            <option key={value} value={value}>
+              {value}
+            </option>
+          ))}
+        </select>
+      </div>
+      <label htmlFor="" className="fs-16" style={labelStyle}>
+        Nội dung chương
+      </label>
+      <CKEditor
+        editor={ClassicEditor}
+        data={edit || ""}
+        onReady={(editor) => {
+          // You can store the "editor" and use when it is needed.
+          console.log("Editor is ready to use!", editor);
+        }}
+        onChange={(event, editor) => {
+          setEdit(editor.getData());
+        }}
+        onBlur={(event, editor) => {
+          console.log("Blur.", editor);
+        }}
+        onFocus={(event, editor) => {
+          console.log("Focus.", editor);
+        }}
+      />
+      <div className="d-flex">
+        {/* {
             edit ?  */}
-                <button className='btn-primary'
-                    onClick={CapNhap}
-                    style={{ 'margin': '20px auto' }}>Thêm chương</button>
+        <button
+          className="btn-primary"
+          onClick={CapNhap}
+          style={{ margin: "20px auto" }}
+        >
+          Thêm chương
+        </button>
 
-                {/* : <button className='btn-primary' onClick={onClickAddChapter} style={{ 'margin': '20px auto' }}>Thêm chương</button>} */}
-
-
-            </div>
-        </>)
-}
+        {/* : <button className='btn-primary' onClick={onClickAddChapter} style={{ 'margin': '20px auto' }}>Thêm chương</button>} */}
+      </div>
+    </>
+  );
+};
 export const EditChapter = () => {
-    const { idChuong } = useParams();
-    const navigate = useNavigate()
+  const { idChuong } = useParams();
+  const navigate = useNavigate();
 
-    const [content, setContent] = useState("")
-    const [tenchuong, setTenchuong] = useState("")
-    const [edit, setEdit] = useState(false)
-    const onChangeTenchuong = (e) => {
-        setTenchuong(e.target.value)
-    }
-    const CapNhap = async () => {
-        const data = {
-            tenchuong,
-            noiDung: edit
-        }
+  const [content, setContent] = useState("");
+  const [maTruyen, setMatruyen] = useState("");
+  const [tenchuong, setTenchuong] = useState("");
+  const [giachuong, setGiachuong] = useState("");
+  const [edit, setEdit] = useState(false);
+  const onChangeTenchuong = (e) => {
+    setTenchuong(e.target.value);
+  };
+  const onChangeGiaChuong = (e) => {
+    setGiachuong(e.target.value);
+  };
+  const CapNhap = async () => {
+    const data = {
+      tenchuong,
+      giaChuong: giachuong,
+      noiDung: edit,
+    };
 
-        const result = await SuaChuongTruyenAction(idChuong, data);
-        if (result) {
-            message.success("Cập nhập chương thành công")
-            navigate("/tacgia/QuanLyTruyenCuaMinh");
-        } else {
-            message.success("Cập nhập xảy ra lỗi hãy thử lại")
-        }
-        console.log(result)
+    const result = await SuaChuongTruyenAction(idChuong, data);
+    if (result) {
+      message.success("Cập nhập chương thành công");
+      navigate(`/tacgia/QuanLyChuong/${maTruyen}`);
+    } else {
+      message.success("Cập nhập xảy ra lỗi hãy thử lại");
     }
-    const GetTruyen = async () => {
-        const result = await GetChiTietChuongAdmin(idChuong);
-        console.log(result)
-        setTenchuong(result.data.tenChuong);
-        setEdit(result.data.noiDung);
-    }
-    useEffect(() => {
-        GetTruyen()
-    }, [idChuong])
-    const labelStyle = { 'minWidth': '100px', 'margin': '5px 0px', 'display': 'inline-block' }
-    return (
-        <>
-            <div>
-                <a onClick={() => { nav(-1) }}
-                //  onClick={onClickBackFromListChap}
-                ><i className="fa-solid fa-angle-left"></i> Danh sách chương</a>
-            </div>
-            <div className="group-info" style={{ 'marginBottom': '10px' }}>
-                <label htmlFor="" className='fs-16' style={labelStyle}>Tên chương</label>
-                <input onChange={onChangeTenchuong} value={tenchuong || ""} />
-            </div>
-            <label htmlFor="" className='fs-16' style={labelStyle}>Nội dung chương</label>
-            <CKEditor
-                editor={ClassicEditor}
-                data={edit || ''}
-                onReady={editor => {
-                    // You can store the "editor" and use when it is needed.
-                    console.log('Editor is ready to use!', editor);
-                }}
-                onChange={(event, editor) => {
-                    setEdit(editor.getData())
-                }}
-                onBlur={(event, editor) => {
-                    console.log('Blur.', editor);
-                }}
-                onFocus={(event, editor) => {
-                    console.log('Focus.', editor);
-                }}
-            />
-            <div className='d-flex'>
-                {/* {
+    console.log(result);
+  };
+  const GetTruyen = async () => {
+    const result = await GetChiTietChuongAdmin(idChuong);
+    console.log(result);
+    setGiachuong(result.data.giaChuong);
+    setTenchuong(result.data.tenChuong);
+    setMatruyen(result.data.maTruyen);
+    setEdit(result.data.noiDung);
+  };
+  useEffect(() => {
+    GetTruyen();
+  }, [idChuong]);
+  const labelStyle = {
+    minWidth: "100px",
+    margin: "5px 0px",
+    display: "inline-block",
+  };
+  return (
+    <>
+      <div>
+        <a
+          onClick={() => {
+            nav(-1);
+          }}
+          //  onClick={onClickBackFromListChap}
+        >
+          <i className="fa-solid fa-angle-left"></i> Danh sách chương
+        </a>
+      </div>
+      <div className="group-info" style={{ marginBottom: "10px" }}>
+        <label htmlFor="" className="fs-16" style={labelStyle}>
+          Tên chương
+        </label>
+        <input onChange={onChangeTenchuong} value={tenchuong || ""} />
+      </div>
+      <div className="group-info" style={{ marginBottom: "10px" }}>
+        <label htmlFor="" className="fs-16" style={labelStyle}>
+          Giá chương
+        </label>
+        <select onChange={onChangeGiaChuong} value={giachuong}>
+          {[...Array(11).keys()].map((value) => (
+            <option key={value} value={value}>
+              {value}
+            </option>
+          ))}
+        </select>
+      </div>
+      <label htmlFor="" className="fs-16" style={labelStyle}>
+        Nội dung chương
+      </label>
+      <CKEditor
+        editor={ClassicEditor}
+        data={edit || ""}
+        onReady={(editor) => {
+          // You can store the "editor" and use when it is needed.
+          console.log("Editor is ready to use!", editor);
+        }}
+        onChange={(event, editor) => {
+          setEdit(editor.getData());
+        }}
+        onBlur={(event, editor) => {
+          console.log("Blur.", editor);
+        }}
+        onFocus={(event, editor) => {
+          console.log("Focus.", editor);
+        }}
+      />
+      <div className="d-flex">
+        {/* {
                 edit ?  */}
-                <button className='btn-primary'
-                    onClick={CapNhap}
-                    style={{ 'margin': '20px auto' }}>Cập nhật chương</button>
+        <button
+          className="btn-primary"
+          onClick={CapNhap}
+          style={{ margin: "20px auto" }}
+        >
+          Cập nhật chương
+        </button>
 
-                {/* : <button className='btn-primary' onClick={onClickAddChapter} style={{ 'margin': '20px auto' }}>Thêm chương</button>} */}
-
-
-            </div>
-        </>)
-}
-
-
+        {/* : <button className='btn-primary' onClick={onClickAddChapter} style={{ 'margin': '20px auto' }}>Thêm chương</button>} */}
+      </div>
+    </>
+  );
+};
 
 export function EditNovel() {
-    const { id } = useParams();
-    const theLoai1 = useSelector(state => state.TheLoaiReducer.theLoai);
-    console.log(theLoai1)
-    const [image, setImage] = useState("");
-    const [preview, setPreview] = useState(avt)
-    const [name, setName] = useState("");
-    const [Nguoiviettruyen, setNguoiVietTruyen] = useState("");
-    const [description, setDescription] = useState("");
-    const [tacgia, setTacgia] = useState("");
-    const [theloai, setTheloai] = useState("");
+  const { id } = useParams();
+  const theLoai1 = useSelector((state) => state.TheLoaiReducer.theLoai);
+  console.log(theLoai1);
+  const [image, setImage] = useState("");
+  const [preview, setPreview] = useState(avt);
+  const [name, setName] = useState("");
+  const [Nguoiviettruyen, setNguoiVietTruyen] = useState("");
+  const [description, setDescription] = useState("");
+  const [tacgia, setTacgia] = useState("");
+  const [theloai, setTheloai] = useState("");
 
-    const [ckValue, setCkValue] = useState(true);
+  const [ckValue, setCkValue] = useState(true);
 
-    const [trangthai, settrangthai] = useState(true)
-    const nav = useNavigate()
-    const handleCreate = async (e) => {
-        e.preventDefault()
-        const form = new FormData();
-        form.append('tenTruyen', name);
-        form.append('tacGia', Nguoiviettruyen);
-        form.append('moTa', description);
-        form.append('MaTheLoai', theloai);
-        form.append('TrangThai', trangthai);
-        form.append('anhBia', image);
-        const result = await SuaTruyen(id, form);
-        console.log(result);
-        if (result == false) {
-            message.error("Lỗi xảy ra thử lại")
-        }
-        else {
-            setCkValue(" ")
-            setTimeout(() => {
-                setCkValue(true)
-            }, [1])
-            setName("")
-            setNguoiVietTruyen("")
-            setDescription("")
-            setPreview(avt)
-            message.success("Cập nhập truyện thành công")
-            nav("/tacgia/QuanLyTruyenCuaMinh")
-        }
+  const [trangthai, settrangthai] = useState(true);
+  const nav = useNavigate();
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    const form = new FormData();
+    form.append("tenTruyen", name);
+    form.append("tacGia", Nguoiviettruyen);
+    form.append("moTa", description);
+    form.append("MaTheLoai", theloai);
+    form.append("TrangThai", trangthai);
+    form.append("anhBia", image);
+    const result = await SuaTruyen(id, form);
+    console.log(result);
+    if (result == false) {
+      message.error("Lỗi xảy ra thử lại");
+    } else {
+      setCkValue(" ");
+      setTimeout(() => {
+        setCkValue(true);
+      }, [1]);
+      setName("");
+      setNguoiVietTruyen("");
+      setDescription("");
+      setPreview(avt);
+      message.success("Cập nhập truyện thành công");
+      nav("/tacgia/QuanLyTruyenCuaMinh");
     }
-    const onChangeName = (e) => {
-        setName(e.target.value)
+  };
+  const onChangeName = (e) => {
+    setName(e.target.value);
+  };
+
+  const onChangeNguoiVietTruyen = (e) => {
+    setNguoiVietTruyen(e.target.value);
+  };
+
+  const onChangeImage = (e) => {
+    if (e.target.files.lenght !== 0) {
+      setImage(e.target.files[0]);
+      setPreview(URL.createObjectURL(e.target.files[0]));
     }
+  };
+  useEffect(() => {
+    const getData = async () => {
+      const result = await GetThongTinTruyen(id);
+      setImage(null);
+      setPreview(result.anhBia);
+      setName(result.tenTruyen);
+      setNguoiVietTruyen(result.tacGia);
+      setTheloai(result.maTheLoai);
+      setDescription(result.moTa);
+      settrangthai(result.trangThai);
+    };
+    getData();
+  }, []);
 
-    const onChangeNguoiVietTruyen = (e) => {
-        setNguoiVietTruyen(e.target.value)
-    }
+  console.log(theloai);
+  const labelStyle = { minWidth: "100px", display: "inline-block" };
+  return (
+    <div className="">
+      <div className="profile__wrap ">
+        <div className="profile__main ">
+          <form className=" d-flex flex-row flex-wrap items-center">
+            <div className="group-info col-3">
+              <label htmlFor="" style={labelStyle}>
+                Tên truyện
+              </label>
+              <input onChange={onChangeName} value={name || ""} />
+            </div>
 
-    const onChangeImage = (e) => {
-        if (e.target.files.lenght !== 0) {
-            setImage(e.target.files[0]);
-            setPreview(URL.createObjectURL(e.target.files[0]))
-        }
-    }
-    useEffect(() => {
-        const getData = async () => {
-            const result = await GetThongTinTruyen(id);
-            setImage(null);
-            setPreview(result.anhBia)
-            setName(result.tenTruyen);
-            setNguoiVietTruyen(result.tacGia);
-            setTheloai(result.maTheLoai)
-            setDescription(result.moTa)
-            settrangthai(result.trangThai)
-        }
-        getData();
+            <div className="group-info col-3">
+              <label htmlFor="" style={labelStyle}>
+                Tác giả
+              </label>
+              <input
+                onChange={onChangeNguoiVietTruyen}
+                value={Nguoiviettruyen || ""}
+              />
+            </div>
 
-    }, [])
-
-
-    console.log(theloai)
-    const labelStyle = { 'minWidth': '100px', 'display': 'inline-block' }
-    return (
-        <div className="">
-
-            <div className="profile__wrap ">
-                <div className="profile__main ">
-                    <form className=' d-flex flex-row flex-wrap items-center'>
-                        <div className="group-info col-3">
-                            <label htmlFor="" style={labelStyle}>Tên truyện</label>
-                            <input
-                                onChange={onChangeName}
-                                value={name || ""} />
-                        </div>
-
-                        <div className="group-info col-3">
-                            <label htmlFor="" style={labelStyle}>Tác giả</label>
-                            <input
-                                onChange={onChangeNguoiVietTruyen}
-                                value={Nguoiviettruyen || ""} />
-                        </div>
-
-                        {/* <div className="group-info col-3">
+            {/* <div className="group-info col-3">
                                 <label style={labelStyle}>Tác giả</label>
                                 <input required
                                     onChange={e => { setTacgia(e.target.value) }} value={tacgia}
                                 ></input>
                             </div> */}
-                        <div className="group-info col-6">
-                            <div className=" profile__avt flex flex-row items-center" style={{ flexDirection: "row" }}>
-                                <img src={preview} alt="" />
-                                <input type={"file"} accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" name={"avatar"}
-                                    onChange={onChangeImage}
-                                />
-                            </div>
-                        </div>
-                        <div className="group-info col-3">
-                            <label for="types">Thể loại</label>
-                            <select style={labelStyle}
-                                onChange={e => { setTheloai(e.target.value) }}
-                                value={theloai} id="types" name="types">
-                                {
-                                    theLoai1.map(item => { return (<option value={item?.maTheLoai}>{item?.tenTheLoai}</option>) })
-                                }
-                            </select>
-                        </div>
-                        <div className="group-info col-12">
-                            <label htmlFor="" style={labelStyle}>Mô tả</label>
-                            <CKEditor
-                                editor={ClassicEditor}
-                                config={{ placeholder: "Please enter your comment" }}
-                                data={description}
-                                onReady={editor => {
-
-                                }}
-                                onChange={
-                                    (_, editor) => setDescription(editor.getData().trim())
-                                }
-                                onBlur={(event, editor) => {
-
-                                }}
-                                onFocus={(event, editor) => {
-
-                                }}
-                            />
-                        </div>
-                        <div className="d-flex">
-                            <button
-                                onClick={handleCreate}
-                            >
-                                Cập nhập truyện</button>
-                        </div>
-                    </form>
-                </div>
+            <div className="group-info col-6">
+              <div
+                className=" profile__avt flex flex-row items-center"
+                style={{ flexDirection: "row" }}
+              >
+                <img src={preview} alt="" />
+                <input
+                  type={"file"}
+                  accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
+                  name={"avatar"}
+                  onChange={onChangeImage}
+                />
+              </div>
             </div>
+            <div className="group-info col-3">
+              <label for="types">Thể loại</label>
+              <select
+                style={labelStyle}
+                onChange={(e) => {
+                  setTheloai(e.target.value);
+                }}
+                value={theloai}
+                id="types"
+                name="types"
+              >
+                {theLoai1.map((item) => {
+                  return (
+                    <option value={item?.maTheLoai}>{item?.tenTheLoai}</option>
+                  );
+                })}
+              </select>
+            </div>
+            <div className="group-info col-12">
+              <label htmlFor="" style={labelStyle}>
+                Mô tả
+              </label>
+              <CKEditor
+                editor={ClassicEditor}
+                config={{ placeholder: "Please enter your comment" }}
+                data={description}
+                onReady={(editor) => {}}
+                onChange={(_, editor) =>
+                  setDescription(editor.getData().trim())
+                }
+                onBlur={(event, editor) => {}}
+                onFocus={(event, editor) => {}}
+              />
+            </div>
+            <div className="d-flex">
+              <button onClick={handleCreate}>Cập nhập truyện</button>
+            </div>
+          </form>
         </div>
-
-    )
+      </div>
+    </div>
+  );
 }

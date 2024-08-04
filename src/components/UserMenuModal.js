@@ -1,12 +1,52 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { message, Modal } from "antd";
+import { themGiaodich } from "../service/actions/GiaoDichAction";
 
 const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
+  const [loading, setLoading] = useState(false);
+
   const handleDangTruyenClick = () => {
     if (userInfo.trangThai !== 1) {
       message.warning("Hãy xác thực tài khoản để có thể đăng truyện");
     }
+  };
+
+  const handleDiemDanhClick = () => {
+    Modal.confirm({
+      title: "Xác nhận điểm danh",
+      content: "Điểm danh để nhận được những phần quà hấp dẫn",
+      okText: "Điểm danh",
+      cancelText: "Hủy",
+      onOk: async () => {
+        setLoading(true);
+        try {
+          const response = await themGiaodich({
+            maChuongTruyen: 22, // hoặc giá trị tương ứng
+            loaiGiaoDich: 6, // Hoặc giá trị tương ứng
+            loaiTien: userInfo.vip == true ? 5 : 6, // tai khoản vip thì loại tiền = 5, còn lại thì = 6
+            soTien: 0, // Hoặc giá trị tương ứng
+          });
+
+          if (response.status == 201) {
+            if(userInfo.vip == true) {
+               message.success("Bạn nhận được 1 chìa khóa và 2 phiều đề cử");
+            }else{
+              message.success("Bạn nhận được 1 chìa khóa và 1 phiều đề cử");
+
+            }
+          } else {
+            message.error(
+              response.data.message
+            );
+          }
+        } catch (error) {
+          console.log(error)
+        } finally {
+          setLoading(false);
+        }
+      },
+    });
   };
 
   if (!isOpen) return null;
@@ -61,15 +101,28 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
               Tài khoản của tôi
             </Link>
           </li>
+          {userInfo && (
+            <li className="mb-4">
+              <button
+                onClick={handleDiemDanhClick}
+                disabled={loading}
+              >
+                {loading ? "Đang xử lý..." : "Điểm danh"}
+              </button>
+            </li>
+          )}
           <li className="mb-4">
-            {userInfo.trangThai == 1 ? (
+            <Link to="/LichSuGiaoDich" onClick={onClose}>
+              Lịch sử giao dịch
+            </Link>
+          </li>
+          <li className="mb-4">
+            {userInfo.trangThai === 1 ? (
               <Link to="/tacgia/butdanh" onClick={onClose}>
                 Đăng Truyện
               </Link>
             ) : (
-              <a onClick={handleDangTruyenClick}>
-                Đăng Truyện
-              </a>
+              <a onClick={handleDangTruyenClick}>Đăng Truyện</a>
             )}
           </li>
           <li className="mb-4">
@@ -87,7 +140,6 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
               Phản hồi
             </Link>
           </li>
-
         </ul>
       </div>
     </div>

@@ -7,7 +7,7 @@ export default function HomePage() {
     return (
         <Layout>
             <div className="main-content">
-                <ListStory />
+                <ListStory /> 
             </div>
         </Layout >
     )

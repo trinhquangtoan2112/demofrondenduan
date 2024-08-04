@@ -76,7 +76,7 @@ export default function Profile(props) {
         content: "Bạn có muốn nạp 50 nghìn để nhận 500 xu không?",
         onOk: async () => {
             const data = {
-                idUser: userInfo.maNguoiDung,
+                idUser: userInfo.maNguoiDung, 
             };
             const result = await napTienAction(data);
             if (result == false) {

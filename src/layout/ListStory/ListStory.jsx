@@ -5,7 +5,7 @@ import { GetTruyenMain } from '../../service/actions/TruyenAction';
 import Story from './../Account/Story';
 import { Link } from 'react-router-dom';
 
-export default function ListStory() {
+export default function ListStory() { 
     const [datas, setData] = useState([]);
     const [list, setList] = useState([]);
     const dispatch = useDispatch();
@@ -65,9 +65,14 @@ export default function ListStory() {
                     <Link
                         to={`truyen/${data.maTruyen}`}
                         key={data.maTruyen}
-                        className="border border-orange-500 rounded-lg p-4 shadow-lg hover:shadow-2xl transition-shadow duration-300"
+                        className="relative border border-orange-500 rounded-lg p-4 shadow-lg hover:shadow-2xl transition-shadow duration-300"
                     >
                         <div className="relative w-full" style={{ paddingTop: '133.33%' }}> {/* Tỷ lệ 3:4 */}
+                            {data.coPhi && (
+                            <span style={{zIndex:'2'}} className="absolute top-0 left-0 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-br-lg">
+                                VIP
+                            </span>
+                        )}
                             <img src={data.anhBia} alt={data.tenTruyen} className="absolute top-0 left-0 w-full h-full object-cover rounded mb-4" />
                         </div>
                         <p className="text-center font-medium mb-2 truncate">{data.tenTruyen}</p> {/* Cắt ngắn tiêu đề */}
