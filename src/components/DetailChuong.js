@@ -13,6 +13,7 @@ export default function DetailChuong() {
 
     const [content, setContent] = useState("")
     const [tenchuong, setTenchuong] = useState("")
+    const [giaChuong, setGiachuong] = useState("")
     const [edit, setEdit] = useState(false)
 
     const CapNhap = async () => {
@@ -30,6 +31,7 @@ export default function DetailChuong() {
         const result = await GetChiTietChuongAdmin(id);
         console.log(result)
         setTenchuong(result.data.tenChuong);
+        setGiachuong(result.data.giaChuong)
         setEdit(result.data.noiDung);
     }
     useEffect(() => {
@@ -46,6 +48,10 @@ export default function DetailChuong() {
             <div className="group-info" style={{ 'marginBottom': '10px' }}>
                 <label htmlFor="" className='fs-16' style={labelStyle}>Tên chương</label>
                 <input disabled value={tenchuong || ""} />
+            </div>
+            <div className="group-info" style={{ 'marginBottom': '10px' }}>
+                <label htmlFor="" className='fs-16' style={labelStyle}>Giá chương</label>
+                <input disabled value={giaChuong} />
             </div>
             <label htmlFor="" className='fs-16' style={labelStyle}>Nội dung chương</label>
             <CKEditor

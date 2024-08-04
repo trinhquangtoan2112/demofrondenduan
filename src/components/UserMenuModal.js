@@ -3,19 +3,20 @@ import { Link } from "react-router-dom";
 import { message, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { setTheme } from "../store/reducer/TienIchReducer";
+import { themGiaodich } from "../service/actions/GiaoDichAction";
 
 const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
   const { nenToi } = useSelector(state => state.TienIchReducer);
   const dispatch = useDispatch()
   console.log(nenToi)
+  const [loading, setLoading] = useState(false);
+
   const handleDangTruyenClick = () => {
     if (userInfo.trangThai !== 1) {
       message.warning("Hãy xác thực tài khoản để có thể đăng truyện");
     }
   };
-  const handleChangeTheme = () => {
-    dispatch(setTheme())
-  }
+
   if (!isOpen) return null;
 
   return (
@@ -68,15 +69,28 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
               Tài khoản của tôi
             </Link>
           </li>
+          {userInfo && (
+            <li className="mb-4">
+              <button
+                onClick={handleDiemDanhClick}
+                disabled={loading}
+              >
+                {loading ? "Đang xử lý..." : "Điểm danh"}
+              </button>
+            </li>
+          )}
           <li className="mb-4">
-            {userInfo.trangThai == 1 ? (
+            <Link to="/LichSuGiaoDich" onClick={onClose}>
+              Lịch sử giao dịch
+            </Link>
+          </li>
+          <li className="mb-4">
+            {userInfo.trangThai === 1 ? (
               <Link to="/tacgia/butdanh" onClick={onClose}>
                 Đăng Truyện
               </Link>
             ) : (
-              <a onClick={handleDangTruyenClick}>
-                Đăng Truyện
-              </a>
+              <a onClick={handleDangTruyenClick}>Đăng Truyện</a>
             )}
           </li>
           <li className="mb-4">
@@ -94,24 +108,6 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
               Phản hồi
             </Link>
           </li>
-          <div className="flex flex-row items-center w-4/12 justify-between">
-            <label className="switch d-flex flex-row ">
-
-              <input type="checkbox" onClick={handleChangeTheme}
-                checked={nenToi} />
-              <span className="slider round" />
-
-
-
-            </label>
-            {nenToi ? <i className="fa fa-moon" /> : <i className="fa fa-sun" />}
-            {/*  */}
-
-
-
-
-          </div>
-
 
         </ul>
       </div>

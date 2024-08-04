@@ -12,6 +12,7 @@ import FeedbackAdmin from "../layout/Feedback/FeedbackAdmin";
 import ButDanh from "../layout/Butdanh/ButDanh";
 import ButDanhAdmin from "../layout/Butdanh/ButDanhAdmin";
 import TheLoaiAdmin from "../layout/TheLoai/TheLoaiAdmin";
+import LichSuGiaoDich from "../layout/GiaoDich/LichSuGiaoDich";
 
 import TuTruyen, {
   AddChapter,
@@ -302,6 +303,13 @@ const ROUTES = [
     path: "DuyetChuong/DetailChuong/:id",
     element: <DetailChuong></DetailChuong>,
     auth: false,
+    roles: [],
+  },
+  {
+    index: 39,
+    path: "LichSuGiaoDich",
+    element: <LichSuGiaoDich></LichSuGiaoDich>,
+    auth: true,
     roles: [],
   },
 ];

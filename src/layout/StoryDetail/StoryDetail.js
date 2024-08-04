@@ -161,7 +161,7 @@ function StoryDetail() {
       }
     }
   };
-
+ 
   const copyToClipboard = () => {
     const link = window.location.href;
     navigator.clipboard
