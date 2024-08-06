@@ -11,7 +11,7 @@ const menu = [
         icon: ""
     },
     {
-        path: "QuanLyTruyenCuaMinh",
+        path: "QuanLyTruyenCuaMinh", 
         display: "Quản lý truyện",
         icon: ""
     },
