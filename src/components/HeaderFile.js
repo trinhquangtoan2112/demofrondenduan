@@ -54,7 +54,7 @@ export default function HeaderFile() {
   };
 
   const hienDangNha = () => {
-    console.log(124421)
+    console.log(124421);
     dispatch(hienDangNhap());
   };
 
@@ -82,7 +82,6 @@ export default function HeaderFile() {
           </div>
 
           <div className="navbar-nav ">
-
             <div className="navbar-nav__list__search">
               <div className="form-group">
                 <input
@@ -94,28 +93,36 @@ export default function HeaderFile() {
                   }}
                   onChange={handleInputChange}
                 ></input>
-                <button
-                  onClick={searching}
-                >
+                <button onClick={searching}>
                   <i className="fa-solid fa-magnifying-glass"></i>
                 </button>
               </div>
             </div>
-
-
           </div>
           <div className="w-2/12 text-right flex flex-row justify-between">
-            {user ?
-              <button className='navbar-nav__collapse fs-14 ' onClick={toggleUserMenu}><i className="fa-solid fa-bars"></i></button>
-              : null
-            }
-            {user ?
-              <button className='navbar-nav__collapse fs-14 ' onClick={onClickLogout}>
+            {user ? (
+              <button
+                className="navbar-nav__collapse fs-14 "
+                onClick={toggleUserMenu}
+              >
+                <i className="fa-solid fa-bars"></i>
+              </button>
+            ) : null}
+            {user ? (
+              <button
+                className="navbar-nav__collapse fs-14 "
+                onClick={onClickLogout}
+              >
                 <i className="fa fa-sign-in-alt"></i>
               </button>
-              : <button className='navbar-nav__collapse fs-14 ' onClick={hienDangNha}><i className="fa fa-user" />
+            ) : (
+              <button
+                className="navbar-nav__collapse fs-14 "
+                onClick={hienDangNha}
+              >
+                <i className="fa fa-user" />
               </button>
-            }
+            )}
             {/* <ul className="navbar-nav__list navbar-nav__list--right">
               {user ? (
                 <div className="navbar-nav__profile d-flex items-center">
@@ -169,7 +176,6 @@ export default function HeaderFile() {
               onClose={toggleUserMenu}
             />
           </div>
-
         </div>
         {auth1.active && !user ? (
           <Modal active={auth1.active}>
@@ -223,9 +229,7 @@ export default function HeaderFile() {
                   }}
                   onChange={handleInputChange}
                 ></input>
-                <button
-                  onClick={searching}
-                >
+                <button onClick={searching}>
                   <i className="fa-solid fa-magnifying-glass"></i>
                 </button>
               </div>
@@ -235,13 +239,11 @@ export default function HeaderFile() {
               {user ? (
                 <div className="navbar-nav__profile d-flex items-center">
                   {userInfo?.daXoa ? null : (
-                    <div
-                      className="navbar-nav__profile__name cursor-pointer"
-                    >
+                    <div className="navbar-nav__profile__name cursor-pointer">
                       {userInfo.anhDaiDien !== "string" &&
-                        userInfo.anhDaiDien !== null ? (
+                      userInfo.anhDaiDien !== null ? (
                         <div
-                          style={{ marginRight: '10px' }}
+                          style={{ marginRight: "10px" }}
                           onClick={toggleUserMenu}
                           className="navbar-nav__avatar"
                         >

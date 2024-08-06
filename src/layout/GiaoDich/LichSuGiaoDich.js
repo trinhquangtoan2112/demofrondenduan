@@ -66,7 +66,7 @@ const LichSuGiaoDich = () => {
             {giaodiches.map((item) => (
               <tr key={item.maGiaoDich} className="hover:bg-gray-100 transition-colors duration-200">
                 <td className="p-3 border-b">{item.maGiaoDich}</td>
-                <td className="p-3 border-b">{dayjs(item.ngaytao).format("DD/MM/YYYY HH:mm")}</td>
+                <td className="p-3 border-b">{dayjs(item.ngaytao).format("DD/MM/YYYY")}</td>
                 <td className="p-3 border-b">{item.noiDung}</td>
                 <td className="p-3 border-b">{transactionTypeMap[item.loaiGiaoDich] || "Không xác định"}</td>
               </tr>

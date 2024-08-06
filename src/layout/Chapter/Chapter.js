@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useParams, Link } from "react-router-dom";
+import { setFontStyle, setFormChu } from "../../store/reducer/TienIchReducer.js";
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 import { GetChiTietChuongTruyenAction } from "../../service/actions/TruyenAction";
 import parse from "html-react-parser";
 import { message, Button, Modal, Input, Select } from "antd";
@@ -16,18 +19,10 @@ import {
   checklike,
 } from "../../service/actions/LikeAction.js";
 import { themGiaodich } from "../../service/actions/GiaoDichAction.js";
-import {
-  setFontStyle,
-  setFormChu,
-} from "../../store/reducer/TienIchReducer.js";
-
-
-
-
-import AudioPlayer from 'react-h5-audio-player';
-import 'react-h5-audio-player/lib/styles.css';
 const { confirm } = Modal;
 const { Option } = Select;
+
+
 function Chapter(props) {
   const [setting, setSetting] = useState(true);
   const [setting1, setSetting1] = useState(0);
