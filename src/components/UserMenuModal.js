@@ -106,7 +106,7 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
               <button
                 onClick={handleDiemDanhClick}
                 disabled={loading}
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+                className="w-full text-white py-2 px-4 rounded hover:bg-[#e66700] bg-[#ff7300] transition"
               >
                 {loading ? "Đang xử lý..." : "Điểm danh"}
               </button>
@@ -118,12 +118,12 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
             </Link>
           </li>
           <li className="mb-4">
-            {userInfo.trangThai === 1 ? (
+            {userInfo.trangThai == 1 ? (
               <Link to="/tacgia/butdanh" onClick={onClose}>
                 Đăng Truyện
               </Link>
             ) : (
-              <button onClick={handleDangTruyenClick} className="text-blue-500 hover:underline">
+              <button onClick={handleDangTruyenClick} className="text-[#ff7300] hover:underline ">
                 Đăng Truyện
               </button>
             )}

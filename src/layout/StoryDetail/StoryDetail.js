@@ -161,7 +161,7 @@ function StoryDetail() {
       }
     }
   };
- 
+
   const copyToClipboard = () => {
     const link = window.location.href;
     navigator.clipboard
@@ -199,26 +199,35 @@ function StoryDetail() {
           <LoadingData />
         ) : (
           <>
-            <div className="heroSide d-flex">
-              <div className="img-wrap">
-                <img src={truyen?.anhBia} className="h-full" alt="" />
+            <div className="heroSide flex">
+              <div className="img-wrap w-1/3">
+                {truyen?.coPhi && (
+                  <span
+                    style={{ zIndex: "2" }}
+                    className="absolute top-0 left-0 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-br-lg"
+                  >
+                    VIP
+                  </span>
+                )}
+                <img src={truyen?.anhBia} className="h-full w-full" alt="" />
               </div>
-              <div className="sm:col-4">
+              <div className="sm:w-1/4">
                 <div className="heroSide__main">
                   <h2 className="mb-1 bold">{truyen?.tenTruyen}</h2>
                   <ul className="flex flex-col w-full">
                     <li className={liClass}>Tác giả: {truyen?.tacGia}</li>
                     <li className={liClass}>Thể loại: {truyen?.tenTheLoai}</li>
                     <li className={liClass}>
-                      Ngày cập nhập:{" "}
+                      Ngày cập nhật:{" "}
                       {dayjs(truyen?.ngayCapNhat).format("DD/MM/YYYY")}
                     </li>
                     <li>
-                      Điểm đánh giá: {truyen?.diemDanhGia ? `${truyen?.diemDanhGia}/5` : '0/5'}
-                      <i className='fa-solid fa-star text-yellow-500' />
+                      Điểm đánh giá:{" "}
+                      {truyen?.diemDanhGia ? `${truyen?.diemDanhGia}/5` : "0/5"}
+                      <i className="fa-solid fa-star text-yellow-500" />
                     </li>
                   </ul>
-                  <div style={{ display: "flex" }}>
+                  <div className="flex">
                     <ul className="heroSide__info">
                       <li>
                         <span className="fs-16 bold">
@@ -299,19 +308,28 @@ function StoryDetail() {
                   )}
                 </div>
               </div>
-              <div className="col-9 content123" style={{ overflowY: "scroll" }}>
+              <div className="w-5/12 content123 overflow-y-scroll">
                 <div className="flex justify-between items-center">
                   <div className="row bold">Giới Thiệu</div>
                   <div>
                     <button
-                      style={{ border: '1px solid gray', padding: '5px 10px', borderRadius: '50%' }}
+                      style={{
+                        border: "1px solid gray",
+                        padding: "5px 10px",
+                        borderRadius: "50%",
+                      }}
                       className="text-yellow-500 hover:text-yellow-600"
                       onClick={() => handleReportClick(truyen.maTruyen)}
                     >
                       <i className="fa-solid fa-flag"></i>
                     </button>
                     <button
-                      style={{ border: '1px solid gray', padding: '5px 10px', borderRadius: '50%', marginLeft: '10px' }}
+                      style={{
+                        border: "1px solid gray",
+                        padding: "5px 10px",
+                        borderRadius: "50%",
+                        marginLeft: "10px",
+                      }}
                       className="text-yellow-500 hover:text-yellow-600"
                       onClick={copyToClipboard}
                     >
@@ -319,7 +337,6 @@ function StoryDetail() {
                     </button>
                   </div>
                 </div>
-
                 {truyen?.moTa != null ? parse(truyen?.moTa) : "Không có gì"}
               </div>
             </div>
@@ -328,8 +345,9 @@ function StoryDetail() {
               <div className="navigate">
                 {nav.map((item, index) => (
                   <a
-                    className={`navigate__tab fs-20 bold ${active === index ? "tab_active" : ""
-                      }`}
+                    className={`navigate__tab fs-20 bold ${
+                      active === index ? "tab_active" : ""
+                    }`}
                     key={index}
                     name={item.path}
                     onClick={handleTabChange}
@@ -353,6 +371,7 @@ function StoryDetail() {
                 <ListChapter
                   dsChuong={truyen?.data}
                   tenTruyen={truyen?.tenTruyen}
+                  giaChuong={truyen?.giaChuong}
                 />
               )}
               {tab === "comment" && <Comment />}
@@ -372,7 +391,7 @@ function StoryDetail() {
 }
 
 export const ListChapter = (props) => {
-  const { dsChuong, tenTruyen } = props;
+  const { dsChuong, tenTruyen,giaChuong } = props;
   const [chapters, setChapters] = useState([dsChuong]);
   const [loadingData, setLoadingData] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -397,7 +416,20 @@ export const ListChapter = (props) => {
                 className="text-overflow-1-lines"
                 style={{ fontSize: `${props.fontsize || 16}px` }}
               >
-                Chương {item?.stt}: {item?.tenChuong}
+                <div>
+                  <div>
+                    Chương {item?.stt}: {item?.tenChuong}
+                    {item?.stt >= 10 && item?.giaChuong > 0 && (
+                      <span style={{borderRadius:'5px', padding:'2px'}} className="bg-red-500 text-white text-xs ml-2">
+                        VIP
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    
+                  </div>
+                </div>
+                
               </Link>
             );
           })}
