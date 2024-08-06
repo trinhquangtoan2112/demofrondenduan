@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { CapNhapThongTin } from '../service/actions/UserAction';
 import PageNotFound from '../components/PageNotFound';
 import KhoaTrang from '../layout/StoryDetail/KhoaTrang';
+import { layDanhSachTheLoaiAction } from '../service/actions/TheLoaiAction';
 const AppRoutes = () => {
     const { user, auth, userInfo } = useSelector(state => state.UserReducer);
     const dispatch = useDispatch();
@@ -19,8 +20,12 @@ const AppRoutes = () => {
         }
 
     }
+    const getTheLoai = async () => {
+        const result = await layDanhSachTheLoaiAction(dispatch);
+    };
     useEffect(() => {
         getThongTin()
+        getTheLoai()
     }, [])
     return (
         <Routes>

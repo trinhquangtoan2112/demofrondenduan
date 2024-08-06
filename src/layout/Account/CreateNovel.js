@@ -15,7 +15,7 @@ export default function CreateNovel(props) {
     const navigate = useNavigate();
 
     const theLoai = useSelector(state => state.TheLoaiReducer.theLoai);
-
+    console.log(theLoai)
     const [ckValue, setCkValue] = useState(true);
     // const user = useSelector(state=>state.auth.login.user)
     const [image, setImage] = useState("");
@@ -25,7 +25,7 @@ export default function CreateNovel(props) {
     const [description, setDescription] = useState("");
     const [listTacgia, setListTacGia] = useState(null);
     const [tacgia, setTacgia] = useState();
-    const [theloai, setTheloai] = useState(theLoai[0].maTheLoai);
+    const [theloai, setTheloai] = useState(theLoai[0]?.maTheLoai ? theLoai[0]?.maTheLoai : 1);
 
     // const loading = useSelector(state => state.message.loading)
     const [loadingUser, setLoadingUser] = useState(true)

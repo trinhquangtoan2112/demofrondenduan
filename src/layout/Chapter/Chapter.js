@@ -21,14 +21,16 @@ import {
   setFormChu,
 } from "../../store/reducer/TienIchReducer.js";
 
-const { confirm } = Modal;
-const { Option } = Select;
 
-import { setFontStyle, setFormChu } from "../../store/reducer/TienIchReducer.js";
+
+
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
+const { confirm } = Modal;
+const { Option } = Select;
 function Chapter(props) {
   const [setting, setSetting] = useState(true);
+  const [setting1, setSetting1] = useState(0);
   const { maChuong, name } = useParams();
   const [chapter, setChapter] = useState({});
   const [manual, setManual] = useState("");
@@ -48,15 +50,14 @@ function Chapter(props) {
   const [giftModalVisible, setGiftModalVisible] = useState(false);
   const [selectedGiftAmount, setSelectedGiftAmount] = useState(10);
   const [showModal, setShowModal] = useState(false);
-  console.log(fontChu)
-  console.log(fontStyle)
   useEffect(() => {
     const handleSetReading = async () => {
       const data = {
         maChuong: maChuong,
       };
       const result = await GetChiTietChuongTruyenAction(data);
-    }},[])
+    }
+  }, [])
   useEffect(() => {
     const LuuLichSu = async () => {
       const data = {
@@ -79,7 +80,7 @@ function Chapter(props) {
           null,
           data
         );
-      } catch (error) {}
+      } catch (error) { }
     };
     const checkLike = async () => {
       try {
@@ -107,6 +108,7 @@ function Chapter(props) {
       maChuong: maChuong,
     };
     const result = await GetChiTietChuongTruyenAction(data);
+    console.log(result, "result")
 
     if (result.status === 401) {
       setChapter({
@@ -139,7 +141,17 @@ function Chapter(props) {
         result,
       });
     }
-    window.scrollTo(0, 0);
+
+    if (result.data.data.viTri !== 0) {
+      console.log("Vi tri", result.data.data.viTri)
+      setSetting1(result.data.data.viTri);
+      setSetting(false)
+    } else {
+      console.log("Vi tri", 0)
+      setSetting1(0);
+      setSetting(false)
+    }
+
   };
   const [operationName, setOperationName] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
@@ -228,6 +240,13 @@ function Chapter(props) {
     if (!chapter?.content) {
       return <div>Không có nội dung</div>;
     }
+    if (setting1 != 0) {
+      setTimeout(() => {
+        window.scrollTo(0, setting1);
+        setSetting1(0)
+      }, [2000])
+    }
+
     return <div>{parse(chapter.content)}</div>;
   };
 
@@ -352,6 +371,45 @@ function Chapter(props) {
     }
     return options;
   };
+
+  const [position, setPosition] = useState(0);
+  const timeoutIdRef = useRef(null);
+  const LuuLichSuViTri = async () => {
+    const data = {
+      maChuong,
+      viTri: parseInt(position, 10)
+    };
+    try {
+      const result = await apiKey.postToken(
+        "LichSuDoc/CapNhapLichSuDocViTri",
+        null,
+        data
+      );
+      console.log(result);
+    } catch (error) {
+
+    }
+
+
+  };
+  const handleScroll = () => {
+    setPosition(window.scrollY);
+    if (timeoutIdRef.current) {
+      clearTimeout(timeoutIdRef.current);
+    }
+    timeoutIdRef.current = setTimeout(() => {
+
+      if (localStorage.getItem("TOKEN")) {
+        LuuLichSuViTri();
+        console.log(position)
+      }
+    }, 500);
+  };
+  if (!setting) {
+    window.addEventListener('scroll', handleScroll);
+  }
+
+
   return (
     <>
       <div
@@ -632,6 +690,6 @@ function Chapter(props) {
     </>
   );
 }
-  
+
 
 export default Chapter;

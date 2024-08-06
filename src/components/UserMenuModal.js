@@ -69,7 +69,7 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
               Tài khoản của tôi
             </Link>
           </li>
-          {userInfo && (
+          {/* {userInfo && (
             <li className="mb-4">
               <button
                 onClick={handleDiemDanhClick}
@@ -78,14 +78,14 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
                 {loading ? "Đang xử lý..." : "Điểm danh"}
               </button>
             </li>
-          )}
+          )} */}
           <li className="mb-4">
             <Link to="/LichSuGiaoDich" onClick={onClose}>
               Lịch sử giao dịch
             </Link>
           </li>
           <li className="mb-4">
-            {userInfo.trangThai === 1 ? (
+            {userInfo.trangThai ? (
               <Link to="/tacgia/butdanh" onClick={onClose}>
                 Đăng Truyện
               </Link>
