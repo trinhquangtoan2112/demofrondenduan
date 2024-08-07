@@ -2,11 +2,15 @@ import { EditOutlined, EyeInvisibleOutlined, EyeOutlined, FormOutlined } from '@
 import { Button, message, Popconfirm, Table } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { AnTruyenAction, GetTruyenTheoButDanh, GetTruyenTheoIDNguoiDung, HienTruyenAction } from '../../service/actions/TruyenAction';
+import { AnTruyenAction, GetTruyenTheoButDanh, GetTruyenTheoIDNguoiDung, HienTruyenAction, timkiemButDanhAction, TimKiemTruyenAcion } from '../../service/actions/TruyenAction';
 import dayjs from 'dayjs';
 
 export default function QuanLyTruyenAllButDanh() {
-    const [list, setList] = useState()
+    const [list, setList] = useState();
+    const [isSearching, setIsSearching] = useState(false);
+    const [searchUser, setSearchUser] = useState([]);
+
+    const [search, setSearch] = useState("");
     useEffect(() => {
         getBang()
     }, [])
@@ -122,13 +126,43 @@ export default function QuanLyTruyenAllButDanh() {
     const onClickAddChapter = () => {
         nav(`../../tacgia/DangTruyen`)
     }
+    const handleSearchUsers = async () => {
+        console.log(search)
+        if (search != null && search.trim() !== "") {
+            const result = await timkiemButDanhAction(search.trim());
+            console.log(result);
+            if (result.status === 200) {
+                setSearchUser(result.data);
+                setIsSearching(true);
+            }
+        } else {
+            getBang()
+            setIsSearching(false);
+        }
+
+    };
     return (
         <>
-
+            <div className='flex flex-row justify-between items-center mb-1'>
+                <h1>Danh sách Truyện</h1>
+                <input
+                    className='w-3/4'
+                    placeholder='Tìm kiếm'
+                    onChange={
+                        (e) => setSearch(e.target.value.trim())
+                    }
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            handleSearchUsers();
+                        }
+                    }}
+                />
+                {/* <Button onClick={handleClickAddUser} type="primary">Thêm tài khoản</Button> */}
+            </div>
             <button className='btn-primary' style={{ 'margin': '0px 10px' }}
                 onClick={onClickAddChapter}
             >Thêm truyện</button>
-            <Table columns={columns} dataSource={list && list.length > 0 ? list : null} />
+            <Table columns={columns} dataSource={isSearching ? searchUser : list ? list : null} />
             {/* {list?.map((item) => {
                 return (
                     <div>

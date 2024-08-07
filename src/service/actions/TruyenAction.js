@@ -337,7 +337,25 @@ export const GetTruyenTheoIDNguoiDung = async (id) => {
 
     }
 }
+export const timkiemButDanhAction = async (tenTruyen) => {
+    let data = {
+        tenTruyen
+    }
+    try {
+        if (localStorage.getItem("TOKEN")) {
+            let result = await apiKey.getToken("api/Truyens/timkiemButDanh", data)
+            if (result.status === 200) {
+                return result.data
+            }
+        }
 
+    } catch (error) {
+        console.log(error)
+        message.error("Lỗi xảy ra")
+        return false
+
+    }
+}
 export const TimKiemChuongTheoTenTruyenAcion = async (tenTruyen) => {
     const data = {
         tenTruyen
@@ -353,7 +371,18 @@ export const TimKiemChuongTheoTenTruyenAcion = async (tenTruyen) => {
     }
 }
 
-
+export const xemDoanhThuTruyenAdmin = async () => {
+    try {
+        const response = await apiKey.getToken(`/api/Truyens/XemdoanhthutruyenAdmin`);
+        if (response.status === 200) { // OK
+            return response.data;
+        } else {
+            message.error(`Lấy danh sách thất bại: ${response.data.message}`);
+        }
+    } catch (error) {
+        message.error(`Lấy danh sách thất bại: ${error.response?.data?.message || error.message}`);
+    }
+};
 
 export const TimKiemTruyenTheoTenTruyenIdAcion = async (tenTruyen) => {
     const data = {
@@ -369,3 +398,15 @@ export const TimKiemTruyenTheoTenTruyenIdAcion = async (tenTruyen) => {
         return false;
     }
 }
+export const xemDoanhThuTruyen = async () => {
+    try {
+        const response = await apiKey.getToken(`/api/Truyens/Xemdoanhthutruyen`);
+        if (response.status === 200) { // OK
+            return response.data;
+        } else {
+            message.error(`Lấy danh sách thất bại: ${response.data.message}`);
+        }
+    } catch (error) {
+        message.error(`Lấy danh sách thất bại: ${error.response?.data?.message || error.message}`);
+    }
+};
