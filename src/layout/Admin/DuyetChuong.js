@@ -4,9 +4,13 @@ import { Button, message, Popconfirm, Table, Tag } from 'antd'
 import { EyeInvisibleOutlined, EyeOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons'
 import dayjs from 'dayjs'
 import { Link } from 'react-router-dom'
+import { TimKiemChuongTheoTenTruyenAcion, TimKiemTruyenAcion } from '../../service/actions/TruyenAction'
 
 export default function DuyetChuong() {
     const [danhSach, setDanhSach] = useState();
+    const [search, setSearch] = useState("");
+    const [searchUser, setSearchUser] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
     useEffect(() => {
         getDanhSach()
     }, [])
@@ -93,7 +97,39 @@ export default function DuyetChuong() {
             ),
         }
     ];
+    const handleSearchUsers = async () => {
+        console.log(search)
+        if (search != null && search.trim() !== "") {
+            const result = await TimKiemChuongTheoTenTruyenAcion(search);
+            console.log(result);
+            if (result.status === 200) {
+                setSearchUser(result.data);
+                setIsSearching(true);
+            }
+        } else {
+            getDanhSach()
+            setIsSearching(false);
+        }
+
+    };
     return (
-        <Table columns={columns} dataSource={danhSach}></Table>
+        <>
+            <div className='flex flex-row justify-center items-center'>
+                <h1>Danh sách chương cần duyệt</h1>
+                <input
+                    className='w-3/4'
+                    placeholder='Tìm kiếm truyện'
+                    onChange={
+                        (e) => setSearch(e.target.value.trim())
+                    }
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            handleSearchUsers();
+                        }
+                    }}
+                />
+            </div>
+            <Table columns={columns} dataSource={isSearching ? searchUser : danhSach ? danhSach : null}></Table>
+        </>
     )
 }

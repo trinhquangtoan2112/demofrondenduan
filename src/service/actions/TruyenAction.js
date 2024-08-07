@@ -337,3 +337,18 @@ export const GetTruyenTheoIDNguoiDung = async (id) => {
 
     }
 }
+
+export const TimKiemChuongTheoTenTruyenAcion = async (tenTruyen) => {
+    const data = {
+        tenTruyen
+    }
+    try {
+        const result = await apiKey.get("Chuongtruyens/timkiemChuongTheoTenTruyen", data);
+        console.log(result)
+
+        return result.data
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}

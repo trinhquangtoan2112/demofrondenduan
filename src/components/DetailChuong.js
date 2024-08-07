@@ -44,6 +44,11 @@ export default function DetailChuong() {
                 <a onClick={() => { nav("/admin/DuyetChuong") }}
                 //  onClick={onClickBackFromListChap}
                 ><i className="fa-solid fa-angle-left"></i>Duyệt chương</a>
+                <input
+                    className='w-3/4'
+                    placeholder='Tìm kiếm'
+
+                />
             </div>
             <div className="group-info" style={{ 'marginBottom': '10px' }}>
                 <label htmlFor="" className='fs-16' style={labelStyle}>Tên chương</label>
