@@ -19,6 +19,8 @@ import {
   checklike,
 } from "../../service/actions/LikeAction.js";
 import { themGiaodich } from "../../service/actions/GiaoDichAction.js";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 const { confirm } = Modal;
 const { Option } = Select;
 
@@ -41,7 +43,7 @@ function Chapter(props) {
     (state) => state.TienIchReducer.allFontKieuChu
   );
   const { fontChu, fontStyle } = useSelector((state) => state.TienIchReducer);
-
+  const pdfRef = useRef()
   const [giftModalVisible, setGiftModalVisible] = useState(false);
   const [selectedGiftAmount, setSelectedGiftAmount] = useState(10);
   const [showModal, setShowModal] = useState(false);
@@ -99,6 +101,7 @@ function Chapter(props) {
     }
   }, [maChuong]);
   const handleSetReading = async () => {
+    window.scroll(0, 0);
     const data = {
       maChuong: maChuong,
     };
@@ -150,6 +153,44 @@ function Chapter(props) {
   };
   const [operationName, setOperationName] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
+  const downloadPdf = () => {
+    const input = pdfRef.current;
+
+    if (!input) {
+      console.error("pdfRef is not defined or pointing to a valid element.");
+      return;
+    }
+    html2canvas(input, {
+      useCORS: true,
+      allowTaint: true,
+    }).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4', false);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = pdfWidth / imgWidth;
+      const pageHeight = pdfHeight / ratio;
+      let heightLeft = imgHeight;
+      let position = 0;
+      while (heightLeft > 0) {
+        const pdfPageHeight = imgHeight * ratio;
+        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfPageHeight);
+        heightLeft -= pageHeight;
+        position -= pdfHeight;
+        if (heightLeft > 0) {
+          pdf.addPage();
+        }
+      }
+      if (chapter.tenChuong !== null && chapter.tenChuong !== undefined) {
+        pdf.save(`${chapter?.tenChuong}.pdf`);
+      }
+
+    }).catch((error) => {
+      console.error('Error capturing the canvas:', error);
+    });
+  }
   const handleSpeak = async () => {
     const data = {
       noiDung: content,
@@ -366,7 +407,7 @@ function Chapter(props) {
     }
     return options;
   };
-
+  console.log(pdfRef)
   const [position, setPosition] = useState(0);
   const timeoutIdRef = useRef(null);
   const LuuLichSuViTri = async () => {
@@ -517,6 +558,12 @@ function Chapter(props) {
               <button onClick={handleSpeak} className="bg-transparent  outline-black text-black hover:outline-orange-300 hover:text-orange-300 font-bold uppercase text-sm px-6 py-3 rounded  outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"><i className="fa fa-microphone" />
               </button>
               : null}
+            {chapter.content == "Hãy mua chương để đọc tiếp" ? null : <button
+              onClick={downloadPdf}
+              className="bg-transparent  outline-black text-black hover:outline-orange-300 hover:text-orange-300 font-bold uppercase text-sm px-6 py-3 rounded  outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+              <i className="fa fa-download" />
+
+            </button>}
           </div>
 
         </div>
@@ -537,6 +584,7 @@ function Chapter(props) {
             <div
               className="d-lex text-lg"
               style={{ fontSize: `${fontChu}px`, fontFamily: `${fontStyle}` }}
+              ref={pdfRef}
             >
               {chapter?.stt && (
                 <h1 className="chapter-name text-xl font-bold mb-4">
