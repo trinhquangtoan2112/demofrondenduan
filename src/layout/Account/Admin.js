@@ -48,6 +48,11 @@ const menu = [
         display: "Duyệt chương",
         icon: ""
     },
+    {
+        path: "LayDoanhThuTruyenAdmin",
+        display: "Xem thống kê truyện",
+        icon: ""
+    },
 ]
 export default function Admin() {
     // const user = useSelector(state => state.auth.login?.user);

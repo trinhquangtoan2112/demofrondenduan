@@ -10,6 +10,8 @@ import Feedback from "./../layout/Feedback/Feedback";
 import FeedbackAdmin from "../layout/Feedback/FeedbackAdmin";
 
 import ButDanh from "../layout/Butdanh/ButDanh";
+import LayDoanhThuTruyen from "../layout/Account/LayDoanhThuTruyen";
+import LayDoanhThuTruyenAdmin from "../layout/Account/LayDoanhThuTruyenAdmin";
 import ButDanhAdmin from "../layout/Butdanh/ButDanhAdmin";
 import TheLoaiAdmin from "../layout/TheLoai/TheLoaiAdmin";
 import LichSuGiaoDich from "../layout/GiaoDich/LichSuGiaoDich";
@@ -310,6 +312,20 @@ const ROUTES = [
     path: "LichSuGiaoDich",
     element: <LichSuGiaoDich></LichSuGiaoDich>,
     auth: true,
+    roles: [],
+  },
+  {
+    index: 39,
+    path: "LayDoanhThuTruyen",
+    element: <LayDoanhThuTruyen></LayDoanhThuTruyen>,
+    auth: false,
+    roles: [],
+  },
+  {
+    index: 39,
+    path: "LayDoanhThuTruyenAdmin",
+    element: <LayDoanhThuTruyenAdmin></LayDoanhThuTruyenAdmin>,
+    auth: false,
     roles: [],
   },
 ];

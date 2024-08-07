@@ -352,3 +352,30 @@ export const TimKiemChuongTheoTenTruyenAcion = async (tenTruyen) => {
         return false;
     }
 }
+// Function to get the list of pseudonyms for admin including the count of stories
+export const xemDoanhThuTruyen = async () => {
+    try {
+        const response = await apiKey.getToken(`/api/Truyens/Xemdoanhthutruyen`);
+        if (response.status === 200) { // OK
+            return response.data;
+        } else {
+            message.error(`Lấy danh sách thất bại: ${response.data.message}`);
+        }
+    } catch (error) {
+        message.error(`Lấy danh sách thất bại: ${error.response?.data?.message || error.message}`);
+    }
+};
+
+// Function to get the list of pseudonyms for admin including the count of stories
+export const xemDoanhThuTruyenAdmin = async () => {
+    try {
+        const response = await apiKey.getToken(`/api/Truyens/XemdoanhthutruyenAdmin`);
+        if (response.status === 200) { // OK
+            return response.data;
+        } else {
+            message.error(`Lấy danh sách thất bại: ${response.data.message}`);
+        }
+    } catch (error) {
+        message.error(`Lấy danh sách thất bại: ${error.response?.data?.message || error.message}`);
+    }
+};
