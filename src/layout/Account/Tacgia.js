@@ -20,6 +20,11 @@ const menu = [
         display: "Quản lý bản thảo",
         icon: ""
     },
+    {
+        path: "LayDoanhThuTruyen",
+        display: "Xem thống kê truyện truyện",
+        icon: ""
+    },
 
 ]
 export default function Tacgia() {

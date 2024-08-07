@@ -42,7 +42,6 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
           }
         } catch (error) {
           console.error(error);
-          message.error("Lỗi khi điểm danh");
         } finally {
           setLoading(false);
         }
@@ -101,7 +100,7 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
               Tài khoản của tôi
             </Link>
           </li>
-          {/* {userInfo && (
+          {userInfo && (
             <li className="mb-4">
               <button
                 onClick={handleDiemDanhClick}
@@ -111,7 +110,7 @@ const UserMenuModal = ({ isOpen, onClose, userInfo }) => {
                 {loading ? "Đang xử lý..." : "Điểm danh"}
               </button>
             </li>
-          )} */}
+          )}
           <li className="mb-4">
             <Link to="/LichSuGiaoDich" onClick={onClose}>
               Lịch sử giao dịch

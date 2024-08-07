@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Table, Input, Space, message } from "antd";
-import { xemDoanhThuTruyen } from "../../service/actions/TruyenAction";
+import { xemDoanhThuTruyenAdmin } from "../../service/actions/TruyenAction";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const LayDoanhThuTruyen = () => {
+const LayDoanhThuTruyenAdmin = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -15,17 +15,14 @@ const LayDoanhThuTruyen = () => {
     if (!userInfo) {
       message.warning("Bạn chưa đăng nhập. Vui lòng đăng nhập.");
       navigate("/");
-    } else if (userInfo.trangThai !== true) {
-      message.warning("Bạn chưa xác thực tài khoản. Vui lòng xác thực.");
-      navigate("/");
-    } else {
+    }  else {
       fetchData();
     }
   }, [userInfo, navigate]);
 
   const fetchData = async () => {
     try {
-      const response = await xemDoanhThuTruyen();
+      const response = await xemDoanhThuTruyenAdmin();
       setData(response.data);
       setFilteredData(response.data);
     } catch (error) {
@@ -116,4 +113,4 @@ const LayDoanhThuTruyen = () => {
   );
 };
 
-export default LayDoanhThuTruyen;
+export default LayDoanhThuTruyenAdmin;
