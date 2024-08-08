@@ -59,7 +59,7 @@ export default function ListStory() {
                     </Section>
                 </div>
             </div>
-            <p className="text-lg font-medium mt-8">Danh sách truyện</p>
+            <p className="text-lg font-medium bold mt-8">Danh sách truyện</p>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {list ? list.map((data) => (
                     <Link

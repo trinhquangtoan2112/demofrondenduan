@@ -57,13 +57,13 @@ export default function EditBanThao() {
             <div>
                 <a onClick={() => { nav("/tacgia/QuanLyBanThao") }}
                 //  onClick={onClickBackFromListChap}
-                ><i className="fa-solid fa-angle-left"></i> Quản lý bản thảo</a>
+                ><i className="fa-solid fa-angle-left"></i> Quản lý bản nháp</a>
             </div>
             <div className="group-info" style={{ 'marginBottom': '10px' }}>
-                <label htmlFor="" className='fs-16' style={labelStyle}>Tên bản thảo</label>
+                <label htmlFor="" className='fs-16' style={labelStyle}>Tên bản nháp</label>
                 <input onChange={onChangeTenchuong} value={tenchuong || ""} />
             </div>
-            <label htmlFor="" className='fs-16' style={labelStyle}>Nội dung bản thảo</label>
+            <label htmlFor="" className='fs-16' style={labelStyle}>Nội dung bản nháp</label>
             <CKEditor
                 editor={ClassicEditor}
                 data={edit || ''}
@@ -86,7 +86,7 @@ export default function EditBanThao() {
             edit ?  */}
                 <button className='btn-primary'
                     onClick={CapNhap}
-                    style={{ 'margin': '20px auto' }}>Cập nhật bản thảo</button>
+                    style={{ 'margin': '20px auto' }}>Cập nhật bản nháp</button>
 
                 {/* : <button className='btn-primary' onClick={onClickAddChapter} style={{ 'margin': '20px auto' }}>Thêm chương</button>} */}
 

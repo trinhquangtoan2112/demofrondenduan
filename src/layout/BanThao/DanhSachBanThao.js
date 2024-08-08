@@ -65,8 +65,8 @@ export default function DanhSachBanThao() {
             <div className='d-flex mb-1' style={{ 'justifyContent': 'space-between' }}>
                 <a onClick={() => { nav("/tacgia/QuanLyBanThao") }}
                 //  onClick={onClickBackFromListChap}
-                ><i className="fa-solid fa-angle-left"></i> Danh sách bản thảo</a>
-                <span className='fs-20 fw-6'>Danh sách bản thảo </span>
+                ><i className="fa-solid fa-angle-left"></i> Danh sách nháp</a>
+                <span className='fs-20 fw-6'>Danh sách bản nháp </span>
 
             </div>
             {chapters != null && chapters.length > 0 ? <Grid gap={15} col={2} snCol={1}>
@@ -76,14 +76,14 @@ export default function DanhSachBanThao() {
                             <div key={item.maBanThao}>
                                 <div className='d-flex'>
                                     <div className="col-9 d-flex" style={{ 'alignItems': 'center' }}>
-                                        <p key={item.maBanThao} name={item.tenBanThao} className='text-overflow-1-lines'>Tên bản thảo: {item.tenBanThao}</p>
+                                        <p key={item.maBanThao} name={item.tenBanThao} className='text-overflow-1-lines'>Tên bản nháp: {item.tenBanThao}</p>
                                     </div>
                                     <div className="col-3">
                                         <Link to={`/tacgia/ChinhSuaBanThao/${item.maBanThao} `}
                                             // onClick={onClickUpdateChap}
                                             className=''><Button><EditOutlined /></Button> </Link>
                                         <Popconfirm
-                                            title="Bạn có muốn xóa bản thảo không"
+                                            title="Bạn có muốn xóa bản nháp không"
                                             description="Bạn có chắc không?"
                                             onConfirm={() => {
                                                 confirm(item.maBanThao)
