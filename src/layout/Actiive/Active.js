@@ -18,7 +18,7 @@ export default function Active() {
     const dispatch = useDispatch();
     useEffect(() => {
         const active = async () => {
-            const result = await authenAccount(dispatch);
+            const result = await authenAccount(dispatch, token);
             if (result) {
                 message.success("Xác thực thành công")
                 setLoadingData(false)
