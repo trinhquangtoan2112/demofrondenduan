@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://localhost:7094/";
+const API_URL = "https://demodoan120240809201623.azurewebsites.net/";
 const TOKEN = "TOKEN";
 class SetUpAxios {
     constructor() {
