@@ -264,7 +264,7 @@ export default function Profile(props) {
                   >
                     Trạng thái của tài khoản
                   </label>
-                  {userInfo.trangThai === 0 ? (
+                  {userInfo.trangThai == false ? (
                     <button
                       className="btn bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
                       onClick={sendEmailToAuthen}
