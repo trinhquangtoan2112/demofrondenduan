@@ -47,7 +47,7 @@ export const CapNhapThongTin = async (dispatch) => {
         setTimeout(() => {
             CapNhapThongTin(dispatch)
         }, 10000)
-        message.error("Lỗi xảy ra")
+
     }
 }
 export const ChinhSuaThongTinDangNhap = async (user, dispatch) => {
@@ -87,10 +87,13 @@ export const sendEmailPassword = async (email) => {
 
     }
 }
-export const authenAccount = async (dispatch) => {
-
+export const authenAccount = async (dispatch, token) => {
+    const data = {
+        token: "Bearer " + token
+    }
+    console.log(data)
     try {
-        const result = await apiKey.putToken("/Login/authenAccount")
+        const result = await apiKey.put("/Login/authenAccount", null, data)
 
         if (result.status == 200) {
             CapNhapThongTin(dispatch)
@@ -100,6 +103,7 @@ export const authenAccount = async (dispatch) => {
 
     } catch (error) {
         message.error("Lỗi xảy ra")
+        console.log(error);
     }
 }
 export const ChangePasswordAction = async (data) => {

@@ -72,22 +72,22 @@ export default function Profile(props) {
     e.preventDefault();
 
     Modal.confirm({
-        title: "Xác nhận nạp tiền",
-        content: "Bạn có muốn nạp 50 nghìn để nhận 500 xu không?",
-        onOk: async () => {
-            const data = {
-                idUser: userInfo.maNguoiDung, 
-            };
-            const result = await napTienAction(data);
-            if (result == false) {
-                message.error("Lỗi xảy ra hãy thử lại");
-            } else {
-                console.log(1);
-                window.open(result, "_blank");
-            }
-        },
+      title: "Xác nhận nạp tiền",
+      content: "Bạn có muốn nạp 50 nghìn để nhận 500 xu không?",
+      onOk: async () => {
+        const data = {
+          idUser: userInfo.maNguoiDung,
+        };
+        const result = await napTienAction(data);
+        if (result == false) {
+          message.error("Lỗi xảy ra hãy thử lại");
+        } else {
+          console.log(1);
+          window.open(result, "_blank");
+        }
+      },
     });
-};
+  };
 
 
   const NangCap = async (e) => {
@@ -194,8 +194,8 @@ export default function Profile(props) {
                   <p>
                     {userInfo.vip
                       ? `Ngày hết hạn vip: ${dayjs(
-                          userInfo.ngayHetHanVip
-                        ).format("DD/MM/YYYY")}`
+                        userInfo.ngayHetHanVip
+                      ).format("DD/MM/YYYY")}`
                       : "Kích hoạt vip để tận hưởng các chức năng của trang web"}
                   </p>
                 </div>
@@ -254,7 +254,7 @@ export default function Profile(props) {
                     type="date"
                     value={birthDate}
                     className="border "
-                    style={{borderColor: "gray" }}
+                    style={{ borderColor: "gray" }}
                   />
                 </div>
                 <div className="group-info mb-4">
@@ -291,7 +291,7 @@ export default function Profile(props) {
                     >
                       Nâng cấp
                     </button>
-                    
+
                   </div>
                   <div>
                     <button
