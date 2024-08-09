@@ -226,6 +226,14 @@ function StoryDetail() {
                       {truyen?.diemDanhGia ? `${truyen?.diemDanhGia}/5` : "0/5"}
                       <i className="fa-solid fa-star text-yellow-500" />
                     </li>
+                    <li style={{display:'flex'}}>
+                      Lượt đề cử: {truyen?.sodecu} 
+                      <img
+                        style={{ width: "20px", height: "20px" }}
+                        src="https://truyenyy-cdnx.yeuthanky.com/truyenyy/svg/tickets.svg"
+                        alt="DeCu"
+                      />
+                    </li>
                   </ul>
                   <div className="flex">
                     <ul className="heroSide__info">
@@ -391,7 +399,7 @@ function StoryDetail() {
 }
 
 export const ListChapter = (props) => {
-  const { dsChuong, tenTruyen,giaChuong } = props;
+  const { dsChuong, tenTruyen, giaChuong } = props;
   const [chapters, setChapters] = useState([dsChuong]);
   const [loadingData, setLoadingData] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -420,16 +428,16 @@ export const ListChapter = (props) => {
                   <div>
                     Chương {item?.stt}: {item?.tenChuong}
                     {item?.stt >= 10 && item?.giaChuong > 0 && (
-                      <span style={{borderRadius:'5px', padding:'2px'}} className="bg-red-500 text-white text-xs ml-2">
+                      <span
+                        style={{ borderRadius: "5px", padding: "2px" }}
+                        className="bg-red-500 text-white text-xs ml-2"
+                      >
                         VIP
                       </span>
                     )}
                   </div>
-                  <div>
-                    
-                  </div>
+                  <div></div>
                 </div>
-                
               </Link>
             );
           })}

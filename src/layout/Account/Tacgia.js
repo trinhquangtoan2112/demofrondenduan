@@ -17,7 +17,7 @@ const menu = [
     },
     {
         path: "QuanLyBanThao",
-        display: "Quản lý bản thảo",
+        display: "Quản lý bản nháp",
         icon: ""
     },
     {

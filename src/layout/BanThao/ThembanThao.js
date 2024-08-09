@@ -35,7 +35,7 @@ export default function ThembanThao() {
             <>
 
                 <div className="group-info" style={{ 'marginBottom': '10px' }}>
-                    <label htmlFor="" className='fs-16' style={labelStyle}>Tên bản thảo</label>
+                    <label htmlFor="" className='fs-16' style={labelStyle}>Tên bản nháp</label>
                     <input
                         onChange={(e) => {
                             setTen(e.target.value);
@@ -43,7 +43,7 @@ export default function ThembanThao() {
                         value={ten || ""}
                     />
                 </div>
-                <label htmlFor="" className='fs-16' style={labelStyle}>Nội dung bản thảo</label>
+                <label htmlFor="" className='fs-16' style={labelStyle}>Nội dung bản nháp</label>
                 <CKEditor
                     editor={ClassicEditor}
                     data={edit || ''}
@@ -66,7 +66,7 @@ export default function ThembanThao() {
             edit ?  */}
                     <button className='btn-primary'
                         onClick={themBanThao}
-                        style={{ 'margin': '20px auto' }}>Thêm bản thảo</button>
+                        style={{ 'margin': '20px auto' }}>Thêm bản nháp</button>
 
                     {/* : <button className='btn-primary' onClick={onClickAddChapter} style={{ 'margin': '20px auto' }}>Thêm chương</button>} */}
 
